@@ -12,7 +12,7 @@ using System.Pdv.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Configuração do Entity Framework Core com PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -48,7 +48,8 @@ builder.Host.UseSerilog();
 //Builder de mesas
 builder.Services.AddScoped<IMesaRepository, MesaRepository>();
 builder.Services.AddScoped<ICreateMesaService, CreateMesaService>();
-builder.Services.AddScoped<IGetAllServices, GetAllServices>();
+builder.Services.AddScoped<IGetAllServices, GetAllService>();
+builder.Services.AddScoped<IDeleteMesaService, DeleteMesaService>();
 
 //Builder de clientes
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();

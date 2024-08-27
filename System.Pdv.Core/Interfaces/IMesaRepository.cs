@@ -8,4 +8,5 @@ public interface IMesaRepository
     Task<IEnumerable<Mesa>> GetAllAsync();
     Task<Mesa> GetByIdAsync(Guid id);
     Task<Mesa> GetByNumberAsync(int numero);
+    Task DeleteAsync(Mesa mesa);
 }

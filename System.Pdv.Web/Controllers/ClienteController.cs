@@ -9,15 +9,29 @@ namespace System.Pdv.Web.Controllers;
 public class ClienteController : ControllerBase
 {
     private readonly ICreateClienteService _createClienteService;
-    public ClienteController(ICreateClienteService createClienteService)
+    private readonly ILogger<ClienteController> _logger;
+    public ClienteController(
+        ICreateClienteService createClienteService,
+        ILogger<ClienteController> logger)
     {
         _createClienteService = createClienteService;
+        _logger = logger;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateCliente(ClienteDto clienteDto)
     {
-        var cliente = await _createClienteService.CreateCliente(clienteDto);
-        return Ok(cliente);
+        try
+        {
+            var result = await _createClienteService.CreateCliente(clienteDto);
+            return result.StatusCode == 200
+                ? Ok(result)
+                : StatusCode(result.StatusCode, result.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao cadastrar cliente");
+            return StatusCode(500, "Ocorreu um erro inesperado.");
+        }
     }
 }
