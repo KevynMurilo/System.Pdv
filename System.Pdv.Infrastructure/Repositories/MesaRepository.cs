@@ -38,4 +38,10 @@ public class MesaRepository : IMesaRepository
     {
         return await _context.Mesas.AsNoTracking().FirstOrDefaultAsync(m => m.Numero == numero);
     }
+
+    public async Task DeleteAsync(Mesa mesa)
+    {
+        _context.Mesas.Remove(mesa);
+        await _context.SaveChangesAsync();
+    }
 }

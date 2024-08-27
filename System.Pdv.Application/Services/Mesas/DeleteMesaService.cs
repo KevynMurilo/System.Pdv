@@ -6,44 +6,50 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Mesas;
 
-public class GetAllServices : IGetAllServices
+public class DeleteMesaService : IDeleteMesaService
 {
     private readonly IMesaRepository _mesaRepository;
-    private readonly ILogger<GetAllServices> _logger;
-    public GetAllServices(IMesaRepository mesaRepository, ILogger<GetAllServices> logger)
+    private readonly ILogger<DeleteMesaService> _logger;
+    public DeleteMesaService(
+        IMesaRepository mesaRepository,
+        ILogger<DeleteMesaService> logger
+        )
     {
         _mesaRepository = mesaRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Mesa>>> GetAllMesas()
+    public async Task<OperationResult<Mesa>> DeleteMesa(Guid id)
     {
         try
         {
-            var mesas = await _mesaRepository.GetAllAsync();
-            if (mesas == null || !mesas.Any())
+            var mesa = await _mesaRepository.GetByIdAsync(id);
+            if (mesa == null)
             {
-                return new OperationResult<IEnumerable<Mesa>>
+                return new OperationResult<Mesa>
                 {
-                    Message = "Nenhuma mesa registrada",
+                    Message = "Mesa não encontrada",
                     StatusCode = 404
                 };
             }
 
-            return new OperationResult<IEnumerable<Mesa>>
+            await _mesaRepository.DeleteAsync(mesa);
+            return new OperationResult<Mesa>
             {
-                Result = mesas,
+                Result = mesa,
+                Message = "Mesa deletada com sucesso!"
             };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar mesas");
-            return new OperationResult<IEnumerable<Mesa>>
+            return new OperationResult<Mesa>
             {
                 Status = false,
                 Message = "Erro inesperado: " + ex.Message,
                 StatusCode = 500
             };
         }
+
     }
 }
