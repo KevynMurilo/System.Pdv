@@ -2,8 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 using System.Pdv.Application.Interfaces.Clientes;
+using System.Pdv.Application.Interfaces.Garcons;
 using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Services.Clientes;
+using System.Pdv.Application.Services.Garcons;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
 using System.Pdv.Core.Interfaces;
@@ -47,10 +49,17 @@ builder.Host.UseSerilog();
 
 //Builder de mesas
 builder.Services.AddScoped<IMesaRepository, MesaRepository>();
-builder.Services.AddScoped<ICreateMesaService, CreateMesaService>();
 builder.Services.AddScoped<IGetAllServices, GetAllService>();
-builder.Services.AddScoped<IDeleteMesaService, DeleteMesaService>();
+builder.Services.AddScoped<IGetMesaByIdService, GetMesaByIdService>();
+builder.Services.AddScoped<ICreateMesaService, CreateMesaService>();
 builder.Services.AddScoped<IUpdateMesaService, UpdateMesaService>();
+builder.Services.AddScoped<IDeleteMesaService, DeleteMesaService>();
+
+//Builder de Garçons
+builder.Services.AddScoped<IGarcomRepository, GarcomRepository>();
+builder.Services.AddScoped<IGetAllGarcomService, GetAllGarcomService>();
+builder.Services.AddScoped<IGetByIdGarcomService, GetByIdGarcomService>();
+builder.Services.AddScoped<ICreateGarcomService, CreateGarcomService>();
 
 //Builder de clientes
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
