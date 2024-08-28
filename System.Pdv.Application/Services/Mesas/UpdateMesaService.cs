@@ -5,42 +5,38 @@ using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
-namespace System.Pdv.Application.Services.MesaService;
+namespace System.Pdv.Application.Services.Mesas;
 
-public class CreateMesaService : ICreateMesaService
+public class UpdateMesaService: IUpdateMesaService
 {
     private readonly IMesaRepository _mesaRepository;
-    private readonly ILogger<CreateMesaService> _logger;
-    public CreateMesaService(
+    private readonly ILogger<UpdateMesaService> _logger;
+    public UpdateMesaService(
         IMesaRepository mesaRepository,
-        ILogger<CreateMesaService> logger)
+        ILogger<UpdateMesaService> logger)
     {
         _mesaRepository = mesaRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> CreateMesa(MesaDto mesaDto)
+    public async Task<OperationResult<Mesa>> UpdateMesa(Guid id, MesaDto mesaDto)
     {
         try
         {
-            var mesaExists = await _mesaRepository.GetByNumberAsync(mesaDto.Numero);
-
-            if (mesaExists != null)
+            var mesa = await _mesaRepository.GetByIdAsync(id);
+            if (mesa == null)
             {
                 return new OperationResult<Mesa>
                 {
-                    Message = "Mesa já registrada",
-                    StatusCode = 409
+                    Message = "Mesa não encontrada",
+                    StatusCode = 404
                 };
             }
 
-            var mesa = new Mesa
-            {
-                Numero = mesaDto.Numero,
-                Status = mesaDto.Status,
-            };
+            mesa.Numero = mesaDto.Numero;
+            mesa.Status = mesaDto.Status;
 
-            await _mesaRepository.AddAsync(mesa);
+            await _mesaRepository.UpdateAsync(mesa);
 
             return new OperationResult<Mesa>
             {
@@ -49,7 +45,7 @@ public class CreateMesaService : ICreateMesaService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao registrar mesa");
+            _logger.LogError(ex, "Ocorreu um erro ao atualizar mesa");
             return new OperationResult<Mesa>
             {
                 ServerOn = false,

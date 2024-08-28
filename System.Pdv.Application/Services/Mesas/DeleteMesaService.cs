@@ -45,7 +45,7 @@ public class DeleteMesaService : IDeleteMesaService
             _logger.LogError(ex, "Ocorreu um erro ao listar mesas");
             return new OperationResult<Mesa>
             {
-                Status = false,
+                ServerOn = false,
                 Message = "Erro inesperado: " + ex.Message,
                 StatusCode = 500
             };

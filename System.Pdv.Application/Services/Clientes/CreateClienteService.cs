@@ -43,7 +43,7 @@ public class CreateClienteService : ICreateClienteService
             _logger.LogError(ex, "Ocorreu um erro ao registrar cliente");
             return new OperationResult<Cliente>
             {
-                Status = false,
+                ServerOn = false,
                 Message = "Erro inesperado: " + ex.Message,
                 StatusCode = 500
             };
