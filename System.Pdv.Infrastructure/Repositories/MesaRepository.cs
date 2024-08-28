@@ -27,14 +27,14 @@ public class MesaRepository : IMesaRepository
             .ToListAsync();
     }
 
-    public async Task<Mesa> GetByIdAsync(Guid id)
+    public async Task<Mesa?> GetByIdAsync(Guid id)
     {
         return await _context.Mesas
             .AsNoTracking()
             .FirstOrDefaultAsync(m => m.Id == id);
     }
 
-    public async Task<Mesa> GetByNumberAsync(int numero)
+    public async Task<Mesa?> GetByNumberAsync(int numero)
     {
         return await _context.Mesas.AsNoTracking().FirstOrDefaultAsync(m => m.Numero == numero);
     }
