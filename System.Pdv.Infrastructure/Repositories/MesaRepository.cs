@@ -44,4 +44,10 @@ public class MesaRepository : IMesaRepository
         _context.Mesas.Remove(mesa);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(Mesa mesa)
+    {
+        _context.Mesas.Update(mesa);
+        await _context.SaveChangesAsync();
+    }
 }

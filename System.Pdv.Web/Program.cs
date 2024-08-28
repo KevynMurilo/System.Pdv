@@ -50,6 +50,7 @@ builder.Services.AddScoped<IMesaRepository, MesaRepository>();
 builder.Services.AddScoped<ICreateMesaService, CreateMesaService>();
 builder.Services.AddScoped<IGetAllServices, GetAllService>();
 builder.Services.AddScoped<IDeleteMesaService, DeleteMesaService>();
+builder.Services.AddScoped<IUpdateMesaService, UpdateMesaService>();
 
 //Builder de clientes
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();

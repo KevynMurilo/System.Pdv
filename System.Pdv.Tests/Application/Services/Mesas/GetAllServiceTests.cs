@@ -28,7 +28,7 @@ public class GetAllServicesTests
 
         var result = await _service.GetAllMesas();
 
-        Assert.True(result.Status);
+        Assert.True(result.ServerOn);
         Assert.Equal("Nenhuma mesa registrada", result.Message);
         Assert.Equal(404, result.StatusCode);
     }
@@ -45,7 +45,7 @@ public class GetAllServicesTests
 
         var result = await _service.GetAllMesas();
 
-        Assert.True(result.Status);
+        Assert.True(result.ServerOn);
         Assert.Equal(mesas, result.Result.ToList());
     }
 
@@ -57,7 +57,7 @@ public class GetAllServicesTests
 
         var result = await _service.GetAllMesas();
 
-        Assert.False(result.Status);
+        Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Erro de teste", result.Message);
         Assert.Equal(500, result.StatusCode);
 

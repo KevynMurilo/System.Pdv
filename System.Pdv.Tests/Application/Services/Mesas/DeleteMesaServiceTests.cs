@@ -28,7 +28,7 @@ namespace System.Pdv.Tests.Application.Services.Mesas
 
             var result = await _deleteMesaService.DeleteMesa(id);
 
-            Assert.True(result.Status);
+            Assert.True(result.ServerOn);
             Assert.Equal("Mesa não encontrada", result.Message);
             Assert.Equal(404, result.StatusCode);
         }
@@ -43,7 +43,7 @@ namespace System.Pdv.Tests.Application.Services.Mesas
             var result = await _deleteMesaService.DeleteMesa(id);
 
             _mockMesaRepository.Verify(repo => repo.DeleteAsync(mesa), Times.Once);
-            Assert.True(result.Status);
+            Assert.True(result.ServerOn);
             Assert.Equal("Mesa deletada com sucesso!", result.Message);
         }
 
@@ -56,7 +56,7 @@ namespace System.Pdv.Tests.Application.Services.Mesas
 
             var result = await _deleteMesaService.DeleteMesa(id);
 
-            Assert.False(result.Status);
+            Assert.False(result.ServerOn);
             Assert.Equal("Erro inesperado: Test exception", result.Message);
             Assert.Equal(500, result.StatusCode);
 

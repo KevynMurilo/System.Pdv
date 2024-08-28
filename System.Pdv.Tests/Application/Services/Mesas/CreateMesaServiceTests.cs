@@ -69,7 +69,7 @@ namespace System.Pdv.Tests.Application.Services.Mesas
 
             var result = await _createMesaService.CreateMesa(mesaDto);
 
-            Assert.False(result.Status);
+            Assert.False(result.ServerOn);
             Assert.Equal(500, result.StatusCode);
             Assert.Equal("Erro inesperado: Database error", result.Message);
 

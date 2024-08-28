@@ -7,7 +7,7 @@ public class Produto
     public string Descricao { get; set; }
     public decimal Preco { get; set; }
     public bool Disponivel { get; set; } = true;
-
-    public ICollection<Categoria> Categoria { get; set; }
+    public Guid CategoriaId { get; set; }   
+    public Categoria Categoria { get; set; }
     public ICollection<ItemPedido> Itens { get; set; }
 }
