@@ -7,10 +7,10 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Admin> Admins { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
+    public DbSet<Role> Roles { get; set; }
     public DbSet<Cliente> Clientes { get; set; }
-    public DbSet<Garcom> Garcons { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<ItemAdicional> Adicionais { get; set; }
     public DbSet<ItemPedido> ItensPedidos { get; set; }
     public DbSet<Mesa> Mesas { get; set; }

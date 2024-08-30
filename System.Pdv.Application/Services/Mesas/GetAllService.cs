@@ -21,29 +21,15 @@ public class GetAllService : IGetAllServices
         try
         {
             var mesas = await _mesaRepository.GetAllAsync();
-            if (mesas == null || !mesas.Any())
-            {
-                return new OperationResult<IEnumerable<Mesa>>
-                {
-                    Message = "Nenhuma mesa registrada",
-                    StatusCode = 404
-                };
-            }
+            if (!mesas.Any())
+                return new OperationResult<IEnumerable<Mesa>> { Message = "Nenhuma mesa registrada", StatusCode = 404 };
 
-            return new OperationResult<IEnumerable<Mesa>>
-            {
-                Result = mesas,
-            };
+            return new OperationResult<IEnumerable<Mesa>> { Result = mesas };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar mesas");
-            return new OperationResult<IEnumerable<Mesa>>
-            {
-                ServerOn = false,
-                Message = "Erro inesperado: " + ex.Message,
-                StatusCode = 500
-            };
+            return new OperationResult<IEnumerable<Mesa>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

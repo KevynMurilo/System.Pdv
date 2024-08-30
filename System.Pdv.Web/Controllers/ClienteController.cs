@@ -26,7 +26,7 @@ public class ClienteController : ControllerBase
             var result = await _createClienteService.CreateCliente(clienteDto);
             return result.StatusCode == 200
                 ? Ok(result)
-                : StatusCode(result.StatusCode, result.Message);
+                : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {

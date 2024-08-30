@@ -13,7 +13,7 @@ public class Pedido
     public Cliente? Cliente { get; set; }
 
     public Guid GarcomId { get; set; }
-    public Garcom Garcom { get; set; }
+    public Usuario Garcom { get; set; }
 
     public TipoPedido TipoPedido { get; set; } = TipoPedido.Externo;
 

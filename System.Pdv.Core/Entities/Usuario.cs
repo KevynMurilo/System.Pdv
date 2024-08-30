@@ -2,9 +2,14 @@
 
 namespace System.Pdv.Core.Entities;
 
-public class Garcom
+public class Usuario
 {
     public Guid Id { get; set; }
+
+    public Guid RoleId { get; set; }
+    [JsonIgnore]
+    public Role Role { get; set; }
+
     public string Nome { get; set; }
     public string Email { get; set; }
 

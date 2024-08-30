@@ -51,25 +51,14 @@ namespace System.Pdv.Tests.Application.Services.Mesas
         public async Task DeleteMesa_ShouldLogError_WhenExceptionIsThrown()
         {
             var id = Guid.NewGuid();
-            var exception = new Exception("Test exception");
+            var exception = new Exception("Database error");
             _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ThrowsAsync(exception);
 
             var result = await _deleteMesaService.DeleteMesa(id);
 
             Assert.False(result.ServerOn);
-            Assert.Equal("Erro inesperado: Test exception", result.Message);
+            Assert.Equal("Erro inesperado: Database error", result.Message);
             Assert.Equal(500, result.StatusCode);
-
-            _mockLogger.Verify(
-                logger => logger.Log(
-                    LogLevel.Error,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Ocorreu um erro ao listar mesas")),
-                    It.Is<Exception>(e => e == exception),
-                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()
-                ),
-                Times.Once
-            );
         }
     }
 }

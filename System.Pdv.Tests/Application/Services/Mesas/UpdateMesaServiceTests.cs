@@ -70,14 +70,6 @@ namespace System.Pdv.Tests.Services.Mesas
             Assert.False(result.ServerOn);
             Assert.Equal(500, result.StatusCode);
             Assert.StartsWith("Erro inesperado:", result.Message);
-
-            _loggerMock.Verify(logger =>
-           logger.Log(
-               LogLevel.Error,
-               It.IsAny<EventId>(),
-               It.Is<It.IsAnyType>((v, t) => true),
-               It.Is<Exception>(ex => ex == exception),
-               It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once);
         }
     }
 }

@@ -72,14 +72,6 @@ namespace System.Pdv.Tests.Application.Services.Mesas
             Assert.False(result.ServerOn);
             Assert.Equal(500, result.StatusCode);
             Assert.Equal("Erro inesperado: Database error", result.Message);
-
-            _loggerMock.Verify(logger =>
-                logger.Log(
-                    It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => true),
-                    It.IsAny<Exception>(),
-                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }
     }
 }

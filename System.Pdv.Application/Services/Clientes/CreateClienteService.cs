@@ -33,20 +33,12 @@ public class CreateClienteService : ICreateClienteService
 
             await _clienteRepository.AddAsync(cliente);
 
-            return new OperationResult<Cliente>
-            {
-                Result = cliente,
-            };
+            return new OperationResult<Cliente> { Result = cliente };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao registrar cliente");
-            return new OperationResult<Cliente>
-            {
-                ServerOn = false,
-                Message = "Erro inesperado: " + ex.Message,
-                StatusCode = 500
-            };
+            return new OperationResult<Cliente> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }
