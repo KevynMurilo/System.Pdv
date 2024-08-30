@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
-using System.Pdv.Application.Interfaces.Clientes;
 using System.Pdv.Application.Interfaces.Mesas;
 
 namespace System.Pdv.Web.Controllers;

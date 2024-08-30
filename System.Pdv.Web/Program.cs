@@ -6,13 +6,11 @@ using Serilog;
 using Serilog.Sinks.PostgreSQL;
 using System.Pdv.Application.Interfaces.Auth;
 using System.Pdv.Application.Interfaces.Authentication;
-using System.Pdv.Application.Interfaces.Clientes;
 using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Application.Services.Auth;
 using System.Pdv.Application.Services.Authentication;
-using System.Pdv.Application.Services.Clientes;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
 using System.Pdv.Application.Services.Roles;
@@ -82,10 +80,6 @@ builder.Services.AddScoped<IGetByIdUsuarioService, GetByIdUsuarioService>();
 builder.Services.AddScoped<ICreateUsuarioService, CreateUsuarioService>();
 builder.Services.AddScoped<IUpdateUsuarioService, UpdateUsuarioService>();
 builder.Services.AddScoped<IDeleteUsuarioService, DeleteUsuarioService>();
-
-//Builder de clientes
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<ICreateClienteService, CreateClienteService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

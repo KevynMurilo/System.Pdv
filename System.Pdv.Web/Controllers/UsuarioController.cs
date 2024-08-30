@@ -13,14 +13,14 @@ public class UsuarioController : ControllerBase
     private readonly ICreateUsuarioService _createUsuarioService;
     private readonly IUpdateUsuarioService _updateUsuarioService;
     private readonly IDeleteUsuarioService _deleteGUsuarioService;
-    private readonly ILogger<ClienteController> _logger;
+    private readonly ILogger<UsuarioController> _logger;
     public UsuarioController(
         IGetAllUsuarioService getAllUsuarioService,
         IGetByIdUsuarioService getByIdUsuarioService,
         ICreateUsuarioService createUsuarioService,
         IUpdateUsuarioService updateUsuarioService,
         IDeleteUsuarioService deleteUsuarioService,
-        ILogger<ClienteController> logger)
+        ILogger<UsuarioController> logger)
     {
         _getAllUsuarioService = getAllUsuarioService;
         _getByIdUsuarioService = getByIdUsuarioService;
