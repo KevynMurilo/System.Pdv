@@ -5,13 +5,11 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 using System.Pdv.Application.Interfaces.Auth;
-using System.Pdv.Application.Interfaces.Authentication;
 using System.Pdv.Application.Interfaces.Categorias;
 using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Application.Services.Auth;
-using System.Pdv.Application.Services.Authentication;
 using System.Pdv.Application.Services.Categorias;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
@@ -62,8 +60,7 @@ builder.Host.UseSerilog();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IGetAllRolesService, GetAllRolesService>();
 
-// Injeção JWT
-builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
+// Injeção Autenticação
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 //Builder de mesas
@@ -81,12 +78,15 @@ builder.Services.AddScoped<IGetByIdUsuarioService, GetByIdUsuarioService>();
 builder.Services.AddScoped<ICreateUsuarioService, CreateUsuarioService>();
 builder.Services.AddScoped<IUpdateUsuarioService, UpdateUsuarioService>();
 builder.Services.AddScoped<IDeleteUsuarioService, DeleteUsuarioService>();
+builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
 
 //Builder de Categorias
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IGetAllCategoriaService, GetAllCategoriaService>();
+builder.Services.AddScoped<IGetByIdCategoriaService, GetByIdCategoriaService>();
 builder.Services.AddScoped<ICreateCategoriaService, CreateCategoriaService>();
 builder.Services.AddScoped<IUpdateCategoriaService,  UpdateCategoriaService>();
+builder.Services.AddScoped<IDeleteCategoriaService, DeleteCategoriaService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

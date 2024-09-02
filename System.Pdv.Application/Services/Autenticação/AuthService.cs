@@ -2,7 +2,7 @@
 using System.Pdv.Application.Common;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Auth;
-using System.Pdv.Application.Interfaces.Authentication;
+using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Auth;
