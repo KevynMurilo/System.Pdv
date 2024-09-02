@@ -13,10 +13,13 @@ public class UsuarioRepository : IUsuarioRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Usuario>> GetAllAsync()
+    public async Task<IEnumerable<Usuario>> GetAllAsync(int pageNumber, int pageSize)
     {
         return await _context.Usuarios
             .AsNoTracking()
+            .Include(r => r.Role)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 

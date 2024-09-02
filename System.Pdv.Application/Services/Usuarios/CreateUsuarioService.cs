@@ -6,7 +6,6 @@ using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Usuarios;
-
 public class CreateUsuarioService : ICreateUsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;

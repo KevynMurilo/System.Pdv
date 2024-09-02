@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Usuarios;
 
 public interface IGetAllUsuarioService
 {
-    Task<OperationResult<IEnumerable<Usuario>>> GetAllUsuario();
+    Task<OperationResult<IEnumerable<Usuario>>> GetAllUsuario(int pageNumber, int pageSize);
 }

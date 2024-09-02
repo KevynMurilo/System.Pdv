@@ -18,11 +18,11 @@ public class GetAllUsuarioService : IGetAllUsuarioService
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Usuario>>> GetAllUsuario()
+    public async Task<OperationResult<IEnumerable<Usuario>>> GetAllUsuario(int pageNumber, int pageSize)
     {
         try
         {
-            var usuarios = await _usuarioRepository.GetAllAsync();
+            var usuarios = await _usuarioRepository.GetAllAsync(pageNumber, pageSize);
             if (!usuarios.Any())
                 return new OperationResult<IEnumerable<Usuario>> { Message = "Nenhum usuário encontrado", StatusCode = 404 };
 

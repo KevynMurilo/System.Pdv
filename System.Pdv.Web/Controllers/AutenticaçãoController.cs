@@ -6,11 +6,11 @@ namespace System.Pdv.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AutenticaçãoController : ControllerBase
 {
     private readonly IAuthService _authService;
 
-    public AuthController(IAuthService authService)
+    public AutenticaçãoController(IAuthService authService)
     {
         _authService = authService;
     }

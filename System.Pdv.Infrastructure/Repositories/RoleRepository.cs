@@ -12,13 +12,6 @@ public class RoleRepository : IRoleRepository
     { 
         _context = context;
     }
-
-    public async Task AddRoleAsync(Role role)
-    {
-        _context.Roles.Add(role);
-        await _context.SaveChangesAsync();
-    }
-
     public async Task<IEnumerable<Role>> GetAllRolesAsync()
     {
         return await _context.Roles.AsNoTracking().ToListAsync();
