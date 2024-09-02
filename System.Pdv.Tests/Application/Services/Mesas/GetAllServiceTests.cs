@@ -45,8 +45,10 @@ public class GetAllServicesTests
 
         var result = await _service.GetAllMesas();
 
+        Assert.NotNull(result);
         Assert.True(result.ServerOn);
-        Assert.Equal(mesas, result.Result.ToList());
+        Assert.Equal(mesas, result.Result);
+        Assert.Equal(200, result.StatusCode);
     }
 
     [Fact]

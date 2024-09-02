@@ -27,7 +27,8 @@ namespace System.Pdv.Tests.Services.Mesas
         public async Task UpdateMesa_ShouldReturnNotFound_WhenMesaDoesNotExist()
         {
             var mesaId = Guid.NewGuid();
-            _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId)).ReturnsAsync((Mesa)null);
+            _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId))
+                .ReturnsAsync((Mesa)null);
 
             var mesaDto = new MesaDto { Numero = 1, Status = StatusMesa.Ocupada };
 

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Pdv.Application.Interfaces.Authentication;
+using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Core.Entities;
 using System.Security.Claims;
 using System.Text;
 
-namespace System.Pdv.Application.Services.Authentication;
+namespace System.Pdv.Application.Services.Usuarios;
 
 public class JwtTokenGeneratorUsuario : IJwtTokenGeneratorUsuario
 {
