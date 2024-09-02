@@ -33,7 +33,7 @@ public class UsuarioController : ControllerBase
 
     [Authorize(Roles = "ADMIN")]
     [HttpGet]
-    public async Task<IActionResult> GetAllUsuario([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1)
+    public async Task<IActionResult> GetAllUsuario([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
         {

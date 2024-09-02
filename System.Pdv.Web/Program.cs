@@ -7,12 +7,14 @@ using Serilog.Sinks.PostgreSQL;
 using System.Pdv.Application.Interfaces.Auth;
 using System.Pdv.Application.Interfaces.Categorias;
 using System.Pdv.Application.Interfaces.Mesas;
+using System.Pdv.Application.Interfaces.Produtos;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Application.Services.Auth;
 using System.Pdv.Application.Services.Categorias;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
+using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Application.Services.Roles;
 using System.Pdv.Application.Services.Usuarios;
 using System.Pdv.Core.Interfaces;
@@ -87,6 +89,14 @@ builder.Services.AddScoped<IGetByIdCategoriaService, GetByIdCategoriaService>();
 builder.Services.AddScoped<ICreateCategoriaService, CreateCategoriaService>();
 builder.Services.AddScoped<IUpdateCategoriaService,  UpdateCategoriaService>();
 builder.Services.AddScoped<IDeleteCategoriaService, DeleteCategoriaService>();
+
+//Builder de Produtos
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<IGetAllProdutoService, GetAllProdutoService>();
+builder.Services.AddScoped<IGetByIdProdutoService, GetByIdProdutoService>();
+builder.Services.AddScoped<IGetProdutoByCategoriaService, GetProdutoByCategoriaService>();
+builder.Services.AddScoped<ICreateProdutoService, CreateProdutoService>();
+builder.Services.AddScoped<IUpdateProdutoService, UpdateProdutoService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
