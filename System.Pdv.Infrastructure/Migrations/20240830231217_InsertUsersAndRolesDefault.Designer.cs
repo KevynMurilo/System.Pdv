@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace System.Pdv.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240830184148_InsertRolesColumn")]
-    partial class InsertRolesColumn
+    [Migration("20240830231217_InsertUsersAndRolesDefault")]
+    partial class InsertUsersAndRolesDefault
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

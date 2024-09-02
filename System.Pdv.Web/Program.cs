@@ -6,11 +6,13 @@ using Serilog;
 using Serilog.Sinks.PostgreSQL;
 using System.Pdv.Application.Interfaces.Auth;
 using System.Pdv.Application.Interfaces.Authentication;
+using System.Pdv.Application.Interfaces.Categorias;
 using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Application.Services.Auth;
 using System.Pdv.Application.Services.Authentication;
+using System.Pdv.Application.Services.Categorias;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
 using System.Pdv.Application.Services.Roles;
@@ -59,7 +61,6 @@ builder.Host.UseSerilog();
 //Criar Role
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IGetAllRolesService, GetAllRolesService>();
-builder.Services.AddScoped<ICreateRoleService, CreateRoleService>();
 
 // Injeção JWT
 builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
@@ -80,6 +81,12 @@ builder.Services.AddScoped<IGetByIdUsuarioService, GetByIdUsuarioService>();
 builder.Services.AddScoped<ICreateUsuarioService, CreateUsuarioService>();
 builder.Services.AddScoped<IUpdateUsuarioService, UpdateUsuarioService>();
 builder.Services.AddScoped<IDeleteUsuarioService, DeleteUsuarioService>();
+
+//Builder de Categorias
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IGetAllCategoriaService, GetAllCategoriaService>();
+builder.Services.AddScoped<ICreateCategoriaService, CreateCategoriaService>();
+builder.Services.AddScoped<IUpdateCategoriaService,  UpdateCategoriaService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

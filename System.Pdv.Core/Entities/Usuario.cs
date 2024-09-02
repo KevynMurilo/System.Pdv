@@ -7,7 +7,6 @@ public class Usuario
     public Guid Id { get; set; }
 
     public Guid RoleId { get; set; }
-    [JsonIgnore]
     public Role Role { get; set; }
 
     public string Nome { get; set; }
