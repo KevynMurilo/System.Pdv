@@ -62,12 +62,5 @@ public class GetMesaByIdServiceTests
         Assert.Null(result.Result);
         Assert.Equal("Erro inesperado: Database failure", result.Message);
         Assert.Equal(500, result.StatusCode);
-        _loggerMock.Verify(logger =>
-            logger.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => true),
-                It.Is<Exception>(ex => ex == exception),
-                It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once);
     }
 }

@@ -37,29 +37,6 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.ToTable("ItemAdicionalItemPedido");
                 });
 
-            modelBuilder.Entity("System.Pdv.Core.Entities.Admin", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins");
-                });
-
             modelBuilder.Entity("System.Pdv.Core.Entities.Categoria", b =>
                 {
                     b.Property<Guid>("Id")
@@ -67,10 +44,12 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
 
                     b.ToTable("Categorias");
                 });
@@ -82,39 +61,14 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Clientes");
-                });
-
-            modelBuilder.Entity("System.Pdv.Core.Entities.Garcom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Garcons");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.ItemAdicional", b =>
@@ -124,7 +78,6 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Preco")
@@ -142,7 +95,6 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Observacoes")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("PedidoId")
@@ -173,9 +125,14 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Numero")
+                        .IsUnique();
 
                     b.ToTable("Mesas");
                 });
@@ -187,7 +144,6 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -244,14 +200,12 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("Disponivel")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Preco")
@@ -264,6 +218,26 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.ToTable("Produtos");
                 });
 
+            modelBuilder.Entity("System.Pdv.Core.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("System.Pdv.Core.Entities.StatusPedido", b =>
                 {
                     b.Property<Guid>("Id")
@@ -271,12 +245,39 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("StatusPedidos");
+                });
+
+            modelBuilder.Entity("System.Pdv.Core.Entities.Usuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("ItemAdicionalItemPedido", b =>
@@ -319,7 +320,7 @@ namespace System.Pdv.Infrastructure.Migrations
                         .WithMany("Pedidos")
                         .HasForeignKey("ClienteId");
 
-                    b.HasOne("System.Pdv.Core.Entities.Garcom", "Garcom")
+                    b.HasOne("System.Pdv.Core.Entities.Usuario", "Garcom")
                         .WithMany("Pedidos")
                         .HasForeignKey("GarcomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -363,17 +364,23 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.Navigation("Categoria");
                 });
 
+            modelBuilder.Entity("System.Pdv.Core.Entities.Usuario", b =>
+                {
+                    b.HasOne("System.Pdv.Core.Entities.Role", "Role")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("System.Pdv.Core.Entities.Categoria", b =>
                 {
                     b.Navigation("Produtos");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Cliente", b =>
-                {
-                    b.Navigation("Pedidos");
-                });
-
-            modelBuilder.Entity("System.Pdv.Core.Entities.Garcom", b =>
                 {
                     b.Navigation("Pedidos");
                 });
@@ -386,6 +393,16 @@ namespace System.Pdv.Infrastructure.Migrations
             modelBuilder.Entity("System.Pdv.Core.Entities.Produto", b =>
                 {
                     b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("System.Pdv.Core.Entities.Role", b =>
+                {
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("System.Pdv.Core.Entities.Usuario", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }

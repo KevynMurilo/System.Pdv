@@ -25,33 +25,19 @@ public class UpdateMesaService: IUpdateMesaService
         {
             var mesa = await _mesaRepository.GetByIdAsync(id);
             if (mesa == null)
-            {
-                return new OperationResult<Mesa>
-                {
-                    Message = "Mesa não encontrada",
-                    StatusCode = 404
-                };
-            }
+                return new OperationResult<Mesa> { Message = "Mesa não encontrada", StatusCode = 404 };
 
             mesa.Numero = mesaDto.Numero;
             mesa.Status = mesaDto.Status;
 
             await _mesaRepository.UpdateAsync(mesa);
 
-            return new OperationResult<Mesa>
-            {
-                Result = mesa
-            };
+            return new OperationResult<Mesa> { Result = mesa };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao atualizar mesa");
-            return new OperationResult<Mesa>
-            {
-                ServerOn = false,
-                Message = "Erro inesperado: " + ex.Message,
-                StatusCode = 500
-            };
+            return new OperationResult<Mesa> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

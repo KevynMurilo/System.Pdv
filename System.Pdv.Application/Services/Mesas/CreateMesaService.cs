@@ -23,39 +23,19 @@ public class CreateMesaService : ICreateMesaService
     {
         try
         {
-            var mesaExists = await _mesaRepository.GetByNumberAsync(mesaDto.Numero);
+            if (await _mesaRepository.GetByNumberAsync(mesaDto.Numero) != null)
+                return new OperationResult<Mesa> { Message = "Mesa já registrada", StatusCode = 409 };
 
-            if (mesaExists != null)
-            {
-                return new OperationResult<Mesa>
-                {
-                    Message = "Mesa já registrada",
-                    StatusCode = 409
-                };
-            }
-
-            var mesa = new Mesa
-            {
-                Numero = mesaDto.Numero,
-                Status = mesaDto.Status,
-            };
-
+            var mesa = new Mesa { Numero = mesaDto.Numero, Status = mesaDto.Status };
+            
             await _mesaRepository.AddAsync(mesa);
 
-            return new OperationResult<Mesa>
-            {
-                Result = mesa
-            };
+            return new OperationResult<Mesa> { Result = mesa };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao registrar mesa");
-            return new OperationResult<Mesa>
-            {
-                ServerOn = false,
-                Message = "Erro inesperado: " + ex.Message,
-                StatusCode = 500
-            };
+            return new OperationResult<Mesa> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

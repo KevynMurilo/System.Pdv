@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
-using System.Pdv.Application.Interfaces.Clientes;
 using System.Pdv.Application.Interfaces.Mesas;
 
 namespace System.Pdv.Web.Controllers;
@@ -39,7 +39,7 @@ public class MesaController : ControllerBase
             var result = await _getAllServices.GetAllMesas();
             return result.StatusCode == 200
                 ? Ok(result)
-                : StatusCode(result.StatusCode, result.Message);
+                : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
@@ -56,7 +56,7 @@ public class MesaController : ControllerBase
             var result = await _getMesaById.GetById(id);
             return result.StatusCode == 200
                 ? Ok(result)
-                : StatusCode(result.StatusCode, result.Message);
+                : StatusCode(result.StatusCode, result);
 
         }
         catch (Exception ex)
@@ -66,6 +66,7 @@ public class MesaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateMesa(MesaDto mesaDto)
     {
@@ -74,7 +75,7 @@ public class MesaController : ControllerBase
             var result = await _createMesaService.CreateMesa(mesaDto);
             return result.StatusCode == 200
                ? Ok(result)
-               : StatusCode(result.StatusCode, result.Message);
+               : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
@@ -83,6 +84,7 @@ public class MesaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateMesa(Guid id, MesaDto mesaDto)
     {
@@ -91,7 +93,7 @@ public class MesaController : ControllerBase
             var result = await _updateMesaService.UpdateMesa(id, mesaDto);
             return result.StatusCode == 200
                 ? Ok(result)
-                : StatusCode(result.StatusCode, result.Message);
+                : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
@@ -100,6 +102,7 @@ public class MesaController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteMesa(Guid id)
     {
@@ -108,7 +111,7 @@ public class MesaController : ControllerBase
             var result = await _deleteMesaService.DeleteMesa(id);
             return result.StatusCode == 200
                 ? Ok(result)
-                : StatusCode(result.StatusCode, result.Message);
+                : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {

@@ -24,28 +24,14 @@ public class GetMesaByIdService : IGetMesaByIdService
         {
             var mesa = await _repository.GetByIdAsync(id);
             if (mesa == null)
-            {
-                return new OperationResult<Mesa>
-                {
-                    Message = "Mesa não encontrada",
-                    StatusCode = 404
-                };
-            }
+                return new OperationResult<Mesa> { Message = "Mesa não encontrada", StatusCode = 404 };
 
-            return new OperationResult<Mesa>
-            {
-                Result = mesa
-            };
+            return new OperationResult<Mesa> { Result = mesa };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar mesa por id");
-            return new OperationResult<Mesa>
-            {
-                ServerOn = false,
-                Message = "Erro inesperado: " + ex.Message,
-                StatusCode = 500
-            };
+            return new OperationResult<Mesa> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }
