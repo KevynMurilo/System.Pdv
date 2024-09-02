@@ -1,4 +1,6 @@
-﻿namespace System.Pdv.Core.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace System.Pdv.Core.Entities;
 
 public class Produto
 {
@@ -7,7 +9,10 @@ public class Produto
     public string Descricao { get; set; }
     public decimal Preco { get; set; }
     public bool Disponivel { get; set; } = true;
+
     public Guid CategoriaId { get; set; }   
     public Categoria Categoria { get; set; }
+
+    [JsonIgnore]
     public ICollection<ItemPedido> Itens { get; set; }
 }

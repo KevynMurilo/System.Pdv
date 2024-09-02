@@ -6,6 +6,7 @@ public class Usuario
 {
     public Guid Id { get; set; }
 
+    [JsonIgnore]
     public Guid RoleId { get; set; }
     public Role Role { get; set; }
 
