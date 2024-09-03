@@ -5,60 +5,58 @@ using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
-namespace System.Pdv.Tests.Application.Services.Mesas
+namespace System.Pdv.Tests.Application.Services.Mesas;
+public class DeleteMesaServiceTests
 {
-    public class DeleteMesaServiceTests
+    private readonly Mock<IMesaRepository> _mockMesaRepository;
+    private readonly Mock<ILogger<DeleteMesaService>> _mockLogger;
+    private readonly DeleteMesaService _deleteMesaService;
+
+    public DeleteMesaServiceTests()
     {
-        private readonly Mock<IMesaRepository> _mockMesaRepository;
-        private readonly Mock<ILogger<DeleteMesaService>> _mockLogger;
-        private readonly DeleteMesaService _deleteMesaService;
+        _mockMesaRepository = new Mock<IMesaRepository>();
+        _mockLogger = new Mock<ILogger<DeleteMesaService>>();
+        _deleteMesaService = new DeleteMesaService(_mockMesaRepository.Object, _mockLogger.Object);
+    }
 
-        public DeleteMesaServiceTests()
-        {
-            _mockMesaRepository = new Mock<IMesaRepository>();
-            _mockLogger = new Mock<ILogger<DeleteMesaService>>();
-            _deleteMesaService = new DeleteMesaService(_mockMesaRepository.Object, _mockLogger.Object);
-        }
+    [Fact]
+    public async Task DeleteMesa_ShouldReturnNotFound_WhenMesaDoesNotExist()
+    {
+        var id = Guid.NewGuid();
+        _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync((Mesa)null);
 
-        [Fact]
-        public async Task DeleteMesa_ShouldReturnNotFound_WhenMesaDoesNotExist()
-        {
-            var id = Guid.NewGuid();
-            _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync((Mesa)null);
+        var result = await _deleteMesaService.DeleteMesa(id);
 
-            var result = await _deleteMesaService.DeleteMesa(id);
+        Assert.True(result.ServerOn);
+        Assert.Equal("Mesa não encontrada", result.Message);
+        Assert.Equal(404, result.StatusCode);
+    }
 
-            Assert.True(result.ServerOn);
-            Assert.Equal("Mesa não encontrada", result.Message);
-            Assert.Equal(404, result.StatusCode);
-        }
+    [Fact]
+    public async Task DeleteMesa_ShouldDeleteMesa_WhenMesaExists()
+    {
+        var id = Guid.NewGuid();
+        var mesa = new Mesa { Id = id };
+        _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(mesa);
 
-        [Fact]
-        public async Task DeleteMesa_ShouldDeleteMesa_WhenMesaExists()
-        {
-            var id = Guid.NewGuid();
-            var mesa = new Mesa { Id = id };
-            _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(mesa);
+        var result = await _deleteMesaService.DeleteMesa(id);
 
-            var result = await _deleteMesaService.DeleteMesa(id);
+        _mockMesaRepository.Verify(repo => repo.DeleteAsync(mesa), Times.Once);
+        Assert.True(result.ServerOn);
+        Assert.Equal("Mesa deletada com sucesso!", result.Message);
+    }
 
-            _mockMesaRepository.Verify(repo => repo.DeleteAsync(mesa), Times.Once);
-            Assert.True(result.ServerOn);
-            Assert.Equal("Mesa deletada com sucesso!", result.Message);
-        }
+    [Fact]
+    public async Task DeleteMesa_ShouldLogError_WhenExceptionIsThrown()
+    {
+        var id = Guid.NewGuid();
+        var exception = new Exception("Database error");
+        _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ThrowsAsync(exception);
 
-        [Fact]
-        public async Task DeleteMesa_ShouldLogError_WhenExceptionIsThrown()
-        {
-            var id = Guid.NewGuid();
-            var exception = new Exception("Database error");
-            _mockMesaRepository.Setup(repo => repo.GetByIdAsync(id)).ThrowsAsync(exception);
+        var result = await _deleteMesaService.DeleteMesa(id);
 
-            var result = await _deleteMesaService.DeleteMesa(id);
-
-            Assert.False(result.ServerOn);
-            Assert.Equal("Erro inesperado: Database error", result.Message);
-            Assert.Equal(500, result.StatusCode);
-        }
+        Assert.False(result.ServerOn);
+        Assert.Equal("Erro inesperado: Database error", result.Message);
+        Assert.Equal(500, result.StatusCode);
     }
 }

@@ -9,23 +9,32 @@ namespace System.Pdv.Web.Controllers;
 public class AutenticaçãoController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ILogger<AutenticaçãoController> _logger;
 
-    public AutenticaçãoController(IAuthService authService)
+    public AutenticaçãoController(
+        IAuthService authService,
+        ILogger<AutenticaçãoController> logger)
     {
         _authService = authService;
+        _logger = logger;
     }
 
     [HttpPost]
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        var token = await _authService.AuthenticateAsync(loginDto);
-
-        if (token == null)
+        try
         {
-            return Unauthorized();
-        }
+            var token = await _authService.AuthenticateAsync(loginDto);
 
-        return Ok(new { Token = token });
+            if (token == null) return Unauthorized();
+
+            return Ok(new { Token = token });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao fazer login");
+            return StatusCode(500, "Ocorreu um erro inesperado.");
+        }
     }
 }

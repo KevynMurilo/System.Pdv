@@ -6,7 +6,6 @@ using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Auth;
-
 public class AuthService : IAuthService
 {
     private readonly IUsuarioRepository _usuarioRepository;

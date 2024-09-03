@@ -7,7 +7,6 @@ using System.Pdv.Core.Interfaces;
 using System.Pdv.Core.Enums;
 
 namespace System.Pdv.Application.Tests.Services.Mesas;
-
 public class GetAllServicesTests
 {
     private readonly Mock<IMesaRepository> _mesaRepositoryMock;

@@ -6,7 +6,6 @@ using System.Pdv.Core.Interfaces;
 using Xunit;
 
 namespace System.Pdv.Tests.Application.Services.Categorias;
-
 public class GetAllCategoriaServiceTests
 {
     private readonly Mock<ICategoriaRepository> _repositoryMock;

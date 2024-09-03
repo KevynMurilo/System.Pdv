@@ -7,7 +7,6 @@ using System.Pdv.Core.Interfaces;
 using Xunit;
 
 namespace System.Pdv.Tests.Application.Services.Categorias;
-
 public class UpdateCategoriaServiceTests
 {
     private readonly Mock<ICategoriaRepository> _categoriasRepositoryMock;
@@ -35,7 +34,7 @@ public class UpdateCategoriaServiceTests
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
-        Assert.Equal(categoriaDto.Nome, result.Result.Nome);
+        Assert.Equal(categoriaDto.Nome.ToUpper(), result.Result.Nome);
         _categoriasRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Categoria>()), Times.Once);
     }
 

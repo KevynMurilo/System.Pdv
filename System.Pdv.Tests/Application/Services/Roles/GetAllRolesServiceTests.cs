@@ -5,6 +5,7 @@ using System.Pdv.Application.Services.Roles;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
+namespace System.Pdv.Tests.Application.Services.Roles;
 public class GetAllRolesServiceTests
 {
     private readonly Mock<IRoleRepository> _roleRepositoryMock;
