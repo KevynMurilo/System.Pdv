@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Produtos;
 
@@ -86,6 +87,7 @@ public class ProdutoController : ControllerBase
         
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateProduto(ProdutoDto produtoDto)
     {
@@ -103,6 +105,7 @@ public class ProdutoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateProduto(Guid id, ProdutoDto produtoDto)
     {
@@ -120,6 +123,7 @@ public class ProdutoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProduto(Guid id)
     {

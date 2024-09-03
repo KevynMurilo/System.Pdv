@@ -7,6 +7,8 @@ using System.Pdv.Core.Entities;
 using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Core.Interfaces;
 
+namespace System.Pdv.Tests.Services.Auth;
+
 public class AuthServiceTests
 {
     private readonly Mock<IUsuarioRepository> _usuarioRepositoryMock;

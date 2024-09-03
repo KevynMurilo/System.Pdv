@@ -4,16 +4,20 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
+using System.Pdv.Application.Interfaces.Adicionais;
 using System.Pdv.Application.Interfaces.Auth;
 using System.Pdv.Application.Interfaces.Categorias;
 using System.Pdv.Application.Interfaces.Mesas;
+using System.Pdv.Application.Interfaces.MetodosPagamento;
 using System.Pdv.Application.Interfaces.Produtos;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.Usuarios;
+using System.Pdv.Application.Services.Adicionais;
 using System.Pdv.Application.Services.Auth;
 using System.Pdv.Application.Services.Categorias;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
+using System.Pdv.Application.Services.MetodosPagamento;
 using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Application.Services.Roles;
 using System.Pdv.Application.Services.Usuarios;
@@ -98,6 +102,22 @@ builder.Services.AddScoped<IGetProdutoByCategoriaService, GetProdutoByCategoriaS
 builder.Services.AddScoped<ICreateProdutoService, CreateProdutoService>();
 builder.Services.AddScoped<IUpdateProdutoService, UpdateProdutoService>();
 builder.Services.AddScoped<IDeleteProdutoService, DeleteProdutoService>();
+
+//Builder de Adicionais
+builder.Services.AddScoped<IAdicionalRepository, AdicionalRepository>();
+builder.Services.AddScoped<IGetAllAdicionalServices, GetAllAdicionalServices>();
+builder.Services.AddScoped<IGetByIdAdicionalService, GetByIdAdicionalService>();
+builder.Services.AddScoped<ICreateAdicionalService, CreateAdicionalService>();
+builder.Services.AddScoped<IUpdateAdicionalService, UpdateAdicionalService>();
+builder.Services.AddScoped<IDeleteAdicionalService,  DeleteAdicionalService>();
+
+//Builder de MetodoPagamento
+builder.Services.AddScoped<IMetodoPagamentoRepository, MetodoPagamentoRepository>();
+builder.Services.AddScoped<IGetAllMetodoPagamentoServices, GetAllMetodoPagamentoServices>();
+builder.Services.AddScoped<IGetByIdMetodoPagamentoService, GetByIdMetodoPagamentoService>();
+builder.Services.AddScoped<ICreateMetodoPagamentoService, CreateMetodoPagamentoService>();
+builder.Services.AddScoped<IUpdateMetodoPagamentoService, UpdateMetodoPagamentoService>();
+builder.Services.AddScoped<IDeleteMetodoPagamentoService, DeleteMetodoPagamentoService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

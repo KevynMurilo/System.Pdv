@@ -46,7 +46,7 @@ namespace System.Pdv.Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "Roles",
                 keyColumn: "Nome",
-                keyValues: new[] { "Admin", "Garcom" });
+                keyValues: new[] { "ADMIN", "GARCOM" });
         }
     }
 }

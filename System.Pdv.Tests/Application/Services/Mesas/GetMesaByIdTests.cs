@@ -5,6 +5,7 @@ using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 using Xunit;
 
+namespace System.Pdv.Application.Tests.Services.Mesas;
 public class GetMesaByIdServiceTests
 {
     private readonly Mock<IMesaRepository> _mesaRepositoryMock;

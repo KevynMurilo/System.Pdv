@@ -22,6 +22,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Para falar que o valor é unico
         modelBuilder.Entity<Usuario>()
             .HasIndex(u => new { u.Email })
             .IsUnique();
@@ -38,8 +39,46 @@ public class AppDbContext : DbContext
             .HasIndex(m => new { m.Numero })
             .IsUnique();
 
+        modelBuilder.Entity<ItemAdicional>()
+            .HasIndex(a => new { a.Nome })
+            .IsUnique();
+
+        modelBuilder.Entity<MetodoPagamento>()
+            .HasIndex(m => new { m.Nome })
+            .IsUnique();
+
+        modelBuilder.Entity<StatusPedido>()
+            .HasIndex(o => new { o.Status })
+            .IsUnique();
+
+        //Para iniciar com um valor default caso não seja passado
         modelBuilder.Entity<Mesa>()
             .Property(m => m.Status)
             .HasDefaultValue(StatusMesa.Livre);
+
+        //Para quando uma tabela for deletada ao inves de deletar as que tem relacionamento, deixar como null
+        modelBuilder.Entity<Produto>()
+            .HasOne(p => p.Categoria)
+            .WithMany(c => c.Produtos)
+            .HasForeignKey(p => p.CategoriaId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Pedido>()
+               .HasOne(p => p.MetodoPagamento)
+               .WithMany(m => m.Pedidos)
+               .HasForeignKey(p => p.MetodoPagamentoId)
+               .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Pedido>()
+            .HasOne(p => p.StatusPedido)
+            .WithMany()
+            .HasForeignKey(p => p.StatusPedidoId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Pedido>()
+            .HasOne(p => p.Garcom)
+            .WithMany(u => u.Pedidos)
+            .HasForeignKey(p => p.GarcomId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

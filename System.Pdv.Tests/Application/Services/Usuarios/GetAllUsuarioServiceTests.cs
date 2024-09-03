@@ -6,7 +6,6 @@ using System.Pdv.Core.Interfaces;
 using Xunit;
 
 namespace System.Pdv.Tests.Application.Services.Usuarios;
-
 public class GetAllUsuarioServiceTests
 {
     private readonly Mock<IUsuarioRepository> _usuarioRepositoryMock;

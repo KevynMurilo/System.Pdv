@@ -25,7 +25,7 @@ public class UpdateCategoriaService : IUpdateCategoriaService
             var categoria = await _categoriasRepository.GetByIdAsync(id);
             if (categoria == null) return new OperationResult<Categoria> { Message = "Categoria não encontrada", StatusCode = 404 };
 
-            categoria.Nome = categoriaDto.Nome;
+            categoria.Nome = categoriaDto.Nome.ToUpper();
 
             await _categoriasRepository.UpdateAsync(categoria);
 

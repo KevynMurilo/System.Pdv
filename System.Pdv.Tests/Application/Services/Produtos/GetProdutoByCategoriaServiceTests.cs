@@ -5,6 +5,7 @@ using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
+namespace System.Pdv.Tests.Application.Services.Produtos;
 public class GetProdutoByCategoriaServiceTests
 {
     private readonly Mock<IProdutoRepository> _produtoRepositoryMock;

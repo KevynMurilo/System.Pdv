@@ -85,6 +85,9 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
                     b.ToTable("Adicionais");
                 });
 
@@ -148,6 +151,9 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
                     b.ToTable("MetodoPagamento");
                 });
 
@@ -172,6 +178,9 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.Property<Guid>("StatusPedidoId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("StatusPedidoId1")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("TipoPedido")
                         .HasColumnType("integer");
 
@@ -187,6 +196,8 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("StatusPedidoId");
 
+                    b.HasIndex("StatusPedidoId1");
+
                     b.ToTable("Pedidos");
                 });
 
@@ -196,7 +207,7 @@ namespace System.Pdv.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CategoriaId")
+                    b.Property<Guid?>("CategoriaId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Descricao")
@@ -248,6 +259,9 @@ namespace System.Pdv.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Status")
+                        .IsUnique();
 
                     b.ToTable("StatusPedidos");
                 });
@@ -323,24 +337,28 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasOne("System.Pdv.Core.Entities.Usuario", "Garcom")
                         .WithMany("Pedidos")
                         .HasForeignKey("GarcomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("System.Pdv.Core.Entities.Mesa", "Mesa")
-                        .WithMany()
+                        .WithMany("Pedidos")
                         .HasForeignKey("MesaId");
 
                     b.HasOne("System.Pdv.Core.Entities.MetodoPagamento", "MetodoPagamento")
-                        .WithMany()
+                        .WithMany("Pedidos")
                         .HasForeignKey("MetodoPagamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("System.Pdv.Core.Entities.StatusPedido", "StatusPedido")
                         .WithMany()
                         .HasForeignKey("StatusPedidoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
+
+                    b.HasOne("System.Pdv.Core.Entities.StatusPedido", null)
+                        .WithMany("Pedidos")
+                        .HasForeignKey("StatusPedidoId1");
 
                     b.Navigation("Cliente");
 
@@ -358,8 +376,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasOne("System.Pdv.Core.Entities.Categoria", "Categoria")
                         .WithMany("Produtos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Categoria");
                 });
@@ -385,6 +402,16 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.Navigation("Pedidos");
                 });
 
+            modelBuilder.Entity("System.Pdv.Core.Entities.Mesa", b =>
+                {
+                    b.Navigation("Pedidos");
+                });
+
+            modelBuilder.Entity("System.Pdv.Core.Entities.MetodoPagamento", b =>
+                {
+                    b.Navigation("Pedidos");
+                });
+
             modelBuilder.Entity("System.Pdv.Core.Entities.Pedido", b =>
                 {
                     b.Navigation("Items");
@@ -398,6 +425,11 @@ namespace System.Pdv.Infrastructure.Migrations
             modelBuilder.Entity("System.Pdv.Core.Entities.Role", b =>
                 {
                     b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("System.Pdv.Core.Entities.StatusPedido", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Usuario", b =>

@@ -6,6 +6,7 @@ using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
+namespace System.Pdv.Tests.Application.Services.Produtos;
 public class UpdateProdutoServiceTests
 {
     private readonly Mock<IProdutoRepository> _produtoRepositoryMock;
@@ -25,8 +26,9 @@ public class UpdateProdutoServiceTests
     public async Task UpdateProduto_ShouldReturnUpdatedProduto_WhenProdutoExistsAndCategoriaIsValid()
     {
         var produtoId = Guid.NewGuid();
-        var produto = new Produto { Id = produtoId, Nome = "Produto Antigo", CategoriaId = Guid.NewGuid() };
-        var categoria = new Categoria { Id = produto.CategoriaId, Nome = "Categoria Atualizada" };
+        var categoriaId = Guid.NewGuid();
+        var produto = new Produto { Id = produtoId, Nome = "Produto Antigo", CategoriaId = categoriaId };
+        var categoria = new Categoria { Id = categoriaId, Nome = "Categoria Atualizada" };
         var produtoDto = new ProdutoDto
         {
             Nome = "Produto Atualizado",

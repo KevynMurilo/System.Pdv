@@ -24,8 +24,7 @@ public class CreateCategoriaService : ICreateCategoriaService
     {
         try
         {
-            var categoriaExists = await _categoriaRepository.GetByNameAsync(categoriaDto.Nome);
-            if (categoriaExists != null)
+            if (await _categoriaRepository.GetByNameAsync(categoriaDto.Nome) != null)
                 return new OperationResult<Categoria> { Message = "Categoria já registrada", StatusCode = 409 };
 
             var categoria = new Categoria { Nome = categoriaDto.Nome.ToUpper() };

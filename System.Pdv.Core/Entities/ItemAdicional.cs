@@ -1,4 +1,6 @@
-﻿namespace System.Pdv.Core.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace System.Pdv.Core.Entities;
 
 public class ItemAdicional
 {
@@ -6,5 +8,6 @@ public class ItemAdicional
     public string Nome { get; set; }
     public decimal Preco { get; set; }
 
+    [JsonIgnore]
     public ICollection<ItemPedido> Itens { get; set; }
 }

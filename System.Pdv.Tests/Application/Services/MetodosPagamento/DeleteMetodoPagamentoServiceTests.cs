@@ -1,0 +1,68 @@
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using System.Pdv.Application.Services.MetodosPagamento;
+using System.Pdv.Core.Entities;
+using System.Pdv.Core.Interfaces;
+using Xunit;
+
+namespace System.Pdv.Tests.Application.Services.MetodosPagamento;
+
+public class DeleteMetodoPagamentoServiceTests
+{
+    private readonly Mock<IMetodoPagamentoRepository> _metodoPagamentoRepositoryMock;
+    private readonly Mock<ILogger<DeleteMetodoPagamentoService>> _loggerMock;
+    private readonly DeleteMetodoPagamentoService _service;
+
+    public DeleteMetodoPagamentoServiceTests()
+    {
+        _metodoPagamentoRepositoryMock = new Mock<IMetodoPagamentoRepository>();
+        _loggerMock = new Mock<ILogger<DeleteMetodoPagamentoService>>();
+        _service = new DeleteMetodoPagamentoService(_metodoPagamentoRepositoryMock.Object, _loggerMock.Object);
+    }
+
+    [Fact]
+    public async Task DeleteMetodoPagamento_ShouldReturnNotFound_WhenMetodoPagamentoDoesNotExist()
+    {
+        var id = Guid.NewGuid();
+        _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync((MetodoPagamento)null);
+
+        var result = await _service.DeleteMetodoPagamento(id);
+
+        Assert.NotNull(result);
+        Assert.Equal(404, result.StatusCode);
+        Assert.Equal("Método de pagamento não encontrado", result.Message);
+        Assert.Null(result.Result);
+    }
+
+    [Fact]
+    public async Task DeleteMetodoPagamento_ShouldReturnSuccess_WhenMetodoPagamentoIsDeletedSuccessfully()
+    {
+        var id = Guid.NewGuid();
+        var metodoPagamento = new MetodoPagamento { Id = id, Nome = "Pix" };
+        _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(metodoPagamento);
+        _metodoPagamentoRepositoryMock.Setup(repo => repo.DeleteAsync(It.IsAny<MetodoPagamento>())).Returns(Task.CompletedTask);
+
+        var result = await _service.DeleteMetodoPagamento(id);
+
+        Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.Equal("Método de pagamento deletado com sucesso", result.Message);
+        Assert.Equal(metodoPagamento, result.Result);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<MetodoPagamento>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteMetodoPagamento_ShouldLogErrorAndReturnServerError_WhenExceptionIsThrown()
+    {
+        var id = Guid.NewGuid();
+        _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception("Test exception"));
+
+        var result = await _service.DeleteMetodoPagamento(id);
+
+        Assert.NotNull(result);
+        Assert.False(result.ServerOn);
+        Assert.Equal(500, result.StatusCode);
+        Assert.Contains("Erro inesperado:", result.Message);
+    }
+}
