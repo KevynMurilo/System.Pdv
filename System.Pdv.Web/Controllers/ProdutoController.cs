@@ -13,6 +13,7 @@ public class ProdutoController : ControllerBase
     private readonly IGetProdutoByCategoriaService _getProdutoByCategoriaService;
     private readonly ICreateProdutoService _createProdutoService;
     private readonly IUpdateProdutoService _updateProdutoService;
+    private readonly IDeleteProdutoService _deleteProdutoService;
     private readonly ILogger<ProdutoController> _logger;
 
     public ProdutoController(
@@ -21,6 +22,7 @@ public class ProdutoController : ControllerBase
         IGetProdutoByCategoriaService getProdutoByCategoriaService,
         ICreateProdutoService createProdutoService,
         IUpdateProdutoService updateProdutoService,
+        IDeleteProdutoService deleteProdutoService,
         ILogger<ProdutoController> logger)
     {
         _getAllProdutoService = getAllProdutoService;
@@ -28,6 +30,7 @@ public class ProdutoController : ControllerBase
         _getProdutoByCategoriaService = getProdutoByCategoriaService;
         _createProdutoService = createProdutoService;
         _updateProdutoService = updateProdutoService;
+        _deleteProdutoService = deleteProdutoService;
         _logger = logger;
     }
 
@@ -113,6 +116,23 @@ public class ProdutoController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao atualizar produto");
+            return StatusCode(500, "Ocorreu um erro inesperado.");
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteProduto(Guid id)
+    {
+        try
+        {
+            var result = await _deleteProdutoService.DeleteProduto(id);
+            return result.StatusCode == 200
+                ? Ok(result)
+                : StatusCode(result.StatusCode, result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao deletar produto");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
