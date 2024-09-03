@@ -97,6 +97,7 @@ builder.Services.AddScoped<IGetByIdProdutoService, GetByIdProdutoService>();
 builder.Services.AddScoped<IGetProdutoByCategoriaService, GetProdutoByCategoriaService>();
 builder.Services.AddScoped<ICreateProdutoService, CreateProdutoService>();
 builder.Services.AddScoped<IUpdateProdutoService, UpdateProdutoService>();
+builder.Services.AddScoped<IDeleteProdutoService, DeleteProdutoService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
