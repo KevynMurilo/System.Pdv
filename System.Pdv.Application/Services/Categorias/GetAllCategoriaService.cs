@@ -11,13 +11,15 @@ public class GetAllCategoriaService : IGetAllCategoriaService
     private readonly ICategoriaRepository _categoriaRepository;
     private readonly ILogger<GetAllCategoriaService> _logger;
 
-    public GetAllCategoriaService(ICategoriaRepository categoriaRepository, ILogger<GetAllCategoriaService> logger)
+    public GetAllCategoriaService(
+        ICategoriaRepository categoriaRepository,
+        ILogger<GetAllCategoriaService> logger)
     {
         _categoriaRepository = categoriaRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Categoria>>> GetAllCategorias()
+    public async Task<OperationResult<IEnumerable<Categoria>>> ExecuteAsync()
     {
         try
         {

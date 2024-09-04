@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Usuarios;
 
 public interface IGetByIdUsuarioService
 {
-    Task<OperationResult<Usuario>> GetById(Guid id);
+    Task<OperationResult<Usuario>> ExecuteAsync(Guid id);
 }

@@ -19,7 +19,7 @@ public class DeleteUsuarioService : IDeleteUsuarioService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Usuario>> DeleteUsuario(Guid id)
+    public async Task<OperationResult<Usuario>> ExecuteAsync(Guid id)
     {
         try
         {

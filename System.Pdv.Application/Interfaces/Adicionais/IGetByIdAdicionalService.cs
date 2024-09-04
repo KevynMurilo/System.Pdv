@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Adicionais;
 
 public interface IGetByIdAdicionalService
 {
-    Task<OperationResult<ItemAdicional>> GetById(Guid id);
+    Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id);
 }

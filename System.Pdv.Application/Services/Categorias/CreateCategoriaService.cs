@@ -20,7 +20,7 @@ public class CreateCategoriaService : ICreateCategoriaService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Categoria>> CreateCategoria(CategoriaDto categoriaDto)
+    public async Task<OperationResult<Categoria>> ExecuteAsync(CategoriaDto categoriaDto)
     {
         try
         {

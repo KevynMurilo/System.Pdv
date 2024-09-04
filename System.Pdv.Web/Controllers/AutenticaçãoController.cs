@@ -25,7 +25,7 @@ public class AutenticaçãoController : ControllerBase
     {
         try
         {
-            var token = await _authService.AuthenticateAsync(loginDto);
+            var token = await _authService.ExecuteAsync(loginDto);
 
             if (token == null) return Unauthorized();
 

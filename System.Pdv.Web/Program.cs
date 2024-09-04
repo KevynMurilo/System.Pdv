@@ -11,6 +11,7 @@ using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Interfaces.MetodosPagamento;
 using System.Pdv.Application.Interfaces.Produtos;
 using System.Pdv.Application.Interfaces.Roles;
+using System.Pdv.Application.Interfaces.StatusPedidos;
 using System.Pdv.Application.Interfaces.Usuarios;
 using System.Pdv.Application.Services.Adicionais;
 using System.Pdv.Application.Services.Auth;
@@ -20,6 +21,7 @@ using System.Pdv.Application.Services.MesaService;
 using System.Pdv.Application.Services.MetodosPagamento;
 using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Application.Services.Roles;
+using System.Pdv.Application.Services.StatusPedidos;
 using System.Pdv.Application.Services.Usuarios;
 using System.Pdv.Core.Interfaces;
 using System.Pdv.Infrastructure.Data;
@@ -118,6 +120,14 @@ builder.Services.AddScoped<IGetByIdMetodoPagamentoService, GetByIdMetodoPagament
 builder.Services.AddScoped<ICreateMetodoPagamentoService, CreateMetodoPagamentoService>();
 builder.Services.AddScoped<IUpdateMetodoPagamentoService, UpdateMetodoPagamentoService>();
 builder.Services.AddScoped<IDeleteMetodoPagamentoService, DeleteMetodoPagamentoService>();
+
+//Builder de StatusPedido
+builder.Services.AddScoped<IStatusPedidoRepository, StatusPedidoRepository>();
+builder.Services.AddScoped<IGetAllStatusPedidoService, GetAllStatusPedidoService>();
+builder.Services.AddScoped<IGetByIdStatusPedidoService,  GetByIdStatusPedidoService>();
+builder.Services.AddScoped<ICreateStatusPedidoService, CreateStatusPedidoService>();
+builder.Services.AddScoped<IUpdateStatusPedidoService, UpdateStatusPedidoService>();
+builder.Services.AddScoped<IDeleteStatusPedidoService, DeleteStatusPedidoService>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

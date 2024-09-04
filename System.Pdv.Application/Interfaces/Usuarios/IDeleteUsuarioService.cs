@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Usuarios;
 
 public interface IDeleteUsuarioService
 {
-    Task<OperationResult<Usuario>> DeleteUsuario(Guid id);
+    Task<OperationResult<Usuario>> ExecuteAsync(Guid id);
 }

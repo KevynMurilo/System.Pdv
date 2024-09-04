@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Mesas;
 
 public interface ICreateMesaService
 {
-    Task<OperationResult<Mesa>> CreateMesa(MesaDto mesa);
+    Task<OperationResult<Mesa>> ExecuteAsync(MesaDto mesa);
 }

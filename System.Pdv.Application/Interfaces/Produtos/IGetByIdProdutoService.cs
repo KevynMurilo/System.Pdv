@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Produtos;
 
 public interface IGetByIdProdutoService
 {
-    Task<OperationResult<Produto>> GetByIdProduto(Guid id);
+    Task<OperationResult<Produto>> ExecuteAsync(Guid id);
 }

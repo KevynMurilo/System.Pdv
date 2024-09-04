@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Mesas;
 
 public interface IGetMesaByIdService
 {
-    Task<OperationResult<Mesa>> GetById(Guid id);
+    Task<OperationResult<Mesa>> ExecuteAsync(Guid id);
 }

@@ -27,11 +27,12 @@ public class GetMesaByIdServiceTests
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId))
             .ReturnsAsync(mesa);
 
-        var result = await _service.GetById(mesaId);
+        var result = await _service.ExecuteAsync(mesaId);
 
         Assert.NotNull(result);
         Assert.Equal(mesa, result.Result);
         Assert.Equal(200, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -41,12 +42,13 @@ public class GetMesaByIdServiceTests
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId))
             .ReturnsAsync((Mesa)null);
 
-        var result = await _service.GetById(mesaId);
+        var result = await _service.ExecuteAsync(mesaId);
 
         Assert.NotNull(result);
         Assert.Null(result.Result);
         Assert.Equal("Mesa não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -57,11 +59,12 @@ public class GetMesaByIdServiceTests
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId))
             .ThrowsAsync(exception);
 
-        var result = await _service.GetById(mesaId);
+        var result = await _service.ExecuteAsync(mesaId);
 
         Assert.NotNull(result);
         Assert.Null(result.Result);
         Assert.Equal("Erro inesperado: Database failure", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }

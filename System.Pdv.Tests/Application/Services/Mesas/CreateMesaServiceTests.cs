@@ -29,10 +29,11 @@ public class CreateMesaServiceTests
         _mesaRepositoryMock.Setup(repo => repo.GetByNumberAsync(It.IsAny<int>()))
             .ReturnsAsync(existingMesa);
 
-        var result = await _createMesaService.CreateMesa(mesaDto);
+        var result = await _createMesaService.ExecuteAsync(mesaDto);
 
         Assert.Equal(409, result.StatusCode);
         Assert.Equal("Mesa já registrada", result.Message);
+        _mesaRepositoryMock.Verify(repo => repo.GetByNumberAsync(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -51,11 +52,13 @@ public class CreateMesaServiceTests
                 return mesa;
             });
 
-        var result = await _createMesaService.CreateMesa(mesaDto);
+        var result = await _createMesaService.ExecuteAsync(mesaDto);
 
         Assert.NotNull(result.Result);
         Assert.Equal(mesaDto.Numero, result.Result.Numero);
         Assert.Equal(200, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetByNumberAsync(It.IsAny<int>()), Times.Once);
+        _mesaRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Mesa>()), Times.Once);
     }
 
     [Fact]
@@ -66,10 +69,11 @@ public class CreateMesaServiceTests
         _mesaRepositoryMock.Setup(repo => repo.GetByNumberAsync(It.IsAny<int>()))
             .ThrowsAsync(new Exception("Database error"));
 
-        var result = await _createMesaService.CreateMesa(mesaDto);
+        var result = await _createMesaService.ExecuteAsync(mesaDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Equal("Erro inesperado: Database error", result.Message);
+        _mesaRepositoryMock.Verify(repo => repo.GetByNumberAsync(It.IsAny<int>()), Times.Once);
     }
 }

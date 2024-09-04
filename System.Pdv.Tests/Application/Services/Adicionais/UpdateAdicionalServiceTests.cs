@@ -30,10 +30,11 @@ public class UpdateAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ReturnsAsync((ItemAdicional)null);
 
-        var result = await _updateAdicionalService.UpdateAdicional(adicionalId, adicionalDto);
+        var result = await _updateAdicionalService.ExecuteAsync(adicionalId, adicionalDto);
 
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Adicional não encontrado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -49,13 +50,15 @@ public class UpdateAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.UpdateAsync(adicional))
             .Returns(Task.CompletedTask);
 
-        var result = await _updateAdicionalService.UpdateAdicional(adicionalId, adicionalDto);
+        var result = await _updateAdicionalService.ExecuteAsync(adicionalId, adicionalDto);
 
         Assert.Equal(adicionalId, result.Result.Id);
         Assert.Equal(adicional.Nome, result.Result.Nome);
         Assert.Equal(15.0m, result.Result.Preco);
         Assert.Equal(200, result.StatusCode);
         Assert.Equal("Adicional atualizado com sucesso", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _adicionalRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<ItemAdicional>()), Times.Once);
     }
 
     [Fact]
@@ -68,10 +71,11 @@ public class UpdateAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ThrowsAsync(exception);
 
-        var result = await _updateAdicionalService.UpdateAdicional(adicionalId, adicionalDto);
+        var result = await _updateAdicionalService.ExecuteAsync(adicionalId, adicionalDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }

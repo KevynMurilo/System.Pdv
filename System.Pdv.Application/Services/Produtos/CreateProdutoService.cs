@@ -23,7 +23,7 @@ public class CreateProdutoService : ICreateProdutoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Produto>> CreateProduto(ProdutoDto produtoDto)
+    public async Task<OperationResult<Produto>> ExecuteAsync(ProdutoDto produtoDto)
     {
         try
         {

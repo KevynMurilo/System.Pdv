@@ -43,7 +43,7 @@ public class CreateProdutoServiceTests
             .Callback<Produto>(produto => capturedProduto = produto)
             .Returns(Task.CompletedTask);
 
-        var result = await _createProdutoService.CreateProduto(produtoDto);
+        var result = await _createProdutoService.ExecuteAsync(produtoDto);
 
         Assert.NotNull(result.Result);
         Assert.Equal(produtoDto.Nome, capturedProduto?.Nome);
@@ -51,6 +51,8 @@ public class CreateProdutoServiceTests
         Assert.Equal(produtoDto.Preco, capturedProduto?.Preco);
         Assert.Equal(produtoDto.Disponivel, capturedProduto?.Disponivel);
         Assert.Equal(produtoDto.CategoriaId, capturedProduto?.CategoriaId);
+        _produtoRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Produto>()), Times.Once);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoDto.CategoriaId), Times.Once);
     }
 
     [Fact]
@@ -67,11 +69,13 @@ public class CreateProdutoServiceTests
 
         _categoriaRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoDto.CategoriaId)).ReturnsAsync((Categoria)null);
 
-        var result = await _createProdutoService.CreateProduto(produtoDto);
+        var result = await _createProdutoService.ExecuteAsync(produtoDto);
 
         Assert.Null(result.Result);
         Assert.Equal("Categoria não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Produto>()), Times.Never);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoDto.CategoriaId), Times.Once);
     }
 
     [Fact]
@@ -88,10 +92,12 @@ public class CreateProdutoServiceTests
 
         _categoriaRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoDto.CategoriaId)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _createProdutoService.CreateProduto(produtoDto);
+        var result = await _createProdutoService.ExecuteAsync(produtoDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Produto>()), Times.Never);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoDto.CategoriaId), Times.Once);
     }
 }

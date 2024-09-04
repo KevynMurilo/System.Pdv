@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.MetodosPagamento;
 
 public interface IGetAllMetodoPagamentoServices
 {
-    Task<OperationResult<IEnumerable<MetodoPagamento>>> GetAllMetodoPagamento();
+    Task<OperationResult<IEnumerable<MetodoPagamento>>> ExecuteAsync();
 }

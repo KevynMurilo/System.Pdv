@@ -37,7 +37,7 @@ public class AdicionalController : ControllerBase
     {
         try
         {
-            var result = await _getAllAdicionalServices.GetAllAdicionais(pageNumber, pageSize);
+            var result = await _getAllAdicionalServices.ExecuteAsync(pageNumber, pageSize);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -54,7 +54,7 @@ public class AdicionalController : ControllerBase
     {
         try
         {
-            var result = await _getByIdAdicionalService.GetById(id);
+            var result = await _getByIdAdicionalService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -72,7 +72,7 @@ public class AdicionalController : ControllerBase
     {
         try
         {
-            var result = await _createAdicionalService.CreateAdicional(adicionalDto);
+            var result = await _createAdicionalService.ExecuteAsync(adicionalDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -90,7 +90,7 @@ public class AdicionalController : ControllerBase
     {
         try
         {
-            var result = await _updateAdicionalService.UpdateAdicional(id, adicionalDto);
+            var result = await _updateAdicionalService.ExecuteAsync(id, adicionalDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -108,7 +108,7 @@ public class AdicionalController : ControllerBase
     {
         try
         {
-            var result = await _deleteAdicionalService.DeleteAdicional(id);
+            var result = await _deleteAdicionalService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);

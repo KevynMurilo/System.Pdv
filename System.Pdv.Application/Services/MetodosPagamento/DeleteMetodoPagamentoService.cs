@@ -11,13 +11,15 @@ public class DeleteMetodoPagamentoService : IDeleteMetodoPagamentoService
     private readonly IMetodoPagamentoRepository _metodoPagamentoRepository;
     private readonly ILogger<DeleteMetodoPagamentoService> _logger;
 
-    public DeleteMetodoPagamentoService(IMetodoPagamentoRepository metodoPagamentoRepository, ILogger<DeleteMetodoPagamentoService> logger)
+    public DeleteMetodoPagamentoService(
+        IMetodoPagamentoRepository metodoPagamentoRepository,
+        ILogger<DeleteMetodoPagamentoService> logger)
     {
         _metodoPagamentoRepository = metodoPagamentoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<MetodoPagamento>> DeleteMetodoPagamento(Guid id)
+    public async Task<OperationResult<MetodoPagamento>> ExecuteAsync(Guid id)
     {
         try
         {

@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Mesas;
 
 public interface IDeleteMesaService
 {
-    Task<OperationResult<Mesa>> DeleteMesa(Guid id);
+    Task<OperationResult<Mesa>> ExecuteAsync(Guid id);
 }

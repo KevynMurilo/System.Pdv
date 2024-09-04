@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Categorias;
 
 public interface IDeleteCategoriaService
 {
-    Task<OperationResult<Categoria>> DeleteCategoria(Guid id);
+    Task<OperationResult<Categoria>> ExecuteAsync(Guid id);
 }

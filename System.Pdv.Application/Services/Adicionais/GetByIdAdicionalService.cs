@@ -19,7 +19,7 @@ public class GetByIdAdicionalService : IGetByIdAdicionalService
         _logger = logger;
     }
 
-    public async Task<OperationResult<ItemAdicional>> GetById(Guid id)
+    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id)
     {
         try
         {

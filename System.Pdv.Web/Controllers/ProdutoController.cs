@@ -40,7 +40,7 @@ public class ProdutoController : ControllerBase
     {
         try
         {
-            var result = await _getAllProdutoService.GetAllProduto(pageNumber, pageSize);
+            var result = await _getAllProdutoService.ExecuteAsync(pageNumber, pageSize);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -57,7 +57,7 @@ public class ProdutoController : ControllerBase
     {
         try
         {
-            var result = await _getByIdProdutoService.GetByIdProduto(id);
+            var result = await _getByIdProdutoService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -74,7 +74,7 @@ public class ProdutoController : ControllerBase
     {
         try
         {
-            var result = await _getProdutoByCategoriaService.GetProdutoByCategoria(categoriaId, pageNumber, pageSize);
+            var result = await _getProdutoByCategoriaService.ExecuteAsync(categoriaId, pageNumber, pageSize);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -93,7 +93,7 @@ public class ProdutoController : ControllerBase
     {
         try
         {
-            var result = await _createProdutoService.CreateProduto(produtoDto);
+            var result = await _createProdutoService.ExecuteAsync(produtoDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -111,7 +111,7 @@ public class ProdutoController : ControllerBase
     {
         try
         {
-            var result = await _updateProdutoService.UpdateProduto(id, produtoDto);
+            var result = await _updateProdutoService.ExecuteAsync(id, produtoDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -129,7 +129,7 @@ public class ProdutoController : ControllerBase
     {
         try
         {
-            var result = await _deleteProdutoService.DeleteProduto(id);
+            var result = await _deleteProdutoService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);

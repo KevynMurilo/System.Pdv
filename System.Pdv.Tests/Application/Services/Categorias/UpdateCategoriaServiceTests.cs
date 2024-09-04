@@ -30,11 +30,12 @@ public class UpdateCategoriaServiceTests
         _categoriasRepositoryMock.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(categoria);
         _categoriasRepositoryMock.Setup(repo => repo.UpdateAsync(It.IsAny<Categoria>())).Returns(Task.CompletedTask);
 
-        var result = await _service.UpdateCategoria(id, categoriaDto);
+        var result = await _service.ExecuteAsync(id, categoriaDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(categoriaDto.Nome.ToUpper(), result.Result.Nome);
+        _categoriasRepositoryMock.Verify(repo => repo.GetByIdAsync(id), Times.Once);
         _categoriasRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Categoria>()), Times.Once);
     }
 
@@ -46,12 +47,13 @@ public class UpdateCategoriaServiceTests
 
         _categoriasRepositoryMock.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync((Categoria)null);
 
-        var result = await _service.UpdateCategoria(id, categoriaDto);
+        var result = await _service.ExecuteAsync(id, categoriaDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Categoria não encontrada", result.Message);
+        _categoriasRepositoryMock.Verify(repo => repo.GetByIdAsync(id), Times.Once);
     }
 
     [Fact]
@@ -63,12 +65,12 @@ public class UpdateCategoriaServiceTests
         _categoriasRepositoryMock.Setup(repo => repo.GetByIdAsync(id))
             .ThrowsAsync(new Exception("Test exception"));
 
-        var result = await _service.UpdateCategoria(id, categoriaDto);
+        var result = await _service.ExecuteAsync(id, categoriaDto);
 
         Assert.NotNull(result);
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado:", result.Message);
-    
+        _categoriasRepositoryMock.Verify(repo => repo.GetByIdAsync(id), Times.Once);
     }
 }

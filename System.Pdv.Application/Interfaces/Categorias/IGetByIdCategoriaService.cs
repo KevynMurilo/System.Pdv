@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Categorias;
 
 public interface IGetByIdCategoriaService
 {
-    Task<OperationResult<Categoria>> GetById(Guid id);
+    Task<OperationResult<Categoria>> ExecuteAsync(Guid id);
 }

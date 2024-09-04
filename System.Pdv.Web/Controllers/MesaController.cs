@@ -36,7 +36,7 @@ public class MesaController : ControllerBase
     {
         try
         {
-            var result = await _getAllServices.GetAllMesas();
+            var result = await _getAllServices.ExecuteAsync();
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -53,7 +53,7 @@ public class MesaController : ControllerBase
     {
         try
         {
-            var result = await _getMesaById.GetById(id);
+            var result = await _getMesaById.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -72,7 +72,7 @@ public class MesaController : ControllerBase
     {
         try
         {
-            var result = await _createMesaService.CreateMesa(mesaDto);
+            var result = await _createMesaService.ExecuteAsync(mesaDto);
             return result.StatusCode == 200
                ? Ok(result)
                : StatusCode(result.StatusCode, result);
@@ -90,7 +90,7 @@ public class MesaController : ControllerBase
     {
         try
         {
-            var result = await _updateMesaService.UpdateMesa(id, mesaDto);
+            var result = await _updateMesaService.ExecuteAsync(id, mesaDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -108,7 +108,7 @@ public class MesaController : ControllerBase
     {
         try
         {
-            var result = await _deleteMesaService.DeleteMesa(id);
+            var result = await _deleteMesaService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);

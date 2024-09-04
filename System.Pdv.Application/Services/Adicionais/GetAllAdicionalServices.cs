@@ -11,13 +11,15 @@ public class GetAllAdicionalServices : IGetAllAdicionalServices
     private readonly IAdicionalRepository _adicionalRepository;
     private readonly ILogger<GetAllAdicionalServices> _logger;
 
-    public GetAllAdicionalServices(IAdicionalRepository adicionalRepository, ILogger<GetAllAdicionalServices> logger)
+    public GetAllAdicionalServices(
+        IAdicionalRepository adicionalRepository,
+        ILogger<GetAllAdicionalServices> logger)
     {
         _adicionalRepository = adicionalRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<ItemAdicional>>> GetAllAdicionais(int pageNumber, int pageSize)
+    public async Task<OperationResult<IEnumerable<ItemAdicional>>> ExecuteAsync(int pageNumber, int pageSize)
     {
         try
         {

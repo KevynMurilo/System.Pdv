@@ -27,11 +27,12 @@ public class GetByIdUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ReturnsAsync(usuario);
 
-        var result = await _service.GetById(usuarioId);
+        var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
         Assert.Equal(usuario, result.Result);
         Assert.Equal(200, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -41,12 +42,13 @@ public class GetByIdUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ReturnsAsync((Usuario)null);
 
-        var result = await _service.GetById(usuarioId);
+        var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
         Assert.Null(result.Result);
         Assert.Equal("Usuário não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -57,11 +59,12 @@ public class GetByIdUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ThrowsAsync(exception);
 
-        var result = await _service.GetById(usuarioId);
+        var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
         Assert.Null(result.Result);
         Assert.Equal("Erro inesperado: Database failure", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }

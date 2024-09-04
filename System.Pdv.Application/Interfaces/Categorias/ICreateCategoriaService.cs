@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Categorias;
 
 public interface ICreateCategoriaService
 {
-    Task<OperationResult<Categoria>> CreateCategoria(CategoriaDto categoriaDto);
+    Task<OperationResult<Categoria>> ExecuteAsync(CategoriaDto categoriaDto);
 }

@@ -12,13 +12,15 @@ public class UpdateMetodoPagamentoService : IUpdateMetodoPagamentoService
     private readonly IMetodoPagamentoRepository _metodoPagamentoRepository;
     private readonly ILogger<UpdateMetodoPagamentoService> _logger;
 
-    public UpdateMetodoPagamentoService(IMetodoPagamentoRepository metodoPagamentoRepository, ILogger<UpdateMetodoPagamentoService> logger)
+    public UpdateMetodoPagamentoService(
+        IMetodoPagamentoRepository metodoPagamentoRepository,
+        ILogger<UpdateMetodoPagamentoService> logger)
     {
         _metodoPagamentoRepository = metodoPagamentoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<MetodoPagamento>> UpdateMetodoPagamento(Guid id, MetodoPagamentoDto metodoPagamentoDto)
+    public async Task<OperationResult<MetodoPagamento>> ExecuteAsync(Guid id, MetodoPagamentoDto metodoPagamentoDto)
     {
         try
         {

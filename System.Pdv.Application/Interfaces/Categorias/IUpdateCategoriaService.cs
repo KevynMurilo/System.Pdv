@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Categorias;
 
 public interface IUpdateCategoriaService
 {
-    Task<OperationResult<Categoria>> UpdateCategoria(Guid id, CategoriaDto categoria);
+    Task<OperationResult<Categoria>> ExecuteAsync(Guid id, CategoriaDto categoria);
 }

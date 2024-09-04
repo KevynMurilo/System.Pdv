@@ -31,11 +31,12 @@ public class UpdateMesaServiceTests
 
         var mesaDto = new MesaDto { Numero = 1, Status = StatusMesa.Ocupada };
 
-        var result = await _updateMesaService.UpdateMesa(mesaId, mesaDto);
+        var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
         Assert.True(result.ServerOn);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Mesa não encontrada", result.Message);
+        _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -48,11 +49,12 @@ public class UpdateMesaServiceTests
 
         var mesaDto = new MesaDto { Numero = 2, Status = StatusMesa.Ocupada };
 
-        var result = await _updateMesaService.UpdateMesa(mesaId, mesaDto);
+        var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
         Assert.True(result.ServerOn);
         Assert.Equal(2, result.Result.Numero);
         Assert.Equal(StatusMesa.Ocupada, result.Result.Status);
+        _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mesaRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Mesa>()), Times.Once);
     }
 
@@ -65,10 +67,11 @@ public class UpdateMesaServiceTests
 
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId)).ThrowsAsync(exception);
 
-        var result = await _updateMesaService.UpdateMesa(mesaId, mesaDto);
+        var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.StartsWith("Erro inesperado:", result.Message);
+        _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }

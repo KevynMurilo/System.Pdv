@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Categorias;
 
 public interface IGetAllCategoriaService
 {
-    Task<OperationResult<IEnumerable<Categoria>>> GetAllCategorias();
+    Task<OperationResult<IEnumerable<Categoria>>> ExecuteAsync();
 }

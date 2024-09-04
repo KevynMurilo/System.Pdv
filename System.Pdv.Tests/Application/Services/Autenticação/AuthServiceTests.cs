@@ -34,12 +34,14 @@ public class AuthServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(loginDto.Email)).ReturnsAsync(usuario);
         _tokenGeneratorMock.Setup(generator => generator.GenerateToken(usuario)).Returns(token);
 
-        var result = await _authService.AuthenticateAsync(loginDto);
+        var result = await _authService.ExecuteAsync(loginDto);
 
         Assert.NotNull(result.Result);
         Assert.Equal(token, result.Result);
         Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _tokenGeneratorMock.Verify(generator => generator.GenerateToken(It.IsAny<Usuario>()), Times.Once);
     }
 
     [Fact]
@@ -50,11 +52,13 @@ public class AuthServiceTests
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(loginDto.Email)).ReturnsAsync(usuario);
 
-        var result = await _authService.AuthenticateAsync(loginDto);
+        var result = await _authService.ExecuteAsync(loginDto);
 
         Assert.Null(result.Result);
         Assert.Equal("Credenciais inválidas", result.Message);
         Assert.Equal(401, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _tokenGeneratorMock.Verify(generator => generator.GenerateToken(It.IsAny<Usuario>()), Times.Never);
     }
 
     [Fact]
@@ -64,11 +68,13 @@ public class AuthServiceTests
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(loginDto.Email)).ReturnsAsync((Usuario)null);
 
-        var result = await _authService.AuthenticateAsync(loginDto);
+        var result = await _authService.ExecuteAsync(loginDto);
 
         Assert.Null(result.Result);
         Assert.Equal("Credenciais inválidas", result.Message);
         Assert.Equal(401, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _tokenGeneratorMock.Verify(generator => generator.GenerateToken(It.IsAny<Usuario>()), Times.Never);
     }
 
     [Fact]
@@ -78,10 +84,12 @@ public class AuthServiceTests
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(loginDto.Email)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _authService.AuthenticateAsync(loginDto);
+        var result = await _authService.ExecuteAsync(loginDto);
 
         Assert.Null(result.Result);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _tokenGeneratorMock.Verify(generator => generator.GenerateToken(It.IsAny<Usuario>()), Times.Never);
     }
 }

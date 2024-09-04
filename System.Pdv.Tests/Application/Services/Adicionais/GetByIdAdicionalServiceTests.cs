@@ -26,10 +26,11 @@ public class GetByIdAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ReturnsAsync((ItemAdicional)null);
 
-        var result = await _getByIdAdicionalService.GetById(adicionalId);
+        var result = await _getByIdAdicionalService.ExecuteAsync(adicionalId);
 
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Adicional não encontrado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -41,12 +42,13 @@ public class GetByIdAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ReturnsAsync(adicional);
 
-        var result = await _getByIdAdicionalService.GetById(adicionalId);
+        var result = await _getByIdAdicionalService.ExecuteAsync(adicionalId);
 
         Assert.Equal(adicionalId, result.Result.Id);
         Assert.Equal("Adicional Teste", result.Result.Nome);
         Assert.Equal(10.0m, result.Result.Preco);
         Assert.Equal(200, result.StatusCode);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -58,10 +60,11 @@ public class GetByIdAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ThrowsAsync(exception);
 
-        var result = await _getByIdAdicionalService.GetById(adicionalId);
+        var result = await _getByIdAdicionalService.ExecuteAsync(adicionalId);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }

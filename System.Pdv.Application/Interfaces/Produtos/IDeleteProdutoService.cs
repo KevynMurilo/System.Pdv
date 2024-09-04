@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Produtos;
 
 public interface IDeleteProdutoService
 {
-    Task<OperationResult<Produto>> DeleteProduto(Guid id);
+    Task<OperationResult<Produto>> ExecuteAsync(Guid id);
 }

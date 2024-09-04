@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.MetodosPagamento;
 
 public interface ICreateMetodoPagamentoService
 {
-    Task<OperationResult<MetodoPagamento>> CreateMetodoPagamento(MetodoPagamentoDto metodoPagamentoDto);
+    Task<OperationResult<MetodoPagamento>> ExecuteAsync(MetodoPagamentoDto metodoPagamentoDto);
 }

@@ -33,12 +33,14 @@ public class DeleteUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ReturnsAsync(usuario);
 
-        var result = await _service.DeleteUsuario(usuarioId);
+        var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(200, result.StatusCode);
         Assert.Equal("Usuário deletado com sucesso", result.Message);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _usuarioRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Usuario>()), Times.Once);
     }
 
 
@@ -49,12 +51,14 @@ public class DeleteUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ReturnsAsync((Usuario)null);
 
-        var result = await _service.DeleteUsuario(usuarioId);
+        var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal("Usuário não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _usuarioRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Usuario>()), Times.Never);
     }
 
     [Fact]
@@ -65,11 +69,13 @@ public class DeleteUsuarioServiceTests
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId)).ThrowsAsync(exception);
 
-        var result = await _service.DeleteUsuario(usuarioId);
+        var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _usuarioRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Usuario>()), Times.Never);
     }
 }

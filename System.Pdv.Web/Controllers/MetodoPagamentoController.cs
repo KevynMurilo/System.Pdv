@@ -37,7 +37,7 @@ public class MetodoPagamentoController : ControllerBase
     {
         try
         {
-            var result = await _getAllMetodoPagamentoServices.GetAllMetodoPagamento();
+            var result = await _getAllMetodoPagamentoServices.ExecuteAsync();
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -54,7 +54,7 @@ public class MetodoPagamentoController : ControllerBase
     {
         try
         {
-            var result = await _getByIdMetodoPagamentoService.GetByIdMetodoPagamento(id);
+            var result = await _getByIdMetodoPagamentoService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -72,7 +72,7 @@ public class MetodoPagamentoController : ControllerBase
     {
         try
         {
-            var result = await _createMetodoPagamentoService.CreateMetodoPagamento(metodoPagamentoDto);
+            var result = await _createMetodoPagamentoService.ExecuteAsync(metodoPagamentoDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -90,7 +90,7 @@ public class MetodoPagamentoController : ControllerBase
     {
         try
         {
-            var result = await _updateMetodoPagamentoService.UpdateMetodoPagamento(id, metodoPagamentoDto);
+            var result = await _updateMetodoPagamentoService.ExecuteAsync(id, metodoPagamentoDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -108,7 +108,7 @@ public class MetodoPagamentoController : ControllerBase
     {
         try
         {
-            var result = await _deleteMetodoPagamentoService.DeleteMetodoPagamento(id);
+            var result = await _deleteMetodoPagamentoService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);

@@ -29,12 +29,14 @@ public class UpdateMetodoPagamentoServiceTests
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(metodoPagamentoId))
             .ReturnsAsync((MetodoPagamento)null);
 
-        var result = await _service.UpdateMetodoPagamento(metodoPagamentoId, metodoPagamentoDto);
+        var result = await _service.ExecuteAsync(metodoPagamentoId, metodoPagamentoDto);
 
         Assert.NotNull(result);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Método de pagamento não encontrado", result.Message);
         Assert.Null(result.Result);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -50,12 +52,14 @@ public class UpdateMetodoPagamentoServiceTests
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByNameAsync(metodoPagamentoDto.Nome))
             .ReturnsAsync(existingMetodoPagamento);
 
-        var result = await _service.UpdateMetodoPagamento(metodoPagamentoId, metodoPagamentoDto);
+        var result = await _service.ExecuteAsync(metodoPagamentoId, metodoPagamentoDto);
 
         Assert.NotNull(result);
         Assert.Equal(409, result.StatusCode);
         Assert.Equal("Método de pagamento já cadastrado", result.Message);
         Assert.Null(result.Result);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
     }
 
     [Fact]
@@ -71,13 +75,16 @@ public class UpdateMetodoPagamentoServiceTests
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByNameAsync(metodoPagamentoDto.Nome))
             .ReturnsAsync((MetodoPagamento)null);
 
-        var result = await _service.UpdateMetodoPagamento(metodoPagamentoId, metodoPagamentoDto);
+        var result = await _service.ExecuteAsync(metodoPagamentoId, metodoPagamentoDto);
 
         Assert.NotNull(result);
         Assert.Equal(200, result.StatusCode);
         Assert.Null(result.Message);
         Assert.Equal(metodoPagamentoId, result.Result.Id);
         Assert.Equal("BOLETO", result.Result.Nome);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<MetodoPagamento>()), Times.Once);
     }
 
     [Fact]
@@ -89,11 +96,13 @@ public class UpdateMetodoPagamentoServiceTests
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(metodoPagamentoId))
             .ThrowsAsync(new Exception("Test exception"));
 
-        var result = await _service.UpdateMetodoPagamento(metodoPagamentoId, metodoPagamentoDto);
+        var result = await _service.ExecuteAsync(metodoPagamentoId, metodoPagamentoDto);
 
         Assert.NotNull(result);
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado:", result.Message);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Never);
     }
 }

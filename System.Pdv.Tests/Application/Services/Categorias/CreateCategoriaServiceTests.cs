@@ -30,12 +30,14 @@ public class CreateCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByNameAsync(categoriaDto.Nome))
             .ReturnsAsync(existingCategoria);
 
-        var result = await _service.CreateCategoria(categoriaDto);
+        var result = await _service.ExecuteAsync(categoriaDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(409, result.StatusCode);
         Assert.Equal("Categoria já registrada", result.Message);
+        _repositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Categoria>()), Times.Never);
     }
 
     [Fact]
@@ -46,12 +48,14 @@ public class CreateCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByNameAsync(categoriaDto.Nome))
             .ReturnsAsync((Categoria)null);
 
-        var result = await _service.CreateCategoria(categoriaDto);
+        var result = await _service.ExecuteAsync(categoriaDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(200, result.StatusCode);
         Assert.Equal(categoriaDto.Nome.ToUpper(), result.Result.Nome);
+        _repositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Categoria>()), Times.Once);
     }
 
     [Fact]
@@ -62,10 +66,12 @@ public class CreateCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByNameAsync(categoriaDto.Nome))
             .ThrowsAsync(new Exception("Erro de banco de dados"));
 
-        var result = await _service.CreateCategoria(categoriaDto);
+        var result = await _service.ExecuteAsync(categoriaDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
+        _repositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Categoria>()), Times.Never);
     }
 }
