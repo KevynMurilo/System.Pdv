@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Mesas;
 
 public interface IGetAllServices
 {
-    Task<OperationResult<IEnumerable<Mesa>>> GetAllMesas();
+    Task<OperationResult<IEnumerable<Mesa>>> ExecuteAsync();
 }

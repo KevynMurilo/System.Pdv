@@ -19,7 +19,7 @@ public class UpdateMesaService: IUpdateMesaService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> UpdateMesa(Guid id, MesaDto mesaDto)
+    public async Task<OperationResult<Mesa>> ExecuteAsync(Guid id, MesaDto mesaDto)
     {
         try
         {

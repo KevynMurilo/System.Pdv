@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.MetodosPagamento;
 
 public interface IGetByIdMetodoPagamentoService
 {
-    Task<OperationResult<MetodoPagamento>> GetByIdMetodoPagamento(Guid id);
+    Task<OperationResult<MetodoPagamento>> ExecuteAsync(Guid id);
 }

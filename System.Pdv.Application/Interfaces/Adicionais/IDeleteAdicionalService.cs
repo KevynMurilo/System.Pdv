@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Adicionais;
 
 public interface IDeleteAdicionalService
 {
-    Task<OperationResult<ItemAdicional>> DeleteAdicional(Guid id);
+    Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id);
 }

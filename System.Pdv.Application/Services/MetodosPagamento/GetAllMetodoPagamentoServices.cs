@@ -11,13 +11,15 @@ public class GetAllMetodoPagamentoServices : IGetAllMetodoPagamentoServices
     private readonly IMetodoPagamentoRepository _metodoPagamentoRepository;
     private readonly ILogger<GetAllMetodoPagamentoServices> _logger;
 
-    public GetAllMetodoPagamentoServices(IMetodoPagamentoRepository metodoPagamentoRepository, ILogger<GetAllMetodoPagamentoServices> logger)
+    public GetAllMetodoPagamentoServices(
+        IMetodoPagamentoRepository metodoPagamentoRepository,
+        ILogger<GetAllMetodoPagamentoServices> logger)
     {
         _metodoPagamentoRepository = metodoPagamentoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<MetodoPagamento>>> GetAllMetodoPagamento()
+    public async Task<OperationResult<IEnumerable<MetodoPagamento>>> ExecuteAsync()
     {
         try
         {

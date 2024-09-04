@@ -11,13 +11,15 @@ public class DeleteCategoriaService : IDeleteCategoriaService
     private readonly ICategoriaRepository _categoriaRepository;
     private readonly ILogger<DeleteCategoriaService> _logger;
 
-    public DeleteCategoriaService(ICategoriaRepository categoriaRepository, ILogger<DeleteCategoriaService> logger)
+    public DeleteCategoriaService(
+        ICategoriaRepository categoriaRepository,
+        ILogger<DeleteCategoriaService> logger)
     {
         _categoriaRepository = categoriaRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<Categoria>> DeleteCategoria(Guid id)
+    public async Task<OperationResult<Categoria>> ExecuteAsync(Guid id)
     {
         try
         {

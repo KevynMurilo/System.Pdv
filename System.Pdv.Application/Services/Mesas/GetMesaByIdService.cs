@@ -18,7 +18,7 @@ public class GetMesaByIdService : IGetMesaByIdService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> GetById(Guid id)
+    public async Task<OperationResult<Mesa>> ExecuteAsync(Guid id)
     {
         try
         {

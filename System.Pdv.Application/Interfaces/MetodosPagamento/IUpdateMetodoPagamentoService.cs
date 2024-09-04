@@ -6,6 +6,6 @@ namespace System.Pdv.Application.Interfaces.MetodosPagamento;
 
 public interface IUpdateMetodoPagamentoService
 {
-    Task<OperationResult<MetodoPagamento>> UpdateMetodoPagamento(Guid id, MetodoPagamentoDto metodoPagamentoDto);
+    Task<OperationResult<MetodoPagamento>> ExecuteAsync(Guid id, MetodoPagamentoDto metodoPagamentoDto);
 
 }

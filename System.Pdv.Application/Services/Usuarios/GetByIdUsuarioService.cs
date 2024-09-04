@@ -19,7 +19,7 @@ public class GetByIdUsuarioService : IGetByIdUsuarioService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Usuario>> GetById(Guid id)
+    public async Task<OperationResult<Usuario>> ExecuteAsync(Guid id)
     {
         try
         {

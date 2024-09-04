@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Roles;
 
 public interface IGetAllRolesService
 {
-    Task<OperationResult<IEnumerable<Role>>> GetAllRoles();
+    Task<OperationResult<IEnumerable<Role>>> ExecuteAsync();
 }

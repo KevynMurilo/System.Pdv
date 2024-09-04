@@ -22,7 +22,7 @@ public class AuthService : IAuthService
         _logger = logger;
     }
 
-    public async Task<OperationResult<string>> AuthenticateAsync(LoginDto loginDto)
+    public async Task<OperationResult<string>> ExecuteAsync(LoginDto loginDto)
     {
         try
         {

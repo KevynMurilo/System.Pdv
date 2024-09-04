@@ -18,7 +18,7 @@ public class CreateAdicionalService : ICreateAdicionalService
         _logger = logger;
     }
 
-    public async Task<OperationResult<ItemAdicional>> CreateAdicional(AdicionalDto adicionalDto)
+    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(AdicionalDto adicionalDto)
     {
         try
         {

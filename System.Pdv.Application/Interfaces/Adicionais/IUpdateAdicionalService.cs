@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Adicionais;
 
 public interface IUpdateAdicionalService
 {
-    Task<OperationResult<ItemAdicional>> UpdateAdicional(Guid id, AdicionalDto adicionalDto);
+    Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id, AdicionalDto adicionalDto);
 }

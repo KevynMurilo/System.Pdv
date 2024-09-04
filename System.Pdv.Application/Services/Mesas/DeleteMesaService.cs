@@ -19,7 +19,7 @@ public class DeleteMesaService : IDeleteMesaService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> DeleteMesa(Guid id)
+    public async Task<OperationResult<Mesa>> ExecuteAsync(Guid id)
     {
         try
         {

@@ -19,7 +19,7 @@ public class CreateMesaService : ICreateMesaService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> CreateMesa(MesaDto mesaDto)
+    public async Task<OperationResult<Mesa>> ExecuteAsync(MesaDto mesaDto)
     {
         try
         {

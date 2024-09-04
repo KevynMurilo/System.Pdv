@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Auth;
 
 public interface IAuthService
 {
-    Task<OperationResult<string>> AuthenticateAsync(LoginDto loginDto);
+    Task<OperationResult<string>> ExecuteAsync(LoginDto loginDto);
 }

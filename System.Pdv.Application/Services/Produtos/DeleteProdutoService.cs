@@ -17,7 +17,7 @@ public class DeleteProdutoService : IDeleteProdutoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Produto>> DeleteProduto(Guid id)
+    public async Task<OperationResult<Produto>> ExecuteAsync(Guid id)
     {
         try
         {

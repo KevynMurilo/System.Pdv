@@ -12,13 +12,15 @@ public class UpdateAdicionalService : IUpdateAdicionalService
     private readonly IAdicionalRepository _adicionalRepository;
     private readonly ILogger<UpdateAdicionalService> _logger;
 
-    public UpdateAdicionalService(IAdicionalRepository adicionalRepository, ILogger<UpdateAdicionalService> logger)
+    public UpdateAdicionalService(
+        IAdicionalRepository adicionalRepository,
+        ILogger<UpdateAdicionalService> logger)
     {
         _adicionalRepository = adicionalRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<ItemAdicional>> UpdateAdicional(Guid id, AdicionalDto adicionalDto)
+    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id, AdicionalDto adicionalDto)
     {
         try
         {

@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Usuarios;
 
 public interface ICreateUsuarioService
 {
-    Task<OperationResult<Usuario>> CreateUsuario(UsuarioDto usuario);
+    Task<OperationResult<Usuario>> ExecuteAsync(UsuarioDto usuario);
 }

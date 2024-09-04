@@ -11,13 +11,15 @@ public class GetAllRolesService : IGetAllRolesService
     private readonly IRoleRepository _roleRepository;
     private readonly ILogger<GetAllRolesService> _logger;
 
-    public GetAllRolesService(IRoleRepository roleRepository, ILogger<GetAllRolesService> logger)
+    public GetAllRolesService(
+        IRoleRepository roleRepository,
+        ILogger<GetAllRolesService> logger)
     {
         _roleRepository = roleRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Role>>> GetAllRoles()
+    public async Task<OperationResult<IEnumerable<Role>>> ExecuteAsync()
     {
         try
         {

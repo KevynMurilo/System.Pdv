@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Produtos;
 
 public interface ICreateProdutoService
 {
-    Task<OperationResult<Produto>> CreateProduto(ProdutoDto produtoDto);
+    Task<OperationResult<Produto>> ExecuteAsync(ProdutoDto produtoDto);
 }

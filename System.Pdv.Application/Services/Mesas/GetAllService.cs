@@ -16,7 +16,7 @@ public class GetAllService : IGetAllServices
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Mesa>>> GetAllMesas()
+    public async Task<OperationResult<IEnumerable<Mesa>>> ExecuteAsync()
     {
         try
         {

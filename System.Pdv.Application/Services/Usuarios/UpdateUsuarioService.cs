@@ -23,7 +23,7 @@ public class UpdateUsuarioService : IUpdateUsuarioService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Usuario>> UpdateUsuario(Guid id, UsuarioDto usuarioDto)
+    public async Task<OperationResult<Usuario>> ExecuteAsync(Guid id, UsuarioDto usuarioDto)
     {
         try
         {

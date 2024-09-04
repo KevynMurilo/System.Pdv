@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Adicionais;
 
 public interface ICreateAdicionalService
 {
-    Task<OperationResult<ItemAdicional>> CreateAdicional(AdicionalDto adicionalDto);
+    Task<OperationResult<ItemAdicional>> ExecuteAsync(AdicionalDto adicionalDto);
 }

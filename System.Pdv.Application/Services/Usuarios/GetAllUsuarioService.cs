@@ -18,7 +18,7 @@ public class GetAllUsuarioService : IGetAllUsuarioService
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Usuario>>> GetAllUsuario(int pageNumber, int pageSize)
+    public async Task<OperationResult<IEnumerable<Usuario>>> ExecuteAsync(int pageNumber, int pageSize)
     {
         try
         {

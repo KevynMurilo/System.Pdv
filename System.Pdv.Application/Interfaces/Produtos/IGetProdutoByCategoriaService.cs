@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Produtos;
 
 public interface IGetProdutoByCategoriaService
 {
-    Task<OperationResult<IEnumerable<Produto>>> GetProdutoByCategoria(Guid categoriaId, int pageNumber, int pageSize);
+    Task<OperationResult<IEnumerable<Produto>>> ExecuteAsync(Guid categoriaId, int pageNumber, int pageSize);
 }

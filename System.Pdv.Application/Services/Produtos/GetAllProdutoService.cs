@@ -11,13 +11,15 @@ public class GetAllProdutoService : IGetAllProdutoService
     private readonly IProdutoRepository _produtoRepository;
     private readonly ILogger<GetAllProdutoService> _logger;
 
-    public GetAllProdutoService(IProdutoRepository produtoRepository, ILogger<GetAllProdutoService> logger)
+    public GetAllProdutoService(
+        IProdutoRepository produtoRepository,
+        ILogger<GetAllProdutoService> logger)
     {
         _produtoRepository = produtoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Produto>>> GetAllProduto(int pageNumber, int pageSize)
+    public async Task<OperationResult<IEnumerable<Produto>>> ExecuteAsync(int pageNumber, int pageSize)
     {
         try
         {

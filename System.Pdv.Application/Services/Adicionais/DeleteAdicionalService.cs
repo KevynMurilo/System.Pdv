@@ -17,7 +17,7 @@ public class DeleteAdicionalService : IDeleteAdicionalService
         _logger = logger;
     }
 
-    public async Task<OperationResult<ItemAdicional>> DeleteAdicional(Guid id)
+    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id)
     {
         try
         {

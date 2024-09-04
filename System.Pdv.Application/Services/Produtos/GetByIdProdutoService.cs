@@ -11,13 +11,15 @@ public class GetByIdProdutoService : IGetByIdProdutoService
     private readonly IProdutoRepository _produtoRepository;
     private readonly ILogger<GetByIdProdutoService> _logger;
 
-    public GetByIdProdutoService(IProdutoRepository produtoRepository, ILogger<GetByIdProdutoService> logger)
+    public GetByIdProdutoService(
+        IProdutoRepository produtoRepository,
+        ILogger<GetByIdProdutoService> logger)
     {
         _produtoRepository = produtoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<Produto>> GetByIdProduto(Guid id)
+    public async Task<OperationResult<Produto>> ExecuteAsync(Guid id)
     {
         try
         {

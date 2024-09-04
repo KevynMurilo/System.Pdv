@@ -12,13 +12,15 @@ public class CreateMetodoPagamentoService : ICreateMetodoPagamentoService
     private readonly IMetodoPagamentoRepository _metodoPagamentoRepository;
     private readonly ILogger<CreateMetodoPagamentoService> _logger;
 
-    public CreateMetodoPagamentoService(IMetodoPagamentoRepository metodoPagamentoRepository, ILogger<CreateMetodoPagamentoService> logger)
+    public CreateMetodoPagamentoService(
+        IMetodoPagamentoRepository metodoPagamentoRepository,
+        ILogger<CreateMetodoPagamentoService> logger)
     {
         _metodoPagamentoRepository = metodoPagamentoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<MetodoPagamento>> CreateMetodoPagamento(MetodoPagamentoDto metodoPagamentoDto)
+    public async Task<OperationResult<MetodoPagamento>> ExecuteAsync(MetodoPagamentoDto metodoPagamentoDto)
     {
         try
         {

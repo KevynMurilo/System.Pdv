@@ -37,7 +37,7 @@ public class UsuarioController : ControllerBase
     {
         try
         {
-            var result = await _getAllUsuarioService.GetAllUsuario(pageNumber, pageSize);
+            var result = await _getAllUsuarioService.ExecuteAsync(pageNumber, pageSize);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -55,7 +55,7 @@ public class UsuarioController : ControllerBase
     {
         try
         {
-            var result = await _getByIdUsuarioService.GetById(id);
+            var result = await _getByIdUsuarioService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -73,7 +73,7 @@ public class UsuarioController : ControllerBase
     {
         try
         {
-            var result = await _createUsuarioService.CreateUsuario(usuarioDto);
+            var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -91,7 +91,7 @@ public class UsuarioController : ControllerBase
     {
         try
         {
-            var result = await _updateUsuarioService.UpdateUsuario(id, usuarioDto);
+            var result = await _updateUsuarioService.ExecuteAsync(id, usuarioDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -109,7 +109,7 @@ public class UsuarioController : ControllerBase
     {
         try
         {
-            var result = await _deleteGUsuarioService.DeleteUsuario(id);
+            var result = await _deleteGUsuarioService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);

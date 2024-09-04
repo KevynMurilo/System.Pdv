@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Adicionais;
 
 public interface IGetAllAdicionalServices
 {
-    Task<OperationResult<IEnumerable<ItemAdicional>>> GetAllAdicionais(int pageNumber, int pageSize);
+    Task<OperationResult<IEnumerable<ItemAdicional>>> ExecuteAsync(int pageNumber, int pageSize);
 }

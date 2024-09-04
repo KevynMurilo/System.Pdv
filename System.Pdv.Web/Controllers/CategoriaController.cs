@@ -36,7 +36,7 @@ public class CategoriaController : ControllerBase
     {
         try
         {
-            var result = await _getAllCategoriaService.GetAllCategorias();
+            var result = await _getAllCategoriaService.ExecuteAsync();
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -53,7 +53,7 @@ public class CategoriaController : ControllerBase
     {
         try
         {
-            var result = await _getByIdCategoriaService.GetById(id);
+            var result = await _getByIdCategoriaService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -71,7 +71,7 @@ public class CategoriaController : ControllerBase
     {
         try
         {
-            var result = await _createCategoriaService.CreateCategoria(categoriaDto);
+            var result = await _createCategoriaService.ExecuteAsync(categoriaDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -89,7 +89,7 @@ public class CategoriaController : ControllerBase
     {
         try
         {
-            var result = await _updateCategoriaService.UpdateCategoria(id, categoriaDto);
+            var result = await _updateCategoriaService.ExecuteAsync(id, categoriaDto);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -107,7 +107,7 @@ public class CategoriaController : ControllerBase
     {
         try
         {
-            var result = await _deleteCategoriaService.DeleteCategoria(id);
+            var result = await _deleteCategoriaService.ExecuteAsync(id);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);

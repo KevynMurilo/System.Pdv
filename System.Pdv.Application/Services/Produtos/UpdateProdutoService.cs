@@ -23,7 +23,7 @@ public class UpdateProdutoService : IUpdateProdutoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Produto>> UpdateProduto(Guid id, ProdutoDto produtoDto)
+    public async Task<OperationResult<Produto>> ExecuteAsync(Guid id, ProdutoDto produtoDto)
     {
         try
         {

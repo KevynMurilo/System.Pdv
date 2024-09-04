@@ -25,7 +25,7 @@ public class RoleController : ControllerBase
     {
         try
         {
-            var result = await _getAllRoleServices.GetAllRoles();
+            var result = await _getAllRoleServices.ExecuteAsync();
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
