@@ -42,13 +42,16 @@ public class UpdateProdutoServiceTests
         _categoriaRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoDto.CategoriaId)).ReturnsAsync(categoria);
         _produtoRepositoryMock.Setup(repo => repo.UpdateAsync(It.IsAny<Produto>())).Returns(Task.CompletedTask);
 
-        var result = await _updateProdutoService.UpdateProduto(produtoId, produtoDto);
+        var result = await _updateProdutoService.ExecuteAsync(produtoId, produtoDto);
 
         Assert.NotNull(result.Result);
         Assert.Equal(produtoDto.Nome, result.Result.Nome);
         Assert.Equal(produtoDto.Descricao, result.Result.Descricao);
         Assert.Equal(produtoDto.Preco, result.Result.Preco);
         Assert.Equal(produtoDto.CategoriaId, result.Result.Categoria.Id);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _produtoRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Produto>()), Times.Once);
     }
 
     [Fact]
@@ -58,11 +61,14 @@ public class UpdateProdutoServiceTests
         var produtoDto = new ProdutoDto { Nome = "Produto Teste", CategoriaId = Guid.NewGuid() };
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync((Produto)null);
 
-        var result = await _updateProdutoService.UpdateProduto(produtoId, produtoDto);
+        var result = await _updateProdutoService.ExecuteAsync(produtoId, produtoDto);
 
         Assert.Null(result.Result);
         Assert.Equal("Produto não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _produtoRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Produto>()), Times.Never);
     }
 
     [Fact]
@@ -75,11 +81,14 @@ public class UpdateProdutoServiceTests
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync(produto);
         _categoriaRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoDto.CategoriaId)).ReturnsAsync((Categoria)null);
 
-        var result = await _updateProdutoService.UpdateProduto(produtoId, produtoDto);
+        var result = await _updateProdutoService.ExecuteAsync(produtoId, produtoDto);
 
         Assert.Null(result.Result);
         Assert.Equal("Categoria não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _produtoRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Produto>()), Times.Never);
     }
 
     [Fact]
@@ -90,10 +99,13 @@ public class UpdateProdutoServiceTests
 
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _updateProdutoService.UpdateProduto(produtoId, produtoDto);
+        var result = await _updateProdutoService.ExecuteAsync(produtoId, produtoDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _produtoRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Produto>()), Times.Never);
     }
 }

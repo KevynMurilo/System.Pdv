@@ -24,11 +24,12 @@ public class GetAllUsuarioServiceTests
     {
         _usuarioRepositoryMock.Setup(repo => repo.GetAllAsync(1, 10)).ReturnsAsync(new List<Usuario>());
         
-        var result = await _service.GetAllUsuario(1, 10);
+        var result = await _service.ExecuteAsync(1, 10);
 
         Assert.True(result.ServerOn);
         Assert.Equal("Nenhum usuário encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);
     }
 
     [Fact]
@@ -42,10 +43,11 @@ public class GetAllUsuarioServiceTests
 
         _usuarioRepositoryMock.Setup(repo => repo.GetAllAsync(1, 10)).ReturnsAsync(usuarios);
 
-        var result = await _service.GetAllUsuario(1, 10);
+        var result = await _service.ExecuteAsync(1, 10);
 
         Assert.True(result.ServerOn);
         Assert.Equal(usuarios, result.Result.ToList());
+        _usuarioRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);
     }
 
     [Fact]
@@ -54,10 +56,11 @@ public class GetAllUsuarioServiceTests
         var exception = new Exception("Database failure");
         _usuarioRepositoryMock.Setup(repo => repo.GetAllAsync(1, 10)).ThrowsAsync(exception);
 
-        var result = await _service.GetAllUsuario(1, 10);
+        var result = await _service.ExecuteAsync(1, 10);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database failure", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);
     }
 }

@@ -28,11 +28,13 @@ public class DeleteProdutoServiceTests
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync(produto);
         _produtoRepositoryMock.Setup(repo => repo.DeleteAsync(produto)).Returns(Task.CompletedTask);
 
-        var result = await _deleteProdutoService.DeleteProduto(produtoId);
+        var result = await _deleteProdutoService.ExecuteAsync(produtoId);
 
         Assert.NotNull(result.Result);
         Assert.Equal(produto, result.Result);
         Assert.Equal("Produto deletado com sucesso", result.Message);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoId), Times.Once);
+        _produtoRepositoryMock.Verify(repo => repo.DeleteAsync(produto), Times.Once);
     }
 
     [Fact]
@@ -42,11 +44,13 @@ public class DeleteProdutoServiceTests
 
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync((Produto)null);
 
-        var result = await _deleteProdutoService.DeleteProduto(produtoId);
+        var result = await _deleteProdutoService.ExecuteAsync(produtoId);
 
         Assert.Null(result.Result);
         Assert.Equal("Produto não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoId), Times.Once);
+        _produtoRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Produto>()), Times.Never);
     }
 
     [Fact]
@@ -56,10 +60,12 @@ public class DeleteProdutoServiceTests
 
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _deleteProdutoService.DeleteProduto(produtoId);
+        var result = await _deleteProdutoService.ExecuteAsync(produtoId);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoId), Times.Once);
+        _produtoRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Produto>()), Times.Never);
     }
 }

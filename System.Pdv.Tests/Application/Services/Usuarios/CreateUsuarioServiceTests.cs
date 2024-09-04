@@ -39,12 +39,15 @@ public class CreateUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Usuario>()))
             .Returns(Task.CompletedTask);
 
-        var result = await _createUsuarioService.CreateUsuario(usuarioDto);
+        var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(usuarioDto.Nome, result.Result.Nome);
         Assert.Equal(200, result.StatusCode);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _roleRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _usuarioRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Usuario>()), Times.Once);
     }
 
     [Fact]
@@ -62,12 +65,15 @@ public class CreateUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Usuario>()))
             .Returns(Task.CompletedTask);
 
-        var result = await _createUsuarioService.CreateUsuario(usuarioDto);
+        var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Role não encontrada", result.Message);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _roleRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _usuarioRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Usuario>()), Times.Never);
     }
 
     [Fact]
@@ -80,11 +86,14 @@ public class CreateUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(usuarioDto.Email))
             .ReturnsAsync(existingUsuario);
 
-        var result = await _createUsuarioService.CreateUsuario(usuarioDto);
+        var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.True(result.ServerOn);
         Assert.Equal(409, result.StatusCode);
         Assert.Equal("Email já cadastrado", result.Message);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _roleRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
+        _usuarioRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Usuario>()), Times.Never);
     }
 
     [Fact]
@@ -103,10 +112,13 @@ public class CreateUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Usuario>()))
             .ThrowsAsync(new Exception("Database error"));
 
-        var result = await _createUsuarioService.CreateUsuario(usuarioDto);
+        var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Equal("Erro inesperado: Database error", result.Message);
+        _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
+        _roleRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _usuarioRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Usuario>()), Times.Once);
     }
 }

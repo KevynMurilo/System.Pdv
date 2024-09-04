@@ -26,12 +26,14 @@ public class DeleteCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByIdAsync(categoriaId))
             .ReturnsAsync((Categoria)null);
 
-        var result = await _service.DeleteCategoria(categoriaId);
+        var result = await _service.ExecuteAsync(categoriaId);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal("Categoria não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _repositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Categoria>()), Times.Never);
     }
 
     [Fact]
@@ -43,7 +45,7 @@ public class DeleteCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByIdAsync(categoriaId))
             .ReturnsAsync(categoria);
 
-        var result = await _service.DeleteCategoria(categoriaId);
+        var result = await _service.ExecuteAsync(categoriaId);
 
         _repositoryMock.Verify(repo => repo.DeleteAsync(categoria), Times.Once);
 
@@ -51,6 +53,8 @@ public class DeleteCategoriaServiceTests
         Assert.Equal(200, result.StatusCode);
         Assert.True(result.ServerOn);
         Assert.Equal("Categoria deletada com sucesso!", result.Message);
+        _repositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Categoria>()), Times.Once);
     }
 
     [Fact]
@@ -62,10 +66,12 @@ public class DeleteCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByIdAsync(categoriaId))
             .ThrowsAsync(exception);
 
-        var result = await _service.DeleteCategoria(categoriaId);
+        var result = await _service.ExecuteAsync(categoriaId);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _repositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Categoria>()), Times.Never);
     }
 }

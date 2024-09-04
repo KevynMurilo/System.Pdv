@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using System;
 using System.Pdv.Application.Services.MetodosPagamento;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
@@ -27,12 +26,13 @@ public class DeleteMetodoPagamentoServiceTests
         var id = Guid.NewGuid();
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync((MetodoPagamento)null);
 
-        var result = await _service.DeleteMetodoPagamento(id);
+        var result = await _service.ExecuteAsync(id);
 
         Assert.NotNull(result);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Método de pagamento não encontrado", result.Message);
         Assert.Null(result.Result);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -43,12 +43,13 @@ public class DeleteMetodoPagamentoServiceTests
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(id)).ReturnsAsync(metodoPagamento);
         _metodoPagamentoRepositoryMock.Setup(repo => repo.DeleteAsync(It.IsAny<MetodoPagamento>())).Returns(Task.CompletedTask);
 
-        var result = await _service.DeleteMetodoPagamento(id);
+        var result = await _service.ExecuteAsync(id);
 
         Assert.NotNull(result);
         Assert.Equal(200, result.StatusCode);
         Assert.Equal("Método de pagamento deletado com sucesso", result.Message);
         Assert.Equal(metodoPagamento, result.Result);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _metodoPagamentoRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<MetodoPagamento>()), Times.Once);
     }
 
@@ -58,11 +59,12 @@ public class DeleteMetodoPagamentoServiceTests
         var id = Guid.NewGuid();
         _metodoPagamentoRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception("Test exception"));
 
-        var result = await _service.DeleteMetodoPagamento(id);
+        var result = await _service.ExecuteAsync(id);
 
         Assert.NotNull(result);
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado:", result.Message);
+        _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }

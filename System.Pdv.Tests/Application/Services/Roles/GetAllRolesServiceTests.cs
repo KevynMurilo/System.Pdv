@@ -30,13 +30,14 @@ public class GetAllRolesServiceTests
 
         _roleRepositoryMock.Setup(repo => repo.GetAllRolesAsync()).ReturnsAsync(roles);
 
-        var result = await _getAllRolesService.GetAllRoles();
+        var result = await _getAllRolesService.ExecuteAsync();
 
         Assert.NotNull(result.Result);
         Assert.Equal(roles.Count, result.Result.Count());
         Assert.Equal("Admin", result.Result.First().Nome);
         Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
+        _roleRepositoryMock.Verify(repo => repo.GetAllRolesAsync(), Times.Once);
     }
 
     [Fact]
@@ -46,11 +47,12 @@ public class GetAllRolesServiceTests
 
         _roleRepositoryMock.Setup(repo => repo.GetAllRolesAsync()).ReturnsAsync(roles);
 
-        var result = await _getAllRolesService.GetAllRoles();
+        var result = await _getAllRolesService.ExecuteAsync();
 
         Assert.Null(result.Result);
         Assert.Equal("Nenhuma role encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _roleRepositoryMock.Verify(repo => repo.GetAllRolesAsync(), Times.Once);
     }
 
     [Fact]
@@ -58,10 +60,11 @@ public class GetAllRolesServiceTests
     {
         _roleRepositoryMock.Setup(repo => repo.GetAllRolesAsync()).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _getAllRolesService.GetAllRoles();
+        var result = await _getAllRolesService.ExecuteAsync();
 
         Assert.Null(result.Result);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _roleRepositoryMock.Verify(repo => repo.GetAllRolesAsync(), Times.Once);
     }
 }

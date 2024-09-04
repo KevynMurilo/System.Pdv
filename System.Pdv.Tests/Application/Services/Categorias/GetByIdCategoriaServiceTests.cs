@@ -28,12 +28,13 @@ public class GetByIdCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByIdAsync(categoriaId))
             .ReturnsAsync(categoria);
 
-        var result = await _service.GetById(categoriaId);
+        var result = await _service.ExecuteAsync(categoriaId);
 
         Assert.NotNull(result);
         Assert.Equal(categoria, result.Result);
         Assert.Equal(200, result.StatusCode);
         Assert.True(result.ServerOn);
+        _repositoryMock.Verify(repo => repo.GetByIdAsync(categoriaId), Times.Once);
     }
 
     [Fact]
@@ -43,13 +44,14 @@ public class GetByIdCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByIdAsync(categoriaId))
             .ReturnsAsync((Categoria)null);
 
-        var result = await _service.GetById(categoriaId);
+        var result = await _service.ExecuteAsync(categoriaId);
 
         Assert.NotNull(result);
         Assert.Null(result.Result);
         Assert.Equal("Categoria não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
         Assert.True(result.ServerOn);
+        _repositoryMock.Verify(repo => repo.GetByIdAsync(categoriaId), Times.Once);
     }
 
     [Fact]
@@ -61,11 +63,12 @@ public class GetByIdCategoriaServiceTests
         _repositoryMock.Setup(repo => repo.GetByIdAsync(categoriaId))
             .ThrowsAsync(exception);
 
-        var result = await _service.GetById(categoriaId);
+        var result = await _service.ExecuteAsync(categoriaId);
 
         Assert.NotNull(result);
         Assert.Null(result.Result);
         Assert.Equal("Erro inesperado: Database failure", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _repositoryMock.Verify(repo => repo.GetByIdAsync(categoriaId), Times.Once);
     }
 }

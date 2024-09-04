@@ -30,12 +30,13 @@ public class GetAllProdutoServiceTests
 
         _produtoRepositoryMock.Setup(repo => repo.GetAllAsync(1, 10)).ReturnsAsync(produtos);
 
-        var result = await _getAllProdutoService.GetAllProduto(1, 10);
+        var result = await _getAllProdutoService.ExecuteAsync(1, 10);
 
         Assert.NotNull(result.Result);
         Assert.Equal(2, result.Result.Count());
         Assert.Equal("Produto 1", result.Result.First().Nome);
         Assert.Equal(10.0m, result.Result.First().Preco);
+        _produtoRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);
     }
 
     [Fact]
@@ -43,11 +44,12 @@ public class GetAllProdutoServiceTests
     {
         _produtoRepositoryMock.Setup(repo => repo.GetAllAsync(1, 10)).ReturnsAsync(new List<Produto>());
 
-        var result = await _getAllProdutoService.GetAllProduto(1, 10);
+        var result = await _getAllProdutoService.ExecuteAsync(1, 10);
 
         Assert.Null(result.Result);
         Assert.Equal("Nenhum produto encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);
     }
 
     [Fact]
@@ -55,10 +57,11 @@ public class GetAllProdutoServiceTests
     {
         _produtoRepositoryMock.Setup(repo => repo.GetAllAsync(1, 10)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _getAllProdutoService.GetAllProduto(1, 10);
+        var result = await _getAllProdutoService.ExecuteAsync(1, 10);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);
     }
 }

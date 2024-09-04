@@ -25,11 +25,12 @@ public class GetAllServicesTests
     {
         _mesaRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(new List<Mesa>());
 
-        var result = await _service.GetAllMesas();
+        var result = await _service.ExecuteAsync();
 
         Assert.True(result.ServerOn);
         Assert.Equal("Nenhuma mesa registrada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
     }
 
     [Fact]
@@ -42,12 +43,13 @@ public class GetAllServicesTests
         };
         _mesaRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(mesas);
 
-        var result = await _service.GetAllMesas();
+        var result = await _service.ExecuteAsync();
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
         Assert.Equal(mesas, result.Result);
         Assert.Equal(200, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
     }
 
     [Fact]
@@ -56,10 +58,11 @@ public class GetAllServicesTests
         var exception = new Exception("Erro de teste");
         _mesaRepositoryMock.Setup(repo => repo.GetAllAsync()).ThrowsAsync(exception);
 
-        var result = await _service.GetAllMesas();
+        var result = await _service.ExecuteAsync();
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Erro de teste", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _mesaRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
     }
 }

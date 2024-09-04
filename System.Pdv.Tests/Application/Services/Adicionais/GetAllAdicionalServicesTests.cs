@@ -26,10 +26,11 @@ public class GetAllAdicionalServicesTests
         _adicionalRepositoryMock.Setup(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(new List<ItemAdicional>());
 
-        var result = await _getAllAdicionalServices.GetAllAdicionais(1, 10);
+        var result = await _getAllAdicionalServices.ExecuteAsync(1, 10);
 
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Nenhum adicional encontrado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -44,10 +45,11 @@ public class GetAllAdicionalServicesTests
         _adicionalRepositoryMock.Setup(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(adicionais);
 
-        var result = await _getAllAdicionalServices.GetAllAdicionais(1, 10);
+        var result = await _getAllAdicionalServices.ExecuteAsync(1, 10);
 
         Assert.Equal(adicionais, result.Result);
         Assert.Equal(200, result.StatusCode);
+        _adicionalRepositoryMock.Verify(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -58,10 +60,11 @@ public class GetAllAdicionalServicesTests
         _adicionalRepositoryMock.Setup(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
             .ThrowsAsync(exception);
 
-        var result = await _getAllAdicionalServices.GetAllAdicionais(1, 10);
+        var result = await _getAllAdicionalServices.ExecuteAsync(1, 10);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 }

@@ -27,10 +27,12 @@ public class CreateAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByNameAsync(adicionalDto.Nome))
             .ReturnsAsync(new ItemAdicional());
 
-        var result = await _createAdicionalService.CreateAdicional(adicionalDto);
+        var result = await _createAdicionalService.ExecuteAsync(adicionalDto);
 
         Assert.Equal(409, result.StatusCode);
         Assert.Equal("Adicional já registrado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _adicionalRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<ItemAdicional>()), Times.Never);
     }
 
     [Fact]
@@ -43,12 +45,14 @@ public class CreateAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<ItemAdicional>()))
             .Returns(Task.CompletedTask);
 
-        var result = await _createAdicionalService.CreateAdicional(adicionalDto);
+        var result = await _createAdicionalService.ExecuteAsync(adicionalDto);
 
         Assert.NotNull(result.Result);
         Assert.Equal(adicionalDto.Nome.ToUpper(), result.Result.Nome);
         Assert.Equal(adicionalDto.Preco, result.Result.Preco);
         Assert.Equal(200, result.StatusCode);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _adicionalRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<ItemAdicional>()), Times.Once);
     }
 
     [Fact]
@@ -60,10 +64,12 @@ public class CreateAdicionalServiceTests
         _adicionalRepositoryMock.Setup(repo => repo.GetByNameAsync(adicionalDto.Nome))
             .ThrowsAsync(exception);
 
-        var result = await _createAdicionalService.CreateAdicional(adicionalDto);
+        var result = await _createAdicionalService.ExecuteAsync(adicionalDto);
 
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
+        _adicionalRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        _adicionalRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<ItemAdicional>()), Times.Never);
     }
 }

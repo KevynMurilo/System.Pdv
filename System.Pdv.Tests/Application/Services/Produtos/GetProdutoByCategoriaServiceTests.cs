@@ -31,12 +31,13 @@ public class GetProdutoByCategoriaServiceTests
 
         _produtoRepositoryMock.Setup(repo => repo.GetProdutoByCategoria(categoriaId, 1, 10)).ReturnsAsync(produtos);
 
-        var result = await _getProdutoByCategoriaService.GetProdutoByCategoria(categoriaId, 1, 10);
+        var result = await _getProdutoByCategoriaService.ExecuteAsync(categoriaId, 1, 10);
 
         Assert.NotNull(result.Result);
         Assert.Equal(2, result.Result.Count());
         Assert.Equal("Produto 1", result.Result.First().Nome);
         Assert.Equal(categoriaId, result.Result.First().CategoriaId);
+        _produtoRepositoryMock.Verify(repo => repo.GetProdutoByCategoria(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -45,11 +46,12 @@ public class GetProdutoByCategoriaServiceTests
         var categoriaId = Guid.NewGuid();
         _produtoRepositoryMock.Setup(repo => repo.GetProdutoByCategoria(categoriaId, 1, 10)).ReturnsAsync(new List<Produto>());
 
-        var result = await _getProdutoByCategoriaService.GetProdutoByCategoria(categoriaId, 1, 10);
+        var result = await _getProdutoByCategoriaService.ExecuteAsync(categoriaId, 1, 10);
 
         Assert.Null(result.Result);
         Assert.Equal("Nenhum produto encontrado para a categoria especificada", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetProdutoByCategoria(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -58,10 +60,11 @@ public class GetProdutoByCategoriaServiceTests
         var categoriaId = Guid.NewGuid();
         _produtoRepositoryMock.Setup(repo => repo.GetProdutoByCategoria(categoriaId, 1, 10)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _getProdutoByCategoriaService.GetProdutoByCategoria(categoriaId, 1, 10);
+        var result = await _getProdutoByCategoriaService.ExecuteAsync(categoriaId, 1, 10);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetProdutoByCategoria(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 }

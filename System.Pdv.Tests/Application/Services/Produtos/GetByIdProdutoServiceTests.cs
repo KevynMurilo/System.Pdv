@@ -27,11 +27,12 @@ public class GetByIdProdutoServiceTests
 
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync(produto);
 
-        var result = await _getByIdProdutoService.GetByIdProduto(produtoId);
+        var result = await _getByIdProdutoService.ExecuteAsync(produtoId);
 
         Assert.NotNull(result.Result);
         Assert.Equal(produto, result.Result);
         Assert.Equal(produtoId, result.Result.Id);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -40,11 +41,12 @@ public class GetByIdProdutoServiceTests
         var produtoId = Guid.NewGuid();
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync((Produto)null);
 
-        var result = await _getByIdProdutoService.GetByIdProduto(produtoId);
+        var result = await _getByIdProdutoService.ExecuteAsync(produtoId);
 
         Assert.Null(result.Result);
         Assert.Equal("Produto não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 
     [Fact]
@@ -53,10 +55,11 @@ public class GetByIdProdutoServiceTests
         var produtoId = Guid.NewGuid();
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ThrowsAsync(new Exception("Database error"));
 
-        var result = await _getByIdProdutoService.GetByIdProduto(produtoId);
+        var result = await _getByIdProdutoService.ExecuteAsync(produtoId);
 
         Assert.False(result.ServerOn);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
+        _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
     }
 }
