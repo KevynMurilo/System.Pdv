@@ -34,7 +34,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("ItensId");
 
-                    b.ToTable("ItemAdicionalItemPedido");
+                    b.ToTable("ItemAdicionalItemPedido", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Categoria", b =>
@@ -51,7 +51,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("Categorias");
+                    b.ToTable("Categorias", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Cliente", b =>
@@ -68,7 +68,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.ItemAdicional", b =>
@@ -88,7 +88,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("Adicionais");
+                    b.ToTable("Adicionais", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.ItemPedido", b =>
@@ -115,7 +115,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("ItensPedidos");
+                    b.ToTable("ItensPedidos", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Mesa", b =>
@@ -137,7 +137,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Numero")
                         .IsUnique();
 
-                    b.ToTable("Mesas");
+                    b.ToTable("Mesas", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.MetodoPagamento", b =>
@@ -154,7 +154,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("MetodoPagamento");
+                    b.ToTable("MetodoPagamento", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Pedido", b =>
@@ -198,7 +198,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("StatusPedidoId1");
 
-                    b.ToTable("Pedidos");
+                    b.ToTable("Pedidos", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Produto", b =>
@@ -226,7 +226,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.ToTable("Produtos");
+                    b.ToTable("Produtos", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Role", b =>
@@ -246,7 +246,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.StatusPedido", b =>
@@ -263,7 +263,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Status")
                         .IsUnique();
 
-                    b.ToTable("StatusPedidos");
+                    b.ToTable("StatusPedidos", (string)null);
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Usuario", b =>
@@ -291,7 +291,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("ItemAdicionalItemPedido", b =>
