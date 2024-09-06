@@ -10,8 +10,6 @@ using System.Pdv.Application.Interfaces.Categorias;
 using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Interfaces.MetodosPagamento;
 using System.Pdv.Application.Interfaces.Pedidos;
-using System.Pdv.Application.Interfaces.Pedidos.Externos;
-using System.Pdv.Application.Interfaces.Pedidos.Internos;
 using System.Pdv.Application.Interfaces.Produtos;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.StatusPedidos;
@@ -23,7 +21,6 @@ using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
 using System.Pdv.Application.Services.MetodosPagamento;
 using System.Pdv.Application.Services.Pedidos;
-using System.Pdv.Application.Services.Pedidos.Externos;
 using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Application.Services.Roles;
 using System.Pdv.Application.Services.StatusPedidos;
@@ -73,8 +70,11 @@ builder.Host.UseSerilog();
 //Builder de Pedidos
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IProcessarItensPedidoService, ProcessarItensPedidoService>();
+builder.Services.AddScoped<IValidarPedidosService, ValidarPedidosService>();
+builder.Services.AddScoped<IGetAllPedidosServices, GetAllPedidosServices>();
 builder.Services.AddScoped<ICreatePedidoInternoService, CreatePedidoInternoService>();
 builder.Services.AddScoped<ICreatePedidoExternoService, CreatePedidoExternoService>();
+builder.Services.AddScoped<IDeletePedidoService , DeletePedidoService>();
 
 //Criar Role
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();

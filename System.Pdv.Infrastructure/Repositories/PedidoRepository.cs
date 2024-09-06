@@ -14,6 +14,39 @@ public class PedidoRepository : IPedidoRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string type)
+    {
+        IQueryable<Pedido> query = _context.Pedidos
+            .AsNoTracking()
+            .OrderByDescending(p => p.DataHora)
+            .Include(i => i.Items)
+                .ThenInclude(i => i.Adicionais);
+
+        switch (type.ToLower())
+        {
+            case "interno":
+                query = query.Where(c => c.ClienteId == null);
+                break;
+            case "externo":
+                query = query.Where(m => m.MesaId == null);
+                break;
+            default:
+                break;
+        }
+
+        return await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<Pedido?> GetByIdAsync(Guid id)
+    {
+        return await _context.Pedidos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
     public async Task<Pedido> AddAsync(Pedido pedido)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
@@ -30,5 +63,11 @@ public class PedidoRepository : IPedidoRepository
         }
 
         return pedido;
+    }
+
+    public async Task DeleteAsync(Pedido pedido)
+    {
+        _context.Pedidos.Remove(pedido);
+        await _context.SaveChangesAsync();
     }
 }

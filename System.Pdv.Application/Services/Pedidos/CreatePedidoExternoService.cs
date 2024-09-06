@@ -2,35 +2,29 @@
 using System.Pdv.Application.Common;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
-using System.Pdv.Application.Interfaces.Pedidos.Externos;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Enums;
 using System.Pdv.Core.Interfaces;
 
-namespace System.Pdv.Application.Services.Pedidos.Externos;
+namespace System.Pdv.Application.Services.Pedidos;
 
 public class CreatePedidoExternoService : ICreatePedidoExternoService
 {
     private readonly IPedidoRepository _pedidoRepository;
-    private readonly IUsuarioRepository _usuarioRepository;
-    private readonly IMetodoPagamentoRepository _metodoPagamentoRepository;
-    private readonly IStatusPedidoRepository _statusPedidoRepository;
     private readonly IProcessarItensPedidoService _processarItensPedidoService;
+    private readonly IValidarPedidosService _validarPedidosService;
     private readonly ILogger<CreatePedidoExternoService> _logger;
 
     public CreatePedidoExternoService(
         IPedidoRepository pedidoRepository,
         IUsuarioRepository usuarioRepository,
-        IMetodoPagamentoRepository metodoPagamentoRepository,
-        IStatusPedidoRepository statusPedidoRepository,
         IProcessarItensPedidoService processarItensPedidoService,
+        IValidarPedidosService validarPedidosService,
         ILogger<CreatePedidoExternoService> logger)
     {
         _pedidoRepository = pedidoRepository;
-        _usuarioRepository = usuarioRepository;
-        _metodoPagamentoRepository = metodoPagamentoRepository;
-        _statusPedidoRepository = statusPedidoRepository;
         _processarItensPedidoService = processarItensPedidoService;
+        _validarPedidosService = validarPedidosService;
         _logger = logger;
     }
 
@@ -38,7 +32,7 @@ public class CreatePedidoExternoService : ICreatePedidoExternoService
     {
         try
         {
-            var validationResult = await ValidarPedidoExternoAsync(pedidoExternoDto);
+            var validationResult = await _validarPedidosService.ValidarPedidoExternoAsync(pedidoExternoDto);
             if (validationResult != null) return validationResult;
 
             var pedido = CriarPedidoExterno(pedidoExternoDto);
@@ -57,25 +51,15 @@ public class CreatePedidoExternoService : ICreatePedidoExternoService
         }
     }
 
-    private async Task<OperationResult<Pedido>> ValidarPedidoExternoAsync(PedidoExternoDto pedidoExternoDto)
-    {
-        if (await _usuarioRepository.GetByIdAsync(pedidoExternoDto.GarcomId) == null)
-            return new OperationResult<Pedido> { Message = "Garçom não encontrado", StatusCode = 404 };
-
-        if (await _metodoPagamentoRepository.GetByIdAsync(pedidoExternoDto.MetodoPagamentoId) == null)
-            return new OperationResult<Pedido> { Message = "Método de pagamento inválido", StatusCode = 400 };
-
-        if (await _statusPedidoRepository.GetByIdAsync(pedidoExternoDto.StatusPedidoId) == null)
-            return new OperationResult<Pedido> { Message = "Status de pedido inválido", StatusCode = 400 };
-
-        return null;
-    }
-
     private Pedido CriarPedidoExterno(PedidoExternoDto pedidoDto)
     {
         return new Pedido
         {
-            ClienteId = pedidoDto.ClienteId,
+            Cliente = new Cliente
+            {
+                Nome = pedidoDto.NomeCliente,
+                Telefone = pedidoDto.TelefoneCliente,
+            },
             GarcomId = pedidoDto.GarcomId,
             TipoPedido = TipoPedido.Externo,
             MetodoPagamentoId = pedidoDto.MetodoPagamentoId,

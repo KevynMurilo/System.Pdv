@@ -2,7 +2,7 @@
 using System.Pdv.Application.DTOs;
 using System.Pdv.Core.Entities;
 
-namespace System.Pdv.Application.Interfaces.Pedidos.Externos;
+namespace System.Pdv.Application.Interfaces.Pedidos;
 
 public interface ICreatePedidoExternoService
 {

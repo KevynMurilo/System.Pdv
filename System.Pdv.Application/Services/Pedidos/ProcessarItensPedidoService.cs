@@ -20,9 +20,6 @@ public class ProcessarItensPedidoService : IProcessarItensPedidoService
 
     public async Task<OperationResult<Pedido>> ExecuteAsync(IList<ItemPedidoDto> itensDto, Pedido pedido)
     {
-        if (itensDto == null || !itensDto.Any())
-            return new OperationResult<Pedido> { Message = "Os itens são obrigatórios e devem ser fornecidos", StatusCode = 400 };
-
         foreach (var itemDto in itensDto)
         {
             var produto = await _produtoRepository.GetByIdAsync(itemDto.ProdutoId);

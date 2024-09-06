@@ -28,6 +28,7 @@ public class Pedido
     public Guid StatusPedidoId { get; set; }
     [JsonIgnore]
     public StatusPedido StatusPedido { get; set; }
+    public DateTime DataHora { get; set; } = DateTime.UtcNow;
 
     public ICollection<ItemPedido> Items { get; set; }
 }
