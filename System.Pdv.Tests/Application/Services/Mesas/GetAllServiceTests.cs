@@ -10,14 +10,14 @@ namespace System.Pdv.Application.Tests.Services.Mesas;
 public class GetAllServicesTests
 {
     private readonly Mock<IMesaRepository> _mesaRepositoryMock;
-    private readonly Mock<ILogger<GetAllService>> _loggerMock;
-    private readonly GetAllService _service;
+    private readonly Mock<ILogger<GetAllMesaService>> _loggerMock;
+    private readonly GetAllMesaService _service;
 
     public GetAllServicesTests()
     {
         _mesaRepositoryMock = new Mock<IMesaRepository>();
-        _loggerMock = new Mock<ILogger<GetAllService>>();
-        _service = new GetAllService(_mesaRepositoryMock.Object, _loggerMock.Object);
+        _loggerMock = new Mock<ILogger<GetAllMesaService>>();
+        _service = new GetAllMesaService(_mesaRepositoryMock.Object, _loggerMock.Object);
     }
 
     [Fact]

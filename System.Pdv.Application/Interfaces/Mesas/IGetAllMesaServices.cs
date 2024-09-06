@@ -3,7 +3,7 @@ using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Application.Interfaces.Mesas;
 
-public interface IGetAllServices
+public interface IGetAllMesaServices
 {
     Task<OperationResult<IEnumerable<Mesa>>> ExecuteAsync();
 }

@@ -9,14 +9,14 @@ namespace System.Pdv.Web.Controllers;
 [Route("[controller]")]
 public class MesaController : ControllerBase
 {
-    private readonly IGetAllServices _getAllServices;
+    private readonly IGetAllMesaServices _getAllServices;
     private readonly IGetMesaByIdService _getMesaById;
     private readonly ICreateMesaService _createMesaService;
     private readonly IUpdateMesaService _updateMesaService;
     private readonly IDeleteMesaService _deleteMesaService;
     private readonly ILogger<MesaController> _logger;
     public MesaController(
-        IGetAllServices getAllServices,
+        IGetAllMesaServices getAllServices,
         IGetMesaByIdService getMesaById,
         ICreateMesaService createMesaService,
         IUpdateMesaService updateMesaService,
