@@ -9,5 +9,6 @@ public class ItemAdicional
     public decimal Preco { get; set; }
 
     [JsonIgnore]
+
     public ICollection<ItemPedido> Itens { get; set; }
 }

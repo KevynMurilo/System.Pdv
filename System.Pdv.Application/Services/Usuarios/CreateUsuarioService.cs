@@ -26,14 +26,10 @@ public class CreateUsuarioService : ICreateUsuarioService
         try
         {
             if (await _usuarioRepository.GetByEmail(usuarioDto.Email) != null)
-            {
                 return new OperationResult<Usuario> { Message = "Email já cadastrado", StatusCode = 409 };
-            }
 
             if (await _roleRepository.GetByIdAsync(usuarioDto.RoleId) == null)
-            {
                 return new OperationResult<Usuario> { Message = "Role não encontrada", StatusCode = 404 };
-            }
 
             var usuario = new Usuario
             {

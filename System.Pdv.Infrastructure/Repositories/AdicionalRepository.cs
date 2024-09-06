@@ -37,7 +37,27 @@ public class AdicionalRepository : IAdicionalRepository
 
     public async Task<ItemAdicional?> GetByNameAsync(string nome)
     {
-        return await _context.Adicionais.AsNoTracking().FirstOrDefaultAsync(x => x.Nome == nome.ToUpper());
+        return await _context.Adicionais
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Nome == nome.ToUpper());
+    }
+
+    public async Task<List<ItemAdicional>> GetAdicionaisByIdsAsync(List<Guid> ids)
+    {
+        return await _context.Adicionais
+            .AsNoTracking()
+            .Where(adicional => ids.Contains(adicional.Id))
+            .ToListAsync();
+    }
+
+
+    //É utilizado para informar ao contexto que uma entidade já existe no banco de dados e que não deve ser inserida novamente.
+    public void AttachAdicionais(IEnumerable<ItemAdicional> adicionais)
+    {
+        foreach (var adicional in adicionais)
+        {
+            _context.Attach(adicional);
+        }
     }
 
     public async Task DeleteAsync(ItemAdicional itemAdicional)

@@ -9,6 +9,7 @@ using System.Pdv.Application.Interfaces.Auth;
 using System.Pdv.Application.Interfaces.Categorias;
 using System.Pdv.Application.Interfaces.Mesas;
 using System.Pdv.Application.Interfaces.MetodosPagamento;
+using System.Pdv.Application.Interfaces.Pedidos;
 using System.Pdv.Application.Interfaces.Produtos;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.StatusPedidos;
@@ -19,6 +20,7 @@ using System.Pdv.Application.Services.Categorias;
 using System.Pdv.Application.Services.Mesas;
 using System.Pdv.Application.Services.MesaService;
 using System.Pdv.Application.Services.MetodosPagamento;
+using System.Pdv.Application.Services.Pedidos;
 using System.Pdv.Application.Services.Produtos;
 using System.Pdv.Application.Services.Roles;
 using System.Pdv.Application.Services.StatusPedidos;
@@ -28,6 +30,7 @@ using System.Pdv.Infrastructure.Data;
 using System.Pdv.Infrastructure.Repositories;
 using System.Pdv.Web.Filters;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +66,15 @@ Log.Logger = new LoggerConfiguration()
 
 // Adiciona Serilog ao host
 builder.Host.UseSerilog();
+
+//Builder de Pedidos
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+builder.Services.AddScoped<IProcessarItensPedidoService, ProcessarItensPedidoService>();
+builder.Services.AddScoped<IValidarPedidosService, ValidarPedidosService>();
+builder.Services.AddScoped<IGetAllPedidosServices, GetAllPedidosServices>();
+builder.Services.AddScoped<ICreatePedidoInternoService, CreatePedidoInternoService>();
+builder.Services.AddScoped<ICreatePedidoExternoService, CreatePedidoExternoService>();
+builder.Services.AddScoped<IDeletePedidoService , DeletePedidoService>();
 
 //Criar Role
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -147,7 +159,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+//SERIALIZAÇÃO
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 // Configuração Swagger
