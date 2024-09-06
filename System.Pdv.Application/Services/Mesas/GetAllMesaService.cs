@@ -6,11 +6,11 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Mesas;
 
-public class GetAllService : IGetAllServices
+public class GetAllMesaService : IGetAllMesaServices
 {
     private readonly IMesaRepository _mesaRepository;
-    private readonly ILogger<GetAllService> _logger;
-    public GetAllService(IMesaRepository mesaRepository, ILogger<GetAllService> logger)
+    private readonly ILogger<GetAllMesaService> _logger;
+    public GetAllMesaService(IMesaRepository mesaRepository, ILogger<GetAllMesaService> logger)
     {
         _mesaRepository = mesaRepository;
         _logger = logger;

@@ -72,8 +72,10 @@ builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IProcessarItensPedidoService, ProcessarItensPedidoService>();
 builder.Services.AddScoped<IValidarPedidosService, ValidarPedidosService>();
 builder.Services.AddScoped<IGetAllPedidosServices, GetAllPedidosServices>();
+builder.Services.AddScoped<IGetByIdPedidoService, GetByIdPedidoService>();
 builder.Services.AddScoped<ICreatePedidoInternoService, CreatePedidoInternoService>();
 builder.Services.AddScoped<ICreatePedidoExternoService, CreatePedidoExternoService>();
+builder.Services.AddScoped<IUpdatePedidoInternoService, UpdatePedidoInternoService>();
 builder.Services.AddScoped<IDeletePedidoService , DeletePedidoService>();
 
 //Criar Role
@@ -85,7 +87,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 //Builder de mesas
 builder.Services.AddScoped<IMesaRepository, MesaRepository>();
-builder.Services.AddScoped<IGetAllServices, GetAllService>();
+builder.Services.AddScoped<IGetAllMesaServices, GetAllMesaService>();
 builder.Services.AddScoped<IGetMesaByIdService, GetMesaByIdService>();
 builder.Services.AddScoped<ICreateMesaService, CreateMesaService>();
 builder.Services.AddScoped<IUpdateMesaService, UpdateMesaService>();
@@ -170,7 +172,7 @@ builder.Services.AddEndpointsApiExplorer();
 // Configuração Swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API BLOG", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SISTEMA PARA GERENCIAMENTO DE PEDIDOS E MESAS", Version = "v1" });
     c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
     {
         Name = "Authorization",

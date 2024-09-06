@@ -44,6 +44,8 @@ public class PedidoRepository : IPedidoRepository
     {
         return await _context.Pedidos
             .AsNoTracking()
+            .Include(i => i.Items)
+                .ThenInclude(i => i.Adicionais)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
@@ -63,6 +65,12 @@ public class PedidoRepository : IPedidoRepository
         }
 
         return pedido;
+    }
+
+    public async Task UpdateAsync(Pedido pedido)
+    {
+        _context.Pedidos.Update(pedido);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Pedido pedido)
