@@ -36,9 +36,6 @@ public class ProcessarItensPedidoService : IProcessarItensPedidoService
                     return new OperationResult<Pedido> { Message = $"Os adicionais com IDs {string.Join(", ", notFoundIds)} não foram encontrados", StatusCode = 404 };
             }
             
-
-            _adicionalRepository.AttachAdicionais(adicionais);
-
             var itemPedido = new ItemPedido
             {
                 ProdutoId = itemDto.ProdutoId,

@@ -102,7 +102,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HttpPatch("{id:guid}")]
+    [HttpPatch("interno/{id:guid}")]
     public async Task<IActionResult> UpdatePedidoInterno(Guid id, PedidoInternoDto pedidoDto)
     {
         try
