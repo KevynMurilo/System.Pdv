@@ -13,6 +13,7 @@ public class CreatePedidoExternoService : ICreatePedidoExternoService
     private readonly IPedidoRepository _pedidoRepository;
     private readonly IProcessarItensPedidoService _processarItensPedidoService;
     private readonly IValidarPedidosService _validarPedidosService;
+    private readonly ITransactionManager _transactionManager;
     private readonly ILogger<CreatePedidoExternoService> _logger;
 
     public CreatePedidoExternoService(
@@ -20,11 +21,13 @@ public class CreatePedidoExternoService : ICreatePedidoExternoService
         IUsuarioRepository usuarioRepository,
         IProcessarItensPedidoService processarItensPedidoService,
         IValidarPedidosService validarPedidosService,
+        ITransactionManager transactionManager,
         ILogger<CreatePedidoExternoService> logger)
     {
         _pedidoRepository = pedidoRepository;
         _processarItensPedidoService = processarItensPedidoService;
         _validarPedidosService = validarPedidosService;
+        _transactionManager = transactionManager;
         _logger = logger;
     }
 
@@ -32,6 +35,7 @@ public class CreatePedidoExternoService : ICreatePedidoExternoService
     {
         try
         {
+            await _transactionManager.BeginTransactionAsync();
             var validationResult = await _validarPedidosService.ValidarPedidoExternoAsync(pedidoExternoDto);
             if (validationResult != null) return validationResult;
 
@@ -41,11 +45,13 @@ public class CreatePedidoExternoService : ICreatePedidoExternoService
             if (itemResult != null) return itemResult;
 
             await _pedidoRepository.AddAsync(pedido);
+            await _transactionManager.CommitTransactionAsync();
 
             return new OperationResult<Pedido> { Result = pedido };
         }
         catch (Exception ex)
         {
+            await _transactionManager.RollbackTransactionAsync();
             _logger.LogError(ex, "Ocorreu um erro ao registrar pedido externo");
             return new OperationResult<Pedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }

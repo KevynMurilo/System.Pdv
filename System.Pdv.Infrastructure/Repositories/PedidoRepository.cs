@@ -40,10 +40,12 @@ public class PedidoRepository : IPedidoRepository
             .ToListAsync();
     }
 
+    // Removido o AsNoTracking para que o Entity Framework rastreie as entidades,
+    // permitindo que as entidades associadas (como Itens e Adicionais) possam ser atualizadas
+    // sem gerar erros de duplicidade ou conflitos no rastreamento de entidades.
     public async Task<Pedido?> GetByIdAsync(Guid id)
     {
         return await _context.Pedidos
-            .AsNoTracking()
             .Include(i => i.Items)
                 .ThenInclude(i => i.Adicionais)
             .FirstOrDefaultAsync(p => p.Id == id);
@@ -51,20 +53,15 @@ public class PedidoRepository : IPedidoRepository
 
     public async Task<Pedido> AddAsync(Pedido pedido)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
-        try
-        {
-            _context.Pedidos.Add(pedido);
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-            throw new Exception("Erro ao criar pedido", ex);
-        }
-
+        _context.Pedidos.Add(pedido);
+        await _context.SaveChangesAsync();
         return pedido;
+    }
+
+    public async Task RemoveItem(ItemPedido item)
+    {
+        _context.ItensPedidos.Remove(item);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Pedido pedido)

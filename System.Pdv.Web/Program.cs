@@ -67,6 +67,8 @@ Log.Logger = new LoggerConfiguration()
 // Adiciona Serilog ao host
 builder.Host.UseSerilog();
 
+builder.Services.AddScoped<ITransactionManager, TransactionManager>();
+
 //Builder de Pedidos
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IProcessarItensPedidoService, ProcessarItensPedidoService>();

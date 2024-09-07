@@ -5,25 +5,27 @@ using System.Pdv.Application.Interfaces.Pedidos;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
-
 namespace System.Pdv.Application.Services.Pedidos;
 
 public class UpdatePedidoInternoService : IUpdatePedidoInternoService
 {
     private readonly IPedidoRepository _pedidoRepository;
-    private readonly IProcessarItensPedidoService _processarItensPedidoService;
+    private readonly IProcessarItensPedidoService _processarItensPedido;
     private readonly IValidarPedidosService _validarPedidosService;
+    private readonly ITransactionManager _transactionManager;
     private readonly ILogger<UpdatePedidoInternoService> _logger;
 
     public UpdatePedidoInternoService(
         IPedidoRepository pedidoRepository,
         IProcessarItensPedidoService processarItensPedidoService,
         IValidarPedidosService validarPedidosService,
+        ITransactionManager transactionManager,
         ILogger<UpdatePedidoInternoService> logger)
     {
         _pedidoRepository = pedidoRepository;
-        _processarItensPedidoService = processarItensPedidoService;
+        _processarItensPedido = processarItensPedidoService;
         _validarPedidosService = validarPedidosService;
+        _transactionManager = transactionManager;
         _logger = logger;
     }
 
@@ -31,56 +33,35 @@ public class UpdatePedidoInternoService : IUpdatePedidoInternoService
     {
         try
         {
+            await _transactionManager.BeginTransactionAsync();
             var pedido = await _pedidoRepository.GetByIdAsync(id);
-            if (pedido == null) return new OperationResult<Pedido> { Message = "Pedido não encontrado", StatusCode = 404 };
-
-            var validationResult = await _validarPedidosService.ValidarPedidoInternoAsync(pedidoDto);
-            if (validationResult != null) return validationResult;
+            if (pedido == null)
+                return new OperationResult<Pedido> { Message = "Pedido não encontrado", StatusCode = 404 };
 
             pedido.MesaId = pedidoDto.MesaId;
             pedido.GarcomId = pedidoDto.GarcomId;
             pedido.MetodoPagamentoId = pedidoDto.MetodoPagamentoId;
             pedido.StatusPedidoId = pedidoDto.StatusPedidoId;
 
-            await AtualizarItensPedido(pedido, pedidoDto.Itens);
+            foreach (var item in pedido.Items.ToList())
+            {
+                await _pedidoRepository.RemoveItem(item);
+            }
+
+            var itemResult = await _processarItensPedido.ExecuteAsync(pedidoDto.Itens, pedido);
+            if (itemResult != null) return itemResult;
 
             await _pedidoRepository.UpdateAsync(pedido);
+            await _transactionManager.CommitTransactionAsync();
 
             return new OperationResult<Pedido> { Result = pedido };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao atualizar pedido interno");
+            await _transactionManager.RollbackTransactionAsync();
+            _logger.LogError(ex, "Ocorreu um erro ao atualizar o pedido interno");
             return new OperationResult<Pedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 
-    private async Task AtualizarItensPedido(Pedido pedido, IList<ItemPedidoDto> itensDto)
-    {
-        var itensARemover = pedido.Items.Where(i => !itensDto.Any(d => d.ProdutoId == i.ProdutoId)).ToList();
-        foreach (var item in itensARemover)
-        {
-            pedido.Items.Remove(item);
-        }
-
-        foreach (var itemDto in itensDto)
-        {
-            var itemExistente = pedido.Items.FirstOrDefault(i => i.ProdutoId == itemDto.ProdutoId);
-            if (itemExistente != null)
-            {
-                itemExistente.Quantidade = itemDto.Quantidade;
-                itemExistente.Observacoes = itemDto.Observacoes;
-            }
-            else
-            {
-                var novoItem = new ItemPedido
-                {
-                    ProdutoId = itemDto.ProdutoId,
-                    Quantidade = itemDto.Quantidade,
-                    Observacoes = itemDto.Observacoes
-                };
-                pedido.Items.Add(novoItem);
-            }
-        }
-    }
 }
