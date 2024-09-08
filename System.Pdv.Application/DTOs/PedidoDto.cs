@@ -4,16 +4,20 @@ using System.Text.Json.Serialization;
 
 namespace System.Pdv.Application.DTOs;
 
-public class PedidoInternoDto
+public class PedidoDto
 {
-    [Required(ErrorMessage = "O ID da mesa é obrigatório.")]
+    [StringLength(100, ErrorMessage = "O nome do cliente deve ter no máximo 100 caracteres.")]
+    public string NomeCliente { get; set; }
+
+    [Phone(ErrorMessage = "O telefone informado não é válido.")]
+    public string TelefoneCliente { get; set; }
+
     public Guid MesaId { get; set; }
 
     [Required(ErrorMessage = "O ID do garçom é obrigatório.")]
     public Guid GarcomId { get; set; }
 
-    [JsonIgnore]
-    public TipoPedido TipoPedido { get; set; } = TipoPedido.Interno;
+    public TipoPedido TipoPedido { get; set; }
 
     [Required(ErrorMessage = "O ID do método de pagamento é obrigatório.")]
     public Guid MetodoPagamentoId { get; set; }

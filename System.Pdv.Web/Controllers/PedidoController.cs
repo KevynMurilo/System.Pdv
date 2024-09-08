@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
 
@@ -10,36 +11,34 @@ public class PedidoController : ControllerBase
 {
     private readonly IGetAllPedidosServices _getAllPedidosService;
     private readonly IGetByIdPedidoService _getByIdPedidoService;
-    private readonly ICreatePedidoInternoService _createPedidoInternoService;
-    private readonly ICreatePedidoExternoService _createPedidoExternoService;
-    private readonly IUpdatePedidoInternoService _updatePedidoInternoService;
+    private readonly ICreatePedidoService _createPedidoInternoService;
+    private readonly IUpdatePedidoService _updatePedidoInternoService;
     private readonly IDeletePedidoService _deletePedidoService;
     private readonly ILogger<PedidoController> _logger;
 
     public PedidoController(
         IGetAllPedidosServices getAllPedidosService,
         IGetByIdPedidoService getByIdPedidoService,
-        ICreatePedidoInternoService createPedidoInternoService,
-        ICreatePedidoExternoService createPedidoExternoService,
-        IUpdatePedidoInternoService updatePedidoInternoService,
+        ICreatePedidoService createPedidoInternoService,
+        IUpdatePedidoService updatePedidoInternoService,
         IDeletePedidoService deletePedidoService,
         ILogger<PedidoController> logger)
     {
         _getAllPedidosService = getAllPedidosService;
         _getByIdPedidoService = getByIdPedidoService;
         _createPedidoInternoService = createPedidoInternoService;
-        _createPedidoExternoService = createPedidoExternoService;
         _updatePedidoInternoService = updatePedidoInternoService;
         _deletePedidoService = deletePedidoService;
         _logger = logger;
     }
 
+    [Authorize(Roles = "ADMIN, GARCOM")]
     [HttpGet]
-    public async Task<IActionResult> GetAllPedidos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string type = "todos")
+    public async Task<IActionResult> GetAllPedidos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string type = "todos", [FromQuery] string status = "todos")
     {
         try
         {
-            var result = await _getAllPedidosService.ExecuteAsync(pageNumber, pageSize, type);
+            var result = await _getAllPedidosService.ExecuteAsync(pageNumber, pageSize, type, status);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -51,6 +50,7 @@ public class PedidoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN, GARCOM")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdPedido(Guid id)
     {
@@ -68,8 +68,9 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HttpPost("interno")]
-    public async Task<IActionResult> CriarPedidoInterno([FromBody] PedidoInternoDto pedidoDto)
+    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HttpPost]
+    public async Task<IActionResult> CreatePedido([FromBody] PedidoDto pedidoDto)
     {
         try
         {
@@ -80,30 +81,14 @@ public class PedidoController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao registrar pedido interno");
+            _logger.LogError(ex, "Ocorreu um erro ao registrar pedido");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
 
-    [HttpPost("externo")]
-    public async Task<IActionResult> CriarPedidoExterno([FromBody] PedidoExternoDto pedidoDto)
-    {
-        try
-        {
-            var result = await _createPedidoExternoService.ExecuteAsync(pedidoDto);
-            return result.StatusCode == 200
-                ? Ok(result)
-                : StatusCode(result.StatusCode, result);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ocorreu um erro ao registrar pedido externo");
-            return StatusCode(500, "Ocorreu um erro inesperado.");
-        }
-    }
-
-    [HttpPatch("interno/{id:guid}")]
-    public async Task<IActionResult> UpdatePedidoInterno(Guid id, PedidoInternoDto pedidoDto)
+    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> UpdatePedido(Guid id, PedidoDto pedidoDto)
     {
         try
         {
@@ -114,11 +99,12 @@ public class PedidoController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao atualizar pedido interno");
+            _logger.LogError(ex, "Ocorreu um erro ao atualizar pedido");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
 
+    [Authorize(Roles = "ADMIN, GARCOM")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeletePedido(Guid id)
     {

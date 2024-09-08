@@ -19,11 +19,11 @@ public class GetAllPedidosServices : IGetAllPedidosServices
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Pedido>>> ExecuteAsync(int pageNumber, int pageSize, string type)
+    public async Task<OperationResult<IEnumerable<Pedido>>> ExecuteAsync(int pageNumber, int pageSize, string type, string status)
     {
         try
         {
-            var pedidos = await _pedidoRepository.GetPedidosAsync(pageNumber, pageSize, type);
+            var pedidos = await _pedidoRepository.GetPedidosAsync(pageNumber, pageSize, type, status);
             if (!pedidos.Any())
                 return new OperationResult<IEnumerable<Pedido>> { Message = "Nenhum pedido encontrado", StatusCode = 404 };
 

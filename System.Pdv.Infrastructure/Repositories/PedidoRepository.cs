@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Pdv.Core.Entities;
+using System.Pdv.Core.Enums;
 using System.Pdv.Core.Interfaces;
 using System.Pdv.Infrastructure.Data;
 
@@ -14,24 +15,41 @@ public class PedidoRepository : IPedidoRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string type)
+    public async Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string type, string status)
     {
         IQueryable<Pedido> query = _context.Pedidos
             .AsNoTracking()
             .OrderByDescending(p => p.DataHora)
+            .Include(c => c.Cliente)
+            .Include(g => g.Garcom)
+                .ThenInclude(r => r.Role)
+            .Include(m => m.MetodoPagamento)
+            .Include(s => s.StatusPedido)
+            .Include(i => i.Items)
+                .ThenInclude(p => p.Produto)
+                    .ThenInclude(c => c.Categoria)
             .Include(i => i.Items)
                 .ThenInclude(i => i.Adicionais);
 
-        switch (type.ToLower())
+        // Filtra por tipo de pedido
+        if (!string.IsNullOrEmpty(type))
         {
-            case "interno":
-                query = query.Where(c => c.ClienteId == null);
-                break;
-            case "externo":
-                query = query.Where(m => m.MesaId == null);
-                break;
-            default:
-                break;
+            switch (type.ToLower())
+            {
+                case "interno":
+                    query = query.Where(t => t.TipoPedido == TipoPedido.Interno);
+                    break;
+                case "externo":
+                    query = query.Where(t => t.TipoPedido == TipoPedido.Externo);
+                    break;
+                default:
+                    break;
+            }
+        }
+        // Filtra por status de pedido
+        if (!string.IsNullOrEmpty(status) && !status.Equals("todos", StringComparison.OrdinalIgnoreCase))
+        {
+            query = query.Where(s => s.StatusPedido.Status == status.ToUpper());
         }
 
         return await query
@@ -46,6 +64,14 @@ public class PedidoRepository : IPedidoRepository
     public async Task<Pedido?> GetByIdAsync(Guid id)
     {
         return await _context.Pedidos
+            .Include(c => c.Cliente)
+            .Include(g => g.Garcom)
+                .ThenInclude(r => r.Role)
+            .Include(m => m.MetodoPagamento)
+            .Include(s => s.StatusPedido)
+            .Include(i => i.Items)
+                .ThenInclude(p => p.Produto)
+                    .ThenInclude(c => c.Categoria)
             .Include(i => i.Items)
                 .ThenInclude(i => i.Adicionais)
             .FirstOrDefaultAsync(p => p.Id == id);
@@ -56,12 +82,6 @@ public class PedidoRepository : IPedidoRepository
         _context.Pedidos.Add(pedido);
         await _context.SaveChangesAsync();
         return pedido;
-    }
-
-    public async Task RemoveItem(ItemPedido item)
-    {
-        _context.ItensPedidos.Remove(item);
-        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Pedido pedido)
@@ -75,4 +95,10 @@ public class PedidoRepository : IPedidoRepository
         _context.Pedidos.Remove(pedido);
         await _context.SaveChangesAsync();
     }
+    public async Task RemoveItem(ItemPedido item)
+    {
+        _context.ItensPedidos.Remove(item);
+        await _context.SaveChangesAsync();
+    }
+
 }

@@ -10,8 +10,8 @@ public class ItemPedido
     [JsonIgnore]
     public Pedido Pedido { get; set; }
 
-    public Guid ProdutoId { get; set; }
     [JsonIgnore]
+    public Guid ProdutoId { get; set; }
     public Produto Produto { get; set; }
 
     public int Quantidade { get; set; }

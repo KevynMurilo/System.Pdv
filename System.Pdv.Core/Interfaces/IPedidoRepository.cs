@@ -4,7 +4,7 @@ namespace System.Pdv.Core.Interfaces;
 
 public interface IPedidoRepository
 {
-    Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string type);
+    Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string type, string status);
     Task<Pedido> GetByIdAsync(Guid id);
     Task<Pedido> AddAsync(Pedido pedido);
     Task RemoveItem(ItemPedido item);

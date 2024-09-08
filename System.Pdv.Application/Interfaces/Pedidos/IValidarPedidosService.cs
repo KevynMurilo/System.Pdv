@@ -6,6 +6,5 @@ namespace System.Pdv.Application.Interfaces.Pedidos;
 
 public interface IValidarPedidosService
 {
-    Task<OperationResult<Pedido>> ValidarPedidoInternoAsync(PedidoInternoDto pedidoDto);
-    Task<OperationResult<Pedido>> ValidarPedidoExternoAsync(PedidoExternoDto pedidoExternoDto);
+    Task<OperationResult<Pedido>> ValidarPedido(PedidoDto pedidoDto);
 }

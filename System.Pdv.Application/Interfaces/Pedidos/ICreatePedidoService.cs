@@ -4,7 +4,7 @@ using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Application.Interfaces.Pedidos;
 
-public interface ICreatePedidoInternoService
+public interface ICreatePedidoService
 {
-    Task<OperationResult<Pedido>> ExecuteAsync(PedidoInternoDto pedidoInternoDto);
+    Task<OperationResult<Pedido>> ExecuteAsync(PedidoDto pedidoDto);
 }
