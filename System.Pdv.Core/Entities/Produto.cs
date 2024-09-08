@@ -10,6 +10,7 @@ public class Produto
     public decimal Preco { get; set; }
     public bool Disponivel { get; set; } = true;
 
+    [JsonIgnore]
     public Guid? CategoriaId { get; set; }   
     public Categoria Categoria { get; set; }
 

@@ -8,20 +8,20 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Pedidos;
 
-public class CreatePedidoInternoService : ICreatePedidoInternoService
+public class CreatePedidoService : ICreatePedidoService
 {
     private readonly IPedidoRepository _pedidoRepository;
     private readonly IProcessarItensPedidoService _processarItensPedido;
     private readonly IValidarPedidosService _validarPedidosService;
     private readonly ITransactionManager _transactionManager;
-    private readonly ILogger<CreatePedidoInternoService> _logger;
+    private readonly ILogger<CreatePedidoService> _logger;
 
-    public CreatePedidoInternoService(
+    public CreatePedidoService(
         IPedidoRepository pedidoRepository,
         IProcessarItensPedidoService processarItensPedidoService,
         IValidarPedidosService validarPedidosService,
         ITransactionManager transactionManager,
-        ILogger<CreatePedidoInternoService> logger)
+        ILogger<CreatePedidoService> logger)
     {
         _pedidoRepository = pedidoRepository;
         _processarItensPedido = processarItensPedidoService;
@@ -30,15 +30,16 @@ public class CreatePedidoInternoService : ICreatePedidoInternoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Pedido>> ExecuteAsync(PedidoInternoDto pedidoDto)
+    public async Task<OperationResult<Pedido>> ExecuteAsync(PedidoDto pedidoDto)
     {
         try
         {
             await _transactionManager.BeginTransactionAsync();
-            var validationResult = await _validarPedidosService.ValidarPedidoInternoAsync(pedidoDto);
+
+            var validationResult = await _validarPedidosService.ValidarPedido(pedidoDto);
             if (validationResult != null) return validationResult;
 
-            var pedido = CriarPedidoInterno(pedidoDto);
+            var pedido = CreatePedido(pedidoDto);
 
             var itemResult = await _processarItensPedido.ExecuteAsync(pedidoDto.Itens, pedido);
             if (itemResult != null) return itemResult;
@@ -51,18 +52,23 @@ public class CreatePedidoInternoService : ICreatePedidoInternoService
         catch (Exception ex)
         {
             await _transactionManager.RollbackTransactionAsync();
-            _logger.LogError(ex, "Ocorreu um erro ao registrar pedido interno");
+            _logger.LogError(ex, "Ocorreu um erro ao registrar pedido");
             return new OperationResult<Pedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 
-    private Pedido CriarPedidoInterno(PedidoInternoDto pedidoDto)
+    private Pedido CreatePedido(PedidoDto pedidoDto)
     {
         return new Pedido
         {
-            MesaId = pedidoDto.MesaId,
+            Cliente = new Cliente
+            {
+                Nome = pedidoDto.NomeCliente,
+                Telefone = pedidoDto.TelefoneCliente,
+            },
+            MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null,
             GarcomId = pedidoDto.GarcomId,
-            TipoPedido = TipoPedido.Interno,
+            TipoPedido = pedidoDto.TipoPedido,
             MetodoPagamentoId = pedidoDto.MetodoPagamentoId,
             StatusPedidoId = pedidoDto.StatusPedidoId,
             Items = new List<ItemPedido>()

@@ -3,24 +3,25 @@ using System.Pdv.Application.Common;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
 using System.Pdv.Core.Entities;
+using System.Pdv.Core.Enums;
 using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Services.Pedidos;
 
-public class UpdatePedidoInternoService : IUpdatePedidoInternoService
+public class UpdatePedidoService : IUpdatePedidoService
 {
     private readonly IPedidoRepository _pedidoRepository;
     private readonly IProcessarItensPedidoService _processarItensPedido;
     private readonly IValidarPedidosService _validarPedidosService;
     private readonly ITransactionManager _transactionManager;
-    private readonly ILogger<UpdatePedidoInternoService> _logger;
+    private readonly ILogger<UpdatePedidoService> _logger;
 
-    public UpdatePedidoInternoService(
+    public UpdatePedidoService(
         IPedidoRepository pedidoRepository,
         IProcessarItensPedidoService processarItensPedidoService,
         IValidarPedidosService validarPedidosService,
         ITransactionManager transactionManager,
-        ILogger<UpdatePedidoInternoService> logger)
+        ILogger<UpdatePedidoService> logger)
     {
         _pedidoRepository = pedidoRepository;
         _processarItensPedido = processarItensPedidoService;
@@ -29,7 +30,7 @@ public class UpdatePedidoInternoService : IUpdatePedidoInternoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Pedido>> ExecuteAsync(Guid id, PedidoInternoDto pedidoDto)
+    public async Task<OperationResult<Pedido>> ExecuteAsync(Guid id, PedidoDto pedidoDto)
     {
         try
         {
@@ -38,7 +39,9 @@ public class UpdatePedidoInternoService : IUpdatePedidoInternoService
             if (pedido == null)
                 return new OperationResult<Pedido> { Message = "Pedido não encontrado", StatusCode = 404 };
 
-            pedido.MesaId = pedidoDto.MesaId;
+            pedido.Cliente.Nome = pedidoDto.NomeCliente;
+            pedido.Cliente.Telefone = pedidoDto.TelefoneCliente;
+            pedido.MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null;
             pedido.GarcomId = pedidoDto.GarcomId;
             pedido.MetodoPagamentoId = pedidoDto.MetodoPagamentoId;
             pedido.StatusPedidoId = pedidoDto.StatusPedidoId;
@@ -59,7 +62,7 @@ public class UpdatePedidoInternoService : IUpdatePedidoInternoService
         catch (Exception ex)
         {
             await _transactionManager.RollbackTransactionAsync();
-            _logger.LogError(ex, "Ocorreu um erro ao atualizar o pedido interno");
+            _logger.LogError(ex, "Ocorreu um erro ao atualizar o pedido");
             return new OperationResult<Pedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }

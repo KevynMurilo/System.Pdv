@@ -11,22 +11,22 @@ public class Pedido
     [JsonIgnore]
     public Mesa Mesa { get; set; }
 
-    public Guid? ClienteId { get; set; }
     [JsonIgnore]
+    public Guid? ClienteId { get; set; }
     public Cliente Cliente { get; set; }
 
-    public Guid GarcomId { get; set; }
     [JsonIgnore]
+    public Guid GarcomId { get; set; }
     public Usuario Garcom { get; set; }
 
     public TipoPedido TipoPedido { get; set; } = TipoPedido.Externo;
 
-    public Guid MetodoPagamentoId { get; set; }
     [JsonIgnore]
+    public Guid MetodoPagamentoId { get; set; }
     public MetodoPagamento MetodoPagamento { get; set; }
 
-    public Guid StatusPedidoId { get; set; }
     [JsonIgnore]
+    public Guid StatusPedidoId { get; set; }
     public StatusPedido StatusPedido { get; set; }
     public DateTime DataHora { get; set; } = DateTime.UtcNow;
 

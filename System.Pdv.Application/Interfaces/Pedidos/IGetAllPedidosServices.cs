@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Pedidos;
 
 public interface IGetAllPedidosServices
 {
-    Task<OperationResult<IEnumerable<Pedido>>> ExecuteAsync(int pageNumber, int pageSize, string type);
+    Task<OperationResult<IEnumerable<Pedido>>> ExecuteAsync(int pageNumber, int pageSize, string type, string status);
 }

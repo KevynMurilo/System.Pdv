@@ -75,9 +75,8 @@ builder.Services.AddScoped<IProcessarItensPedidoService, ProcessarItensPedidoSer
 builder.Services.AddScoped<IValidarPedidosService, ValidarPedidosService>();
 builder.Services.AddScoped<IGetAllPedidosServices, GetAllPedidosServices>();
 builder.Services.AddScoped<IGetByIdPedidoService, GetByIdPedidoService>();
-builder.Services.AddScoped<ICreatePedidoInternoService, CreatePedidoInternoService>();
-builder.Services.AddScoped<ICreatePedidoExternoService, CreatePedidoExternoService>();
-builder.Services.AddScoped<IUpdatePedidoInternoService, UpdatePedidoInternoService>();
+builder.Services.AddScoped<ICreatePedidoService, CreatePedidoService>();
+builder.Services.AddScoped<IUpdatePedidoService, UpdatePedidoService>();
 builder.Services.AddScoped<IDeletePedidoService , DeletePedidoService>();
 
 //Criar Role
