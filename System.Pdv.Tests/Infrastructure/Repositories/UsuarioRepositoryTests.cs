@@ -28,7 +28,7 @@ public class UsuarioRepositoryTests : IDisposable
         var usuario = new Usuario
         {
             Id = Guid.NewGuid(),
-            RoleId = Guid.NewGuid(),
+            Role = new Role { Id = Guid.NewGuid(), Nome = "Initial Role" },
             Nome = "Test Usuario",
             Email = "test@example.com",
         };
