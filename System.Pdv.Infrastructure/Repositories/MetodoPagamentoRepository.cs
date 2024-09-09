@@ -29,7 +29,6 @@ public class MetodoPagamentoRepository : IMetodoPagamentoRepository
     public async Task<MetodoPagamento?> GetByIdAsync(Guid id)
     {
         return await _context.MetodoPagamento
-            .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 

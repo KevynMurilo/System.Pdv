@@ -27,7 +27,6 @@ public class ProdutoRepository : IProdutoRepository
     public async Task<Produto?> GetByIdAsync(Guid id)
     {
         return await _context.Produtos
-            .AsNoTracking()
             .Include (p => p.Categoria)
             .FirstOrDefaultAsync(p => p.Id == id);
     }

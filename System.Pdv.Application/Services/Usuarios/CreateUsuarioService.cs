@@ -43,7 +43,7 @@ public class CreateUsuarioService : ICreateUsuarioService
 
             await _usuarioRepository.AddAsync(usuario);
 
-            return new OperationResult<Usuario> { Result = usuario };
+            return new OperationResult<Usuario> { Result = await _usuarioRepository.GetByIdAsync(usuario.Id) };
         }
         catch (Exception ex)
         {

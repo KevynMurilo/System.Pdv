@@ -48,9 +48,9 @@ public class CreatePedidoService : ICreatePedidoService
             if (itemResult != null) return itemResult;
 
             await _pedidoRepository.AddAsync(pedido);
-            await _transactionManager.CommitTransactionAsync(); 
+            await _transactionManager.CommitTransactionAsync();
 
-            return new OperationResult<Pedido> { Result = pedido };
+            return new OperationResult<Pedido> { Result = await _pedidoRepository.GetByIdAsync(pedido.Id) };
         }
         catch (Exception ex)
         {
