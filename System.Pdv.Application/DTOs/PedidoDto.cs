@@ -14,9 +14,6 @@ public class PedidoDto
 
     public Guid MesaId { get; set; }
 
-    [Required(ErrorMessage = "O ID do garçom é obrigatório.")]
-    public Guid GarcomId { get; set; }
-
     public TipoPedido TipoPedido { get; set; }
 
     [Required(ErrorMessage = "O ID do método de pagamento é obrigatório.")]

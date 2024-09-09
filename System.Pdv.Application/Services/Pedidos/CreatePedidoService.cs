@@ -5,6 +5,7 @@ using System.Pdv.Application.Interfaces.Pedidos;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Enums;
 using System.Pdv.Core.Interfaces;
+using System.Security.Claims;
 
 namespace System.Pdv.Application.Services.Pedidos;
 
@@ -30,16 +31,18 @@ public class CreatePedidoService : ICreatePedidoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Pedido>> ExecuteAsync(PedidoDto pedidoDto)
+    public async Task<OperationResult<Pedido>> ExecuteAsync(PedidoDto pedidoDto, ClaimsPrincipal userClaims)
     {
         try
         {
             await _transactionManager.BeginTransactionAsync();
 
-            var validationResult = await _validarPedidosService.ValidarPedido(pedidoDto);
+            var userId = userClaims.FindFirstValue("id");
+
+            var validationResult = await _validarPedidosService.ValidarPedido(pedidoDto, userId);
             if (validationResult != null) return validationResult;
 
-            var pedido = CreatePedido(pedidoDto);
+            var pedido = CreatePedido(pedidoDto, Guid.Parse(userId));
 
             var itemResult = await _processarItensPedido.ExecuteAsync(pedidoDto.Itens, pedido);
             if (itemResult != null) return itemResult;
@@ -57,7 +60,7 @@ public class CreatePedidoService : ICreatePedidoService
         }
     }
 
-    private Pedido CreatePedido(PedidoDto pedidoDto)
+    private Pedido CreatePedido(PedidoDto pedidoDto, Guid garcomId)
     {
         return new Pedido
         {
@@ -67,7 +70,7 @@ public class CreatePedidoService : ICreatePedidoService
                 Telefone = pedidoDto.TelefoneCliente,
             },
             MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null,
-            GarcomId = pedidoDto.GarcomId,
+            GarcomId = garcomId,
             TipoPedido = pedidoDto.TipoPedido,
             MetodoPagamentoId = pedidoDto.MetodoPagamentoId,
             StatusPedidoId = pedidoDto.StatusPedidoId,

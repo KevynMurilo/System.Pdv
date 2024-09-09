@@ -5,6 +5,7 @@ using System.Pdv.Application.Interfaces.Pedidos;
 using System.Pdv.Core.Entities;
 using System.Pdv.Core.Enums;
 using System.Pdv.Core.Interfaces;
+using System.Security.Claims;
 
 namespace System.Pdv.Application.Services.Pedidos;
 
@@ -30,19 +31,25 @@ public class UpdatePedidoService : IUpdatePedidoService
         _logger = logger;
     }
 
-    public async Task<OperationResult<Pedido>> ExecuteAsync(Guid id, PedidoDto pedidoDto)
+    public async Task<OperationResult<Pedido>> ExecuteAsync(Guid id, PedidoDto pedidoDto, ClaimsPrincipal userClaims)
     {
         try
         {
             await _transactionManager.BeginTransactionAsync();
+
             var pedido = await _pedidoRepository.GetByIdAsync(id);
             if (pedido == null)
                 return new OperationResult<Pedido> { Message = "Pedido não encontrado", StatusCode = 404 };
 
+            var userId = userClaims.FindFirstValue("id");
+
+            var validationResult = await _validarPedidosService.ValidarPedido(pedidoDto, userId);
+            if (validationResult != null) return validationResult;
+
             pedido.Cliente.Nome = pedidoDto.NomeCliente;
             pedido.Cliente.Telefone = pedidoDto.TelefoneCliente;
             pedido.MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null;
-            pedido.GarcomId = pedidoDto.GarcomId;
+            pedido.GarcomId = Guid.Parse(userId);
             pedido.MetodoPagamentoId = pedidoDto.MetodoPagamentoId;
             pedido.StatusPedidoId = pedidoDto.StatusPedidoId;
 

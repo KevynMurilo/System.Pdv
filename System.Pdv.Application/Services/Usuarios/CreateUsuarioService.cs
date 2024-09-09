@@ -28,7 +28,8 @@ public class CreateUsuarioService : ICreateUsuarioService
             if (await _usuarioRepository.GetByEmail(usuarioDto.Email) != null)
                 return new OperationResult<Usuario> { Message = "Email já cadastrado", StatusCode = 409 };
 
-            if (await _roleRepository.GetByIdAsync(usuarioDto.RoleId) == null)
+            var role = await _roleRepository.GetByIdAsync(usuarioDto.RoleId);
+            if (role == null)
                 return new OperationResult<Usuario> { Message = "Role não encontrada", StatusCode = 404 };
 
             var usuario = new Usuario
@@ -37,6 +38,7 @@ public class CreateUsuarioService : ICreateUsuarioService
                 Email = usuarioDto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Password),
                 RoleId = usuarioDto.RoleId,
+                Role = role,
             };
 
             await _usuarioRepository.AddAsync(usuario);
