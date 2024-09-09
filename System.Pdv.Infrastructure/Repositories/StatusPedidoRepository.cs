@@ -30,7 +30,6 @@ public class StatusPedidoRepository : IStatusPedidoRepository
     public async Task<StatusPedido?> GetByIdAsync(Guid id)
     {
         return await _context.StatusPedidos
-            .AsNoTracking()
             .FirstOrDefaultAsync(s => s.Id == id);
     }
 

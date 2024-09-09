@@ -50,7 +50,7 @@ public class ValidarPedidosService : IValidarPedidosService
 
         if (string.IsNullOrEmpty(garcomId))
             return new OperationResult<Pedido> { Message = "Token inválido. ID do garçom não encontrado.", StatusCode = 401 };
-       
+
         if (await _metodoPagamentoRepository.GetByIdAsync(pedidoDto.MetodoPagamentoId) == null)
             return new OperationResult<Pedido> { Message = "Método de pagamento inválido", StatusCode = 400 };
 

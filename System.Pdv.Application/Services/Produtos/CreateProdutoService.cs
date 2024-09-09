@@ -41,7 +41,7 @@ public class CreateProdutoService : ICreateProdutoService
 
             await _produtoRepository.AddAsync(produto);
             
-            return new OperationResult<Produto> { Result = produto };
+            return new OperationResult<Produto> { Result = await _produtoRepository.GetByIdAsync(produto.Id) };
         }
         catch (Exception ex)
         {

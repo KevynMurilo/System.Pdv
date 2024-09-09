@@ -34,23 +34,22 @@ public class CreateProdutoServiceTests
             CategoriaId = Guid.NewGuid()
         };
 
-        var categoria = new Categoria { Id = Guid.NewGuid(), Nome = "Categoria Teste" };
+        var categoria = new Categoria { Id = produtoDto.CategoriaId, Nome = "Categoria Teste" };
+        var produtoAdicionado = new Produto { Id = Guid.NewGuid(), Nome = produtoDto.Nome, Descricao = produtoDto.Descricao, Preco = produtoDto.Preco, Disponivel = produtoDto.Disponivel, CategoriaId = produtoDto.CategoriaId };
+
         _categoriaRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoDto.CategoriaId)).ReturnsAsync(categoria);
 
-        Produto? capturedProduto = null;
-        _produtoRepositoryMock
-            .Setup(repo => repo.AddAsync(It.IsAny<Produto>()))
-            .Callback<Produto>(produto => capturedProduto = produto)
-            .Returns(Task.CompletedTask);
+        _produtoRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Produto>())).Returns(Task.CompletedTask);
+        _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(produtoAdicionado);
 
         var result = await _createProdutoService.ExecuteAsync(produtoDto);
 
         Assert.NotNull(result.Result);
-        Assert.Equal(produtoDto.Nome, capturedProduto?.Nome);
-        Assert.Equal(produtoDto.Descricao, capturedProduto?.Descricao);
-        Assert.Equal(produtoDto.Preco, capturedProduto?.Preco);
-        Assert.Equal(produtoDto.Disponivel, capturedProduto?.Disponivel);
-        Assert.Equal(produtoDto.CategoriaId, capturedProduto?.CategoriaId);
+        Assert.Equal(produtoDto.Nome, result.Result.Nome);
+        Assert.Equal(produtoDto.Descricao, result.Result.Descricao);
+        Assert.Equal(produtoDto.Preco, result.Result.Preco);
+        Assert.Equal(produtoDto.Disponivel, result.Result.Disponivel);
+        Assert.Equal(produtoDto.CategoriaId, result.Result.CategoriaId);
         _produtoRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Produto>()), Times.Once);
         _categoriaRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoDto.CategoriaId), Times.Once);
     }

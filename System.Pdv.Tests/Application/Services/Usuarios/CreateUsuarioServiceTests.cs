@@ -29,6 +29,7 @@ public class CreateUsuarioServiceTests
         var roleId = Guid.NewGuid();
         var usuarioDto = new UsuarioDto { Nome = "Teste", RoleId = roleId, Email = "teste@example.com", Password = "senha123" };
         var existingRole = new Role { Id = roleId, Nome = "Usuario", Descricao = "descricao" };
+        var usuarioCriado = new Usuario { Id = Guid.NewGuid(), Nome = usuarioDto.Nome, Email = usuarioDto.Email, PasswordHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Password), RoleId = roleId, Role = existingRole };
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(usuarioDto.Email))
             .ReturnsAsync((Usuario)null);
@@ -39,16 +40,21 @@ public class CreateUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Usuario>()))
             .Returns(Task.CompletedTask);
 
+        _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(usuarioCriado);
+
         var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
+        Assert.NotNull(result.Result);
         Assert.Equal(usuarioDto.Nome, result.Result.Nome);
         Assert.Equal(200, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
         _roleRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _usuarioRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Usuario>()), Times.Once);
     }
+
 
     [Fact]
     public async Task CreateUsuario_ShouldReturn_NotFoundRole()

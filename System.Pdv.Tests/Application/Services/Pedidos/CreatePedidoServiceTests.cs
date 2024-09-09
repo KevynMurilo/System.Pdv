@@ -44,7 +44,7 @@ public class CreatePedidoServiceTests
         var pedidoDto = new PedidoDto
         {
             NomeCliente = "Cliente Teste",
-            TelefoneCliente = "11999999999", 
+            TelefoneCliente = "11999999999",
             Itens = new List<ItemPedidoDto>(),
             TipoPedido = TipoPedido.Interno,
             MesaId = Guid.NewGuid(),
@@ -53,7 +53,14 @@ public class CreatePedidoServiceTests
         };
 
         var userClaims = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("id", Guid.NewGuid().ToString()) }));
-        var pedido = new Pedido { GarcomId = Guid.NewGuid() };
+        var pedido = new Pedido
+        {
+            Id = Guid.NewGuid(),
+            Cliente = new Cliente { Nome = pedidoDto.NomeCliente, Telefone = pedidoDto.TelefoneCliente },
+            TipoPedido = pedidoDto.TipoPedido,
+            MesaId = pedidoDto.MesaId,
+            MetodoPagamentoId = pedidoDto.MetodoPagamentoId
+        };
 
         _validarPedidosServiceMock.Setup(v => v.ValidarPedido(It.IsAny<PedidoDto>(), It.IsAny<string>()))
             .ReturnsAsync((OperationResult<Pedido>)null);
@@ -63,6 +70,9 @@ public class CreatePedidoServiceTests
 
         _pedidoRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Pedido>()))
             .Returns(Task.CompletedTask);
+
+        _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(pedido);
 
         var result = await _createPedidoService.ExecuteAsync(pedidoDto, userClaims);
 
@@ -75,6 +85,7 @@ public class CreatePedidoServiceTests
         _pedidoRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Pedido>()), Times.Once);
         _transactionManagerMock.Verify(t => t.CommitTransactionAsync(), Times.Once);
     }
+
 
     [Fact]
     public async Task CreatePedido_ShouldReturnError_WhenValidationFails()

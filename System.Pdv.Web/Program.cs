@@ -103,6 +103,9 @@ builder.Services.AddScoped<IUpdateUsuarioService, UpdateUsuarioService>();
 builder.Services.AddScoped<IDeleteUsuarioService, DeleteUsuarioService>();
 builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
 
+//Builder de Clientes
+builder.Services.AddScoped<IClienteRepository, IClienteRepository>();
+
 //Builder de Categorias
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IGetAllCategoriaService, GetAllCategoriaService>();
