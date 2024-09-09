@@ -27,6 +27,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         return await _context.Usuarios
             .AsNoTracking()
+            .Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 

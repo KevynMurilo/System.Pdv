@@ -1,4 +1,5 @@
-﻿using System.Pdv.Application.Common;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Pdv.Application.Common;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
 using System.Pdv.Core.Entities;
@@ -27,7 +28,7 @@ public class ValidarPedidosService : IValidarPedidosService
         _statusPedidoRepository = statusPedidoRepository;
     }
 
-    public async Task<OperationResult<Pedido>> ValidarPedido(PedidoDto pedidoDto)
+    public async Task<OperationResult<Pedido>> ValidarPedido(PedidoDto pedidoDto, string garcomId)
     {
         if (pedidoDto.TipoPedido == TipoPedido.Interno)
         {
@@ -47,9 +48,9 @@ public class ValidarPedidosService : IValidarPedidosService
                 return new OperationResult<Pedido> { Message = "O ID da mesa não deve ser informado para pedidos externos.", StatusCode = 400 };
         }
 
-        if (await _usuarioRepository.GetByIdAsync(pedidoDto.GarcomId) == null)
-            return new OperationResult<Pedido> { Message = "Garçom não encontrado", StatusCode = 404 };
-
+        if (string.IsNullOrEmpty(garcomId))
+            return new OperationResult<Pedido> { Message = "Token inválido. ID do garçom não encontrado.", StatusCode = 401 };
+       
         if (await _metodoPagamentoRepository.GetByIdAsync(pedidoDto.MetodoPagamentoId) == null)
             return new OperationResult<Pedido> { Message = "Método de pagamento inválido", StatusCode = 400 };
 

@@ -77,11 +77,10 @@ public class PedidoRepository : IPedidoRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Pedido> AddAsync(Pedido pedido)
+    public async Task AddAsync(Pedido pedido)
     {
         _context.Pedidos.Add(pedido);
         await _context.SaveChangesAsync();
-        return pedido;
     }
 
     public async Task UpdateAsync(Pedido pedido)

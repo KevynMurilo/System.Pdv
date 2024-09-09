@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
+using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Web.Controllers;
 
@@ -74,7 +75,7 @@ public class PedidoController : ControllerBase
     {
         try
         {
-            var result = await _createPedidoInternoService.ExecuteAsync(pedidoDto);
+            var result = await _createPedidoInternoService.ExecuteAsync(pedidoDto, User);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -92,7 +93,7 @@ public class PedidoController : ControllerBase
     {
         try
         {
-            var result = await _updatePedidoInternoService.ExecuteAsync(id, pedidoDto);
+            var result = await _updatePedidoInternoService.ExecuteAsync(id, pedidoDto, User);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
