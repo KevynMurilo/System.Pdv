@@ -104,7 +104,7 @@ builder.Services.AddScoped<IDeleteUsuarioService, DeleteUsuarioService>();
 builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
 
 //Builder de Clientes
-builder.Services.AddScoped<IClienteRepository, IClienteRepository>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 
 //Builder de Categorias
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
