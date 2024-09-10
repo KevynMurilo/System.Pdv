@@ -37,6 +37,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+//Configuração impressora termica
 builder.Services.AddScoped<IThermalPrinterService>(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
