@@ -15,6 +15,7 @@ public class CreatePedidoService : ICreatePedidoService
     private readonly IProcessarItensPedidoService _processarItensPedido;
     private readonly IValidarPedidosService _validarPedidosService;
     private readonly ITransactionManager _transactionManager;
+    private readonly IThermalPrinterService _thermalPrinterService;
     private readonly ILogger<CreatePedidoService> _logger;
 
     public CreatePedidoService(
@@ -22,12 +23,14 @@ public class CreatePedidoService : ICreatePedidoService
         IProcessarItensPedidoService processarItensPedidoService,
         IValidarPedidosService validarPedidosService,
         ITransactionManager transactionManager,
+        IThermalPrinterService thermalPrinterService,
         ILogger<CreatePedidoService> logger)
     {
         _pedidoRepository = pedidoRepository;
         _processarItensPedido = processarItensPedidoService;
         _validarPedidosService = validarPedidosService;
         _transactionManager = transactionManager;
+        _thermalPrinterService = thermalPrinterService;
         _logger = logger;
     }
 
@@ -50,7 +53,11 @@ public class CreatePedidoService : ICreatePedidoService
             await _pedidoRepository.AddAsync(pedido);
             await _transactionManager.CommitTransactionAsync();
 
-            return new OperationResult<Pedido> { Result = await _pedidoRepository.GetByIdAsync(pedido.Id) };
+            var returnPedido = await _pedidoRepository.GetByIdAsync(pedido.Id);
+
+            _thermalPrinterService.PrintOrder(returnPedido);
+
+            return new OperationResult<Pedido> { Result = returnPedido };
         }
         catch (Exception ex)
         {

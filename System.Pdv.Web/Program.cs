@@ -28,6 +28,7 @@ using System.Pdv.Application.Services.Usuarios;
 using System.Pdv.Core.Interfaces;
 using System.Pdv.Infrastructure.Data;
 using System.Pdv.Infrastructure.Repositories;
+using System.Pdv.Infrastructure.Services;
 using System.Pdv.Web.Filters;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -35,6 +36,12 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddScoped<IThermalPrinterService>(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new ThermalPrinterService(configuration);
+});
 
 // Configuração do Entity Framework Core com PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
