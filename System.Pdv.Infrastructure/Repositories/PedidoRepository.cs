@@ -20,6 +20,7 @@ public class PedidoRepository : IPedidoRepository
         IQueryable<Pedido> query = _context.Pedidos
             .AsNoTracking()
             .OrderByDescending(p => p.DataHora)
+            .Include(m => m.Mesa)
             .Include(c => c.Cliente)
             .Include(g => g.Garcom)
                 .ThenInclude(r => r.Role)
@@ -65,6 +66,7 @@ public class PedidoRepository : IPedidoRepository
     {
         return await _context.Pedidos
             .Include(c => c.Cliente)
+            .Include(m => m.Mesa)
             .Include(g => g.Garcom)
                 .ThenInclude(r => r.Role)
             .Include(m => m.MetodoPagamento)

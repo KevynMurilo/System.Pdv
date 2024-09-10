@@ -55,9 +55,12 @@ public class CreatePedidoService : ICreatePedidoService
 
             var returnPedido = await _pedidoRepository.GetByIdAsync(pedido.Id);
 
-            _thermalPrinterService.PrintOrder(returnPedido);
+            var printSuccess = _thermalPrinterService.PrintOrder(returnPedido);
+            var message = printSuccess == true
+                ? "Pedido criado e impressão realizada com sucesso."
+                : "Pedido criado, mas houve um erro na impressão.";
 
-            return new OperationResult<Pedido> { Result = returnPedido };
+            return new OperationResult<Pedido> { Result = returnPedido, Message = message };
         }
         catch (Exception ex)
         {
