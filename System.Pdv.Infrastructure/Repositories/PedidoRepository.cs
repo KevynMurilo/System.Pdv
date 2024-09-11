@@ -15,7 +15,7 @@ public class PedidoRepository : IPedidoRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string type, string status)
+    public async Task<IEnumerable<Pedido>> GetPedidosAsync(int pageNumber, int pageSize, string tipoPedido, string statusPedido)
     {
         IQueryable<Pedido> query = _context.Pedidos
             .AsNoTracking()
@@ -33,9 +33,9 @@ public class PedidoRepository : IPedidoRepository
                 .ThenInclude(i => i.Adicionais);
 
         // Filtra por tipo de pedido
-        if (!string.IsNullOrEmpty(type))
+        if (!string.IsNullOrEmpty(tipoPedido))
         {
-            switch (type.ToLower())
+            switch (tipoPedido.ToLower())
             {
                 case "interno":
                     query = query.Where(t => t.TipoPedido == TipoPedido.Interno);
@@ -48,15 +48,40 @@ public class PedidoRepository : IPedidoRepository
             }
         }
         // Filtra por status de pedido
-        if (!string.IsNullOrEmpty(status) && !status.Equals("todos", StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(statusPedido))
         {
-            query = query.Where(s => s.StatusPedido.Status == status.ToUpper());
+            query = query.Where(s => s.StatusPedido.Status == statusPedido.ToUpper());
         }
 
         return await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Pedido>> GetPedidosByMesaAsync(int numeroMesa, string statusPedido)
+    {
+        IQueryable<Pedido> query = _context.Pedidos
+            .Where(p => p.Mesa.Numero == numeroMesa)
+            .Include(m => m.Mesa)
+            .Include(c => c.Cliente)
+            .Include(g => g.Garcom)
+                .ThenInclude(r => r.Role)
+            .Include(m => m.MetodoPagamento)
+            .Include(s => s.StatusPedido)
+            .Include(i => i.Items)
+                .ThenInclude(p => p.Produto)
+                    .ThenInclude(c => c.Categoria)
+            .Include(i => i.Items)
+                .ThenInclude(i => i.Adicionais);
+
+        // Filtra por status de pedido
+        if (!string.IsNullOrEmpty(statusPedido))
+        {
+            query = query.Where(p => p.StatusPedido.Status == statusPedido.ToUpper());
+        }
+
+        return await query.ToListAsync();
     }
 
     // Removido o AsNoTracking para que o Entity Framework rastreie as entidades,

@@ -27,12 +27,12 @@ using System.Pdv.Application.UseCase.Adicionais;
 using System.Pdv.Core.Interfaces;
 using System.Pdv.Infrastructure.Data;
 using System.Pdv.Infrastructure.Repositories;
-using System.Pdv.Infrastructure.Services;
 using System.Pdv.Web.Filters;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Pdv.Application.Interfaces.Clientes;
 using System.Pdv.Application.UseCase.Clientes;
+using System.Pdv.Infrastructure.Services.Printer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,9 +90,11 @@ builder.Services.AddScoped<ITransactionManager, TransactionManager>();
 
 //Builder de Pedidos
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+builder.Services.AddScoped<IPrintPedidoByIdUseCase, PrintPedidoByIdUseCase>();
 builder.Services.AddScoped<IProcessarItensPedidoUseCase, ProcessarItensPedidoUseCase>();
 builder.Services.AddScoped<IValidarPedidosUseCase, ValidarPedidosUseCase>();
 builder.Services.AddScoped<IGetAllPedidosUseCase, GetAllPedidosUseCase>();
+builder.Services.AddScoped<IGetPedidosByMesaUseCase, GetPedidosByMesaUseCase>();
 builder.Services.AddScoped<IGetByIdPedidoUseCase, GetByIdPedidoUseCase>();
 builder.Services.AddScoped<ICreatePedidoUseCase, CreatePedidoUseCase>();
 builder.Services.AddScoped<IUpdatePedidoUseCase, UpdatePedidoUseCase>();

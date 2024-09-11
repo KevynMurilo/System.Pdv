@@ -69,6 +69,7 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
             pedido.MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null;
             pedido.GarcomId = Guid.Parse(userId);
             pedido.MetodoPagamentoId = pedidoDto.MetodoPagamentoId;
+            pedido.TipoPedido = pedidoDto.TipoPedido;
             pedido.StatusPedidoId = pedidoDto.StatusPedidoId;
 
             foreach (var item in pedido.Items.ToList())
