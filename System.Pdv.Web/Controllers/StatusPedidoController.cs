@@ -9,19 +9,19 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class StatusPedidoController : ControllerBase
 {
-    private readonly IGetAllStatusPedidoService _getAllStatusPedidoService;
-    private readonly ICreateStatusPedidoService _createStatusPedidoService;
-    private readonly IGetByIdStatusPedidoService _getByIdStatusPedidoService;
-    private readonly IUpdateStatusPedidoService _updateStatusPedidoService;
-    private readonly IDeleteStatusPedidoService _deleteStatusPedidoService;
+    private readonly IGetAllStatusPedidoUseCase _getAllStatusPedidoService;
+    private readonly ICreateStatusPedidoUseCase _createStatusPedidoService;
+    private readonly IGetByIdStatusPedidoUseCase _getByIdStatusPedidoService;
+    private readonly IUpdateStatusPedidoUseCase _updateStatusPedidoService;
+    private readonly IDeleteStatusPedidoUseCase _deleteStatusPedidoService;
     private readonly ILogger<StatusPedidoController> _logger;
 
     public StatusPedidoController(
-        IGetAllStatusPedidoService getAllStatusPedidoService,
-        IGetByIdStatusPedidoService getByIdStatusPedidoService,
-        ICreateStatusPedidoService statusPedidoService,
-        IUpdateStatusPedidoService updateStatusPedidoService,
-        IDeleteStatusPedidoService deleteStatusPedidoService,
+        IGetAllStatusPedidoUseCase getAllStatusPedidoService,
+        IGetByIdStatusPedidoUseCase getByIdStatusPedidoService,
+        ICreateStatusPedidoUseCase statusPedidoService,
+        IUpdateStatusPedidoUseCase updateStatusPedidoService,
+        IDeleteStatusPedidoUseCase deleteStatusPedidoService,
         ILogger<StatusPedidoController> logger)
     {
         _getAllStatusPedidoService = getAllStatusPedidoService;

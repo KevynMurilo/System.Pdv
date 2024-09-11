@@ -32,7 +32,7 @@ namespace System.Pdv.Infrastructure.Repositories
         public async Task<IEnumerable<Cliente>> GetByNameAsync(string nome)
         {
             return await _context.Clientes
-                .Where(c => c.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase))
+                .Where(c => c.Nome.ToLower().Contains(nome.ToLower()))
                 .ToListAsync();
         }
 

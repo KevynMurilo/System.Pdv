@@ -8,11 +8,11 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class AutenticaçãoController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IAuthUseCase _authService;
     private readonly ILogger<AutenticaçãoController> _logger;
 
     public AutenticaçãoController(
-        IAuthService authService,
+        IAuthUseCase authService,
         ILogger<AutenticaçãoController> logger)
     {
         _authService = authService;

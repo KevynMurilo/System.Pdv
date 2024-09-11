@@ -9,18 +9,18 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class CategoriaController : ControllerBase
 {
-    private readonly IGetAllCategoriaService _getAllCategoriaService;
-    private readonly IGetByIdCategoriaService _getByIdCategoriaService;
-    private readonly ICreateCategoriaService _createCategoriaService;
-    private readonly IUpdateCategoriaService _updateCategoriaService;
-    private readonly IDeleteCategoriaService _deleteCategoriaService;
+    private readonly IGetAllCategoriaUseCase _getAllCategoriaService;
+    private readonly IGetByIdCategoriaUseCase _getByIdCategoriaService;
+    private readonly ICreateCategoriaUseCase _createCategoriaService;
+    private readonly IUpdateCategoriaUseCase _updateCategoriaService;
+    private readonly IDeleteCategoriaUseCase _deleteCategoriaService;
     private readonly ILogger<CategoriaController> _logger;
     public CategoriaController(
-        IGetAllCategoriaService getAllCategoriaService,
-        IGetByIdCategoriaService getByIdCategoriaService,
-        ICreateCategoriaService createCategoriaService,
-        IUpdateCategoriaService updateCategoriaService,
-        IDeleteCategoriaService deleteCategoriaService,
+        IGetAllCategoriaUseCase getAllCategoriaService,
+        IGetByIdCategoriaUseCase getByIdCategoriaService,
+        ICreateCategoriaUseCase createCategoriaService,
+        IUpdateCategoriaUseCase updateCategoriaService,
+        IDeleteCategoriaUseCase deleteCategoriaService,
         ILogger<CategoriaController> logger)
     {
         _getAllCategoriaService = getAllCategoriaService;

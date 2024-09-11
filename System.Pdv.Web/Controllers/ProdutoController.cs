@@ -9,21 +9,21 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class ProdutoController : ControllerBase
 {
-    private readonly IGetAllProdutoService _getAllProdutoService;
-    private readonly IGetByIdProdutoService _getByIdProdutoService;
-    private readonly IGetProdutoByCategoriaService _getProdutoByCategoriaService;
-    private readonly ICreateProdutoService _createProdutoService;
-    private readonly IUpdateProdutoService _updateProdutoService;
-    private readonly IDeleteProdutoService _deleteProdutoService;
+    private readonly IGetAllProdutoUseCase _getAllProdutoService;
+    private readonly IGetByIdProdutoUseCase _getByIdProdutoService;
+    private readonly IGetProdutoByCategoriaUseCase _getProdutoByCategoriaService;
+    private readonly ICreateProdutoUseCase _createProdutoService;
+    private readonly IUpdateProdutoUseCase _updateProdutoService;
+    private readonly IDeleteProdutoUseCase _deleteProdutoService;
     private readonly ILogger<ProdutoController> _logger;
 
     public ProdutoController(
-        IGetAllProdutoService getAllProdutoService,
-        IGetByIdProdutoService getByIdProdutoService,
-        IGetProdutoByCategoriaService getProdutoByCategoriaService,
-        ICreateProdutoService createProdutoService,
-        IUpdateProdutoService updateProdutoService,
-        IDeleteProdutoService deleteProdutoService,
+        IGetAllProdutoUseCase getAllProdutoService,
+        IGetByIdProdutoUseCase getByIdProdutoService,
+        IGetProdutoByCategoriaUseCase getProdutoByCategoriaService,
+        ICreateProdutoUseCase createProdutoService,
+        IUpdateProdutoUseCase updateProdutoService,
+        IDeleteProdutoUseCase deleteProdutoService,
         ILogger<ProdutoController> logger)
     {
         _getAllProdutoService = getAllProdutoService;

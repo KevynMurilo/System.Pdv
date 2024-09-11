@@ -10,19 +10,19 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class PedidoController : ControllerBase
 {
-    private readonly IGetAllPedidosServices _getAllPedidosService;
-    private readonly IGetByIdPedidoService _getByIdPedidoService;
-    private readonly ICreatePedidoService _createPedidoInternoService;
-    private readonly IUpdatePedidoService _updatePedidoInternoService;
-    private readonly IDeletePedidoService _deletePedidoService;
+    private readonly IGetAllPedidosUseCase _getAllPedidosService;
+    private readonly IGetByIdPedidoUseCase _getByIdPedidoService;
+    private readonly ICreatePedidoUseCase _createPedidoInternoService;
+    private readonly IUpdatePedidoUseCase _updatePedidoInternoService;
+    private readonly IDeletePedidoUseCase _deletePedidoService;
     private readonly ILogger<PedidoController> _logger;
 
     public PedidoController(
-        IGetAllPedidosServices getAllPedidosService,
-        IGetByIdPedidoService getByIdPedidoService,
-        ICreatePedidoService createPedidoInternoService,
-        IUpdatePedidoService updatePedidoInternoService,
-        IDeletePedidoService deletePedidoService,
+        IGetAllPedidosUseCase getAllPedidosService,
+        IGetByIdPedidoUseCase getByIdPedidoService,
+        ICreatePedidoUseCase createPedidoInternoService,
+        IUpdatePedidoUseCase updatePedidoInternoService,
+        IDeletePedidoUseCase deletePedidoService,
         ILogger<PedidoController> logger)
     {
         _getAllPedidosService = getAllPedidosService;
