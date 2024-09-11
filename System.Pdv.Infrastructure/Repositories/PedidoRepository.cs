@@ -79,6 +79,13 @@ public class PedidoRepository : IPedidoRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    //Criei esse método de cliente aqui por que vou usar ele só em pedidos!
+    public async Task<Cliente?> GetClienteByNomeTelefoneAsync(string nome, string telefone)
+    {
+        return await _context.Clientes
+            .FirstOrDefaultAsync(c => c.Nome == nome && c.Telefone == telefone);
+    }
+
     public async Task AddAsync(Pedido pedido)
     {
         _context.Pedidos.Add(pedido);

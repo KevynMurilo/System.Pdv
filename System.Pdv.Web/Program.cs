@@ -14,17 +14,16 @@ using System.Pdv.Application.Interfaces.Produtos;
 using System.Pdv.Application.Interfaces.Roles;
 using System.Pdv.Application.Interfaces.StatusPedidos;
 using System.Pdv.Application.Interfaces.Usuarios;
-using System.Pdv.Application.Services.Adicionais;
-using System.Pdv.Application.Services.Auth;
-using System.Pdv.Application.Services.Categorias;
-using System.Pdv.Application.Services.Mesas;
-using System.Pdv.Application.Services.MesaService;
-using System.Pdv.Application.Services.MetodosPagamento;
-using System.Pdv.Application.Services.Pedidos;
-using System.Pdv.Application.Services.Produtos;
-using System.Pdv.Application.Services.Roles;
-using System.Pdv.Application.Services.StatusPedidos;
-using System.Pdv.Application.Services.Usuarios;
+using System.Pdv.Application.UseCase.Auth;
+using System.Pdv.Application.UseCase.Mesas;
+using System.Pdv.Application.UseCase.Categorias;
+using System.Pdv.Application.UseCase.MetodosPagamento;
+using System.Pdv.Application.UseCase.Pedidos;
+using System.Pdv.Application.UseCase.Produtos;
+using System.Pdv.Application.UseCase.Roles;
+using System.Pdv.Application.UseCase.StatusPedidos;
+using System.Pdv.Application.UseCase.Usuarios;
+using System.Pdv.Application.UseCase.Adicionais;
 using System.Pdv.Core.Interfaces;
 using System.Pdv.Infrastructure.Data;
 using System.Pdv.Infrastructure.Repositories;
@@ -32,17 +31,12 @@ using System.Pdv.Infrastructure.Services;
 using System.Pdv.Web.Filters;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Pdv.Application.Interfaces.Clientes;
+using System.Pdv.Application.UseCase.Clientes;
 
 var builder = WebApplication.CreateBuilder(args);
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-//Configuração impressora termica
-builder.Services.AddScoped<IThermalPrinterService>(serviceProvider =>
-{
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    return new ThermalPrinterService(configuration);
-});
 
 // Configuração do Entity Framework Core com PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -75,85 +69,105 @@ Log.Logger = new LoggerConfiguration()
 // Adiciona Serilog ao host
 builder.Host.UseSerilog();
 
+//Configuração impressora termica
+builder.Services.AddScoped<IThermalPrinterService>(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new ThermalPrinterService(configuration);
+});
+
+//Configuração para listar impressoars disponiveis no terminal
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+var thermalPrinterService = new ThermalPrinterService(configuration);
+thermalPrinterService.ListAvailablePrinters();
+
+
+//Builder para transações
 builder.Services.AddScoped<ITransactionManager, TransactionManager>();
 
 //Builder de Pedidos
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<IProcessarItensPedidoService, ProcessarItensPedidoService>();
-builder.Services.AddScoped<IValidarPedidosService, ValidarPedidosService>();
-builder.Services.AddScoped<IGetAllPedidosServices, GetAllPedidosServices>();
-builder.Services.AddScoped<IGetByIdPedidoService, GetByIdPedidoService>();
-builder.Services.AddScoped<ICreatePedidoService, CreatePedidoService>();
-builder.Services.AddScoped<IUpdatePedidoService, UpdatePedidoService>();
-builder.Services.AddScoped<IDeletePedidoService , DeletePedidoService>();
+builder.Services.AddScoped<IProcessarItensPedidoUseCase, ProcessarItensPedidoUseCase>();
+builder.Services.AddScoped<IValidarPedidosUseCase, ValidarPedidosUseCase>();
+builder.Services.AddScoped<IGetAllPedidosUseCase, GetAllPedidosUseCase>();
+builder.Services.AddScoped<IGetByIdPedidoUseCase, GetByIdPedidoUseCase>();
+builder.Services.AddScoped<ICreatePedidoUseCase, CreatePedidoUseCase>();
+builder.Services.AddScoped<IUpdatePedidoUseCase, UpdatePedidoUseCase>();
+builder.Services.AddScoped<IDeletePedidoUseCase , DeletePedidoUseCase>();
 
 //Criar Role
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IGetAllRolesService, GetAllRolesService>();
+builder.Services.AddScoped<IGetAllRolesService, GetAllRolesUseCase>();
 
 // Injeção Autenticação
-builder.Services.AddScoped<IAuthService, AuthService>();
-
-//Builder de mesas
-builder.Services.AddScoped<IMesaRepository, MesaRepository>();
-builder.Services.AddScoped<IGetAllMesaServices, GetAllMesaService>();
-builder.Services.AddScoped<IGetMesaByIdService, GetMesaByIdService>();
-builder.Services.AddScoped<ICreateMesaService, CreateMesaService>();
-builder.Services.AddScoped<IUpdateMesaService, UpdateMesaService>();
-builder.Services.AddScoped<IDeleteMesaService, DeleteMesaService>();
-
-//Builder de Usuários
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IGetAllUsuarioService, GetAllUsuarioService>();
-builder.Services.AddScoped<IGetByIdUsuarioService, GetByIdUsuarioService>();
-builder.Services.AddScoped<ICreateUsuarioService, CreateUsuarioService>();
-builder.Services.AddScoped<IUpdateUsuarioService, UpdateUsuarioService>();
-builder.Services.AddScoped<IDeleteUsuarioService, DeleteUsuarioService>();
-builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
+builder.Services.AddScoped<IAuthUseCase, AuthUseCase>();
 
 //Builder de Clientes
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IGetAllClienteUseCase, GetAllClienteUseCase>();
+builder.Services.AddScoped<IGetByNameClienteUseCase, GetByNameClienteUseCase>();
+builder.Services.AddScoped<IGetByIdClienteUseCase, GetByIdClienteUseCase>();
+
+//Builder de mesas
+builder.Services.AddScoped<IMesaRepository, MesaRepository>();
+builder.Services.AddScoped<IGetAllMesaUseCase, GetAllMesaUseCase>();
+builder.Services.AddScoped<IGetMesaByIdUseCase, GetMesaByIdUseCase>();
+builder.Services.AddScoped<ICreateMesaUseCase, CreateMesaUseCase>();
+builder.Services.AddScoped<IUpdateMesaUseCase, UpdateMesaUseCase>();
+builder.Services.AddScoped<IDeleteMesaUseCase, DeleteMesaUseCase>();
+
+//Builder de Usuários
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IGetAllUsuarioUseCase, GetAllUsuarioUseCase>();
+builder.Services.AddScoped<IGetByIdUsuarioUseCase, GetByIdUsuarioUseCase>();
+builder.Services.AddScoped<ICreateUsuarioUseCase, CreateUsuarioUseCase>();
+builder.Services.AddScoped<IUpdateUsuarioUseCase, UpdateUsuarioUseCase>();
+builder.Services.AddScoped<IDeleteUsuarioUseCase, DeleteUsuarioUseCase>();
+builder.Services.AddScoped<IJwtTokenGeneratorUsuario, JwtTokenGeneratorUsuario>();
 
 //Builder de Categorias
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddScoped<IGetAllCategoriaService, GetAllCategoriaService>();
-builder.Services.AddScoped<IGetByIdCategoriaService, GetByIdCategoriaService>();
-builder.Services.AddScoped<ICreateCategoriaService, CreateCategoriaService>();
-builder.Services.AddScoped<IUpdateCategoriaService,  UpdateCategoriaService>();
-builder.Services.AddScoped<IDeleteCategoriaService, DeleteCategoriaService>();
+builder.Services.AddScoped<IGetAllCategoriaUseCase, GetAllCategoriaUseCase>();
+builder.Services.AddScoped<IGetByIdCategoriaUseCase, GetByIdCategoriaUseCase>();
+builder.Services.AddScoped<ICreateCategoriaUseCase, CreateCategoriaUseCase>();
+builder.Services.AddScoped<IUpdateCategoriaUseCase,  UpdateCategoriaUseCase>();
+builder.Services.AddScoped<IDeleteCategoriaUseCase, DeleteCategoriaUseCase>();
 
 //Builder de Produtos
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<IGetAllProdutoService, GetAllProdutoService>();
-builder.Services.AddScoped<IGetByIdProdutoService, GetByIdProdutoService>();
-builder.Services.AddScoped<IGetProdutoByCategoriaService, GetProdutoByCategoriaService>();
-builder.Services.AddScoped<ICreateProdutoService, CreateProdutoService>();
-builder.Services.AddScoped<IUpdateProdutoService, UpdateProdutoService>();
-builder.Services.AddScoped<IDeleteProdutoService, DeleteProdutoService>();
+builder.Services.AddScoped<IGetAllProdutoUseCase, GetAllProdutoUseCase>();
+builder.Services.AddScoped<IGetByIdProdutoUseCase, GetByIdProdutoUseCase>();
+builder.Services.AddScoped<IGetProdutoByCategoriaUseCase, GetProdutoByCategoriaUseCase>();
+builder.Services.AddScoped<ICreateProdutoUseCase, CreateProdutoUseCase>();
+builder.Services.AddScoped<IUpdateProdutoUseCase, UpdateProdutoUseCase>();
+builder.Services.AddScoped<IDeleteProdutoUseCase, DeleteProdutoUseCase>();
 
 //Builder de Adicionais
 builder.Services.AddScoped<IAdicionalRepository, AdicionalRepository>();
-builder.Services.AddScoped<IGetAllAdicionalServices, GetAllAdicionalServices>();
-builder.Services.AddScoped<IGetByIdAdicionalService, GetByIdAdicionalService>();
-builder.Services.AddScoped<ICreateAdicionalService, CreateAdicionalService>();
-builder.Services.AddScoped<IUpdateAdicionalService, UpdateAdicionalService>();
-builder.Services.AddScoped<IDeleteAdicionalService,  DeleteAdicionalService>();
+builder.Services.AddScoped<IGetAllAdicionalUseCase, GetAllAdicionalUseCase>();
+builder.Services.AddScoped<IGetByIdAdicionalUseCase, GetByIdAdicionalUseCase>();
+builder.Services.AddScoped<ICreateAdicionalUseCase, CreateAdicionalUseCase>();
+builder.Services.AddScoped<IUpdateAdicionalUseCase, UpdateAdicionalUseCase>();
+builder.Services.AddScoped<IDeleteAdicionalUseCase,  DeleteAdicionalUseCase>();
 
 //Builder de MetodoPagamento
 builder.Services.AddScoped<IMetodoPagamentoRepository, MetodoPagamentoRepository>();
-builder.Services.AddScoped<IGetAllMetodoPagamentoServices, GetAllMetodoPagamentoServices>();
-builder.Services.AddScoped<IGetByIdMetodoPagamentoService, GetByIdMetodoPagamentoService>();
-builder.Services.AddScoped<ICreateMetodoPagamentoService, CreateMetodoPagamentoService>();
-builder.Services.AddScoped<IUpdateMetodoPagamentoService, UpdateMetodoPagamentoService>();
-builder.Services.AddScoped<IDeleteMetodoPagamentoService, DeleteMetodoPagamentoService>();
+builder.Services.AddScoped<IGetAllMetodoPagamentoUseCase, GetAllMetodoPagamentoUseCase>();
+builder.Services.AddScoped<IGetByIdMetodoPagamentoUseCase, GetByIdMetodoPagamentoUseCase>();
+builder.Services.AddScoped<ICreateMetodoPagamentoUseCase, CreateMetodoPagamentoUseCase>();
+builder.Services.AddScoped<IUpdateMetodoPagamentoUseCase, UpdateMetodoPagamentoUseCase>();
+builder.Services.AddScoped<IDeleteMetodoPagamentoUseCase, DeleteMetodoPagamentoUseCase>();
 
 //Builder de StatusPedido
 builder.Services.AddScoped<IStatusPedidoRepository, StatusPedidoRepository>();
-builder.Services.AddScoped<IGetAllStatusPedidoService, GetAllStatusPedidoService>();
-builder.Services.AddScoped<IGetByIdStatusPedidoService,  GetByIdStatusPedidoService>();
-builder.Services.AddScoped<ICreateStatusPedidoService, CreateStatusPedidoService>();
-builder.Services.AddScoped<IUpdateStatusPedidoService, UpdateStatusPedidoService>();
-builder.Services.AddScoped<IDeleteStatusPedidoService, DeleteStatusPedidoService>();
+builder.Services.AddScoped<IGetAllStatusPedidoUseCase, GetAllStatusPedidoUseCase>();
+builder.Services.AddScoped<IGetByIdStatusPedidoUseCase,  GetByIdStatusPedidoUseCase>();
+builder.Services.AddScoped<ICreateStatusPedidoUseCase, CreateStatusPedidoUseCase>();
+builder.Services.AddScoped<IUpdateStatusPedidoUseCase, UpdateStatusPedidoUseCase>();
+builder.Services.AddScoped<IDeleteStatusPedidoUseCase, DeleteStatusPedidoUseCase>();
 
 // Configuração do JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

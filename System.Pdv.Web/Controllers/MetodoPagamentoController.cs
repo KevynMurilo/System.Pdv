@@ -9,19 +9,19 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class MetodoPagamentoController : ControllerBase
 {
-    private readonly IGetAllMetodoPagamentoServices _getAllMetodoPagamentoServices;
-    private readonly IGetByIdMetodoPagamentoService _getByIdMetodoPagamentoService;
-    private readonly ICreateMetodoPagamentoService _createMetodoPagamentoService;
-    private readonly IUpdateMetodoPagamentoService _updateMetodoPagamentoService;
-    private readonly IDeleteMetodoPagamentoService _deleteMetodoPagamentoService;
+    private readonly IGetAllMetodoPagamentoUseCase _getAllMetodoPagamentoServices;
+    private readonly IGetByIdMetodoPagamentoUseCase _getByIdMetodoPagamentoService;
+    private readonly ICreateMetodoPagamentoUseCase _createMetodoPagamentoService;
+    private readonly IUpdateMetodoPagamentoUseCase _updateMetodoPagamentoService;
+    private readonly IDeleteMetodoPagamentoUseCase _deleteMetodoPagamentoService;
     private readonly ILogger<MetodoPagamentoController> _logger;
 
     public MetodoPagamentoController(
-        IGetAllMetodoPagamentoServices getAllMetodoPagamentoServices,
-        IGetByIdMetodoPagamentoService getByIdMetodoPagamentoService,
-        ICreateMetodoPagamentoService createMetodoPagamentoService,
-        IUpdateMetodoPagamentoService updateMetodoPagamentoService,
-        IDeleteMetodoPagamentoService deleteMetodoPagamentoService,
+        IGetAllMetodoPagamentoUseCase getAllMetodoPagamentoServices,
+        IGetByIdMetodoPagamentoUseCase getByIdMetodoPagamentoService,
+        ICreateMetodoPagamentoUseCase createMetodoPagamentoService,
+        IUpdateMetodoPagamentoUseCase updateMetodoPagamentoService,
+        IDeleteMetodoPagamentoUseCase deleteMetodoPagamentoService,
         ILogger<MetodoPagamentoController> logger)
     {
         _getAllMetodoPagamentoServices = getAllMetodoPagamentoServices;

@@ -9,18 +9,18 @@ namespace System.Pdv.Web.Controllers;
 [Route("[controller]")]
 public class MesaController : ControllerBase
 {
-    private readonly IGetAllMesaServices _getAllServices;
-    private readonly IGetMesaByIdService _getMesaById;
-    private readonly ICreateMesaService _createMesaService;
-    private readonly IUpdateMesaService _updateMesaService;
-    private readonly IDeleteMesaService _deleteMesaService;
+    private readonly IGetAllMesaUseCase _getAllServices;
+    private readonly IGetMesaByIdUseCase _getMesaById;
+    private readonly ICreateMesaUseCase _createMesaService;
+    private readonly IUpdateMesaUseCase _updateMesaService;
+    private readonly IDeleteMesaUseCase _deleteMesaService;
     private readonly ILogger<MesaController> _logger;
     public MesaController(
-        IGetAllMesaServices getAllServices,
-        IGetMesaByIdService getMesaById,
-        ICreateMesaService createMesaService,
-        IUpdateMesaService updateMesaService,
-        IDeleteMesaService deleteMesaService,
+        IGetAllMesaUseCase getAllServices,
+        IGetMesaByIdUseCase getMesaById,
+        ICreateMesaUseCase createMesaService,
+        IUpdateMesaUseCase updateMesaService,
+        IDeleteMesaUseCase deleteMesaService,
         ILogger<MesaController> logger)
     {
         _getAllServices = getAllServices;

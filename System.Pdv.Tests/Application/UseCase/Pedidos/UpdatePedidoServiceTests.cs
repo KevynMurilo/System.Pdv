@@ -17,6 +17,7 @@ public class UpdatePedidoServiceTests
     private readonly Mock<IPedidoRepository> _pedidoRepositoryMock;
     private readonly Mock<IProcessarItensPedidoUseCase> _processarItensPedidoMock;
     private readonly Mock<IValidarPedidosUseCase> _validarPedidosServiceMock;
+    private readonly Mock<IThermalPrinterService> _thermalPrinterServiceMock;
     private readonly Mock<ITransactionManager> _transactionManagerMock;
     private readonly Mock<ILogger<UpdatePedidoUseCase>> _loggerMock;
     private readonly UpdatePedidoUseCase _updatePedidoService;
@@ -26,6 +27,7 @@ public class UpdatePedidoServiceTests
         _pedidoRepositoryMock = new Mock<IPedidoRepository>();
         _processarItensPedidoMock = new Mock<IProcessarItensPedidoUseCase>();
         _validarPedidosServiceMock = new Mock<IValidarPedidosUseCase>();
+        _thermalPrinterServiceMock = new Mock<IThermalPrinterService>();
         _transactionManagerMock = new Mock<ITransactionManager>();
         _loggerMock = new Mock<ILogger<UpdatePedidoUseCase>>();
 
@@ -33,6 +35,7 @@ public class UpdatePedidoServiceTests
             _pedidoRepositoryMock.Object,
             _processarItensPedidoMock.Object,
             _validarPedidosServiceMock.Object,
+            _thermalPrinterServiceMock.Object,
             _transactionManagerMock.Object,
             _loggerMock.Object
         );
@@ -72,6 +75,9 @@ public class UpdatePedidoServiceTests
 
         _pedidoRepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Pedido>()))
             .Returns(Task.CompletedTask);
+
+        _thermalPrinterServiceMock.Setup(t => t.PrintOrder(It.IsAny<Pedido>()))
+            .Returns(true);
 
         var result = await _updatePedidoService.ExecuteAsync(pedidoId, pedidoDto, userClaims);
 

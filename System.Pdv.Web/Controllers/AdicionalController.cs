@@ -9,19 +9,19 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class AdicionalController : ControllerBase
 {
-    private readonly IGetAllAdicionalServices _getAllAdicionalServices;
-    private readonly IGetByIdAdicionalService _getByIdAdicionalService;
-    private readonly ICreateAdicionalService _createAdicionalService;
-    private readonly IUpdateAdicionalService _updateAdicionalService;
-    private readonly IDeleteAdicionalService _deleteAdicionalService;
+    private readonly IGetAllAdicionalUseCase _getAllAdicionalServices;
+    private readonly IGetByIdAdicionalUseCase _getByIdAdicionalService;
+    private readonly ICreateAdicionalUseCase _createAdicionalService;
+    private readonly IUpdateAdicionalUseCase _updateAdicionalService;
+    private readonly IDeleteAdicionalUseCase _deleteAdicionalService;
     private readonly ILogger<AdicionalController> _logger;
 
     public AdicionalController(
-        ICreateAdicionalService createAdicionalService,
-        IGetAllAdicionalServices getAllAdicionalServices,
-        IGetByIdAdicionalService getByIdAdicionalService,
-        IUpdateAdicionalService updateAdicionalService,
-        IDeleteAdicionalService deleteAdicionalService,
+        ICreateAdicionalUseCase createAdicionalService,
+        IGetAllAdicionalUseCase getAllAdicionalServices,
+        IGetByIdAdicionalUseCase getByIdAdicionalService,
+        IUpdateAdicionalUseCase updateAdicionalService,
+        IDeleteAdicionalUseCase deleteAdicionalService,
         ILogger<AdicionalController> logger)
     {
         _getAllAdicionalServices = getAllAdicionalServices;

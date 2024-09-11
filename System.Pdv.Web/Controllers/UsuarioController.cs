@@ -9,18 +9,18 @@ namespace System.Pdv.Web.Controllers;
 [Route("[controller]")]
 public class UsuarioController : ControllerBase
 {
-    private readonly IGetAllUsuarioService _getAllUsuarioService;
-    private readonly IGetByIdUsuarioService _getByIdUsuarioService;
-    private readonly ICreateUsuarioService _createUsuarioService;
-    private readonly IUpdateUsuarioService _updateUsuarioService;
-    private readonly IDeleteUsuarioService _deleteGUsuarioService;
+    private readonly IGetAllUsuarioUseCase _getAllUsuarioService;
+    private readonly IGetByIdUsuarioUseCase _getByIdUsuarioService;
+    private readonly ICreateUsuarioUseCase _createUsuarioService;
+    private readonly IUpdateUsuarioUseCase _updateUsuarioService;
+    private readonly IDeleteUsuarioUseCase _deleteGUsuarioService;
     private readonly ILogger<UsuarioController> _logger;
     public UsuarioController(
-        IGetAllUsuarioService getAllUsuarioService,
-        IGetByIdUsuarioService getByIdUsuarioService,
-        ICreateUsuarioService createUsuarioService,
-        IUpdateUsuarioService updateUsuarioService,
-        IDeleteUsuarioService deleteUsuarioService,
+        IGetAllUsuarioUseCase getAllUsuarioService,
+        IGetByIdUsuarioUseCase getByIdUsuarioService,
+        ICreateUsuarioUseCase createUsuarioService,
+        IUpdateUsuarioUseCase updateUsuarioService,
+        IDeleteUsuarioUseCase deleteUsuarioService,
         ILogger<UsuarioController> logger)
     {
         _getAllUsuarioService = getAllUsuarioService;
