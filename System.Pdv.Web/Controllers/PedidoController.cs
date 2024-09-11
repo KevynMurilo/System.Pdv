@@ -11,6 +11,8 @@ namespace System.Pdv.Web.Controllers;
 public class PedidoController : ControllerBase
 {
     private readonly IGetAllPedidosUseCase _getAllPedidosService;
+    private readonly IPrintPedidoByIdUseCase _printPedidoByIdUseCase;
+    private readonly IGetPedidosByMesaUseCase _getPedidosByMesaUseCase;
     private readonly IGetByIdPedidoUseCase _getByIdPedidoService;
     private readonly ICreatePedidoUseCase _createPedidoInternoService;
     private readonly IUpdatePedidoUseCase _updatePedidoInternoService;
@@ -19,6 +21,8 @@ public class PedidoController : ControllerBase
 
     public PedidoController(
         IGetAllPedidosUseCase getAllPedidosService,
+        IPrintPedidoByIdUseCase printPedidoByIdUseCase,
+        IGetPedidosByMesaUseCase getPedidosByMesaUseCase,
         IGetByIdPedidoUseCase getByIdPedidoService,
         ICreatePedidoUseCase createPedidoInternoService,
         IUpdatePedidoUseCase updatePedidoInternoService,
@@ -26,6 +30,8 @@ public class PedidoController : ControllerBase
         ILogger<PedidoController> logger)
     {
         _getAllPedidosService = getAllPedidosService;
+        _printPedidoByIdUseCase = printPedidoByIdUseCase;
+        _getPedidosByMesaUseCase = getPedidosByMesaUseCase;
         _getByIdPedidoService = getByIdPedidoService;
         _createPedidoInternoService = createPedidoInternoService;
         _updatePedidoInternoService = updatePedidoInternoService;
@@ -35,11 +41,11 @@ public class PedidoController : ControllerBase
 
     [Authorize(Roles = "ADMIN, GARCOM")]
     [HttpGet]
-    public async Task<IActionResult> GetAllPedidos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string type = "todos", [FromQuery] string status = "todos")
+    public async Task<IActionResult> GetAllPedidos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string tipoPedido = null, [FromQuery] string statusPedido = null)
     {
         try
         {
-            var result = await _getAllPedidosService.ExecuteAsync(pageNumber, pageSize, type, status);
+            var result = await _getAllPedidosService.ExecuteAsync(pageNumber, pageSize, tipoPedido, statusPedido);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
@@ -47,6 +53,23 @@ public class PedidoController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar pedidos");
+            return StatusCode(500, "Ocorreu um erro inesperado.");
+        }
+    }
+
+    [HttpGet("{numeroMesa:int}")]
+    public async Task<IActionResult> GetPedidoByMesa(int numeroMesa, [FromQuery] string statusPedido = null)
+    {
+        try
+        {
+            var result = await _getPedidosByMesaUseCase.ExecuteAsync(numeroMesa, statusPedido);
+            return result.StatusCode == 200
+                ? Ok(result)
+                : StatusCode(result.StatusCode, result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao listar pedidos de uma mesa especifica");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
@@ -65,6 +88,24 @@ public class PedidoController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao procurar pedido por id");
+            return StatusCode(500, "Ocorreu um erro inesperado.");
+        }
+    }
+    
+
+    [HttpPost("print/{id:guid}")]
+    public async Task<IActionResult> PrintPedidoById(Guid id)
+    {
+        try
+        {
+            var result = await _printPedidoByIdUseCase.ExecuteAsync(id);
+            return result.StatusCode == 200
+                ? Ok(result)
+                : StatusCode(result.StatusCode, result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Ocorreu um erro ao imprimir pedido com id: {id}");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
