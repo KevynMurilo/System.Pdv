@@ -2,17 +2,17 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Pdv.Core.Entities;
-using System.Pdv.Core.Enums;
 using System.Pdv.Core.Interfaces;
 using System.Runtime.Versioning;
 using System.Management;
+using System.Pdv.Core.Enums;
 
 namespace System.Pdv.Infrastructure.Services.Printer;
 
 public class ThermalPrinterService : IThermalPrinterService
 {
     private readonly PrintDocument _printDocument;
-    private Pedido _pedido;
+    private List<Pedido> _pedidos;
     private readonly string _printerName;
 
     [SupportedOSPlatform("windows")]
@@ -32,7 +32,7 @@ public class ThermalPrinterService : IThermalPrinterService
     }
 
     [SupportedOSPlatform("windows")]
-    public bool PrintOrder(Pedido pedido)
+    public bool PrintOrders(IEnumerable<Pedido> pedidos)
     {
         if (!IsPrinterConnected())
         {
@@ -42,7 +42,7 @@ public class ThermalPrinterService : IThermalPrinterService
 
         try
         {
-            _pedido = pedido;
+            _pedidos = pedidos.ToList();
             _printDocument.Print();
             return true;
         }
@@ -72,61 +72,71 @@ public class ThermalPrinterService : IThermalPrinterService
         var margin = 5f;
         var y = margin;
 
-        graphics?.DrawString("**** PEDIDO ****", fontBold, Brushes.Black, new PointF(margin, y));
-        y += lineHeight + 5;
+        Pedido? pedidoAnterior = null;
 
-        graphics?.DrawString($"ID: {_pedido.Id}", fontRegular, Brushes.Black, new PointF(margin, y));
-        y += lineHeight;
-
-        if (_pedido.TipoPedido == TipoPedido.Interno && _pedido.MesaId.HasValue)
+        foreach (var pedido in _pedidos)
         {
-            graphics?.DrawString($"Mesa: {_pedido.Mesa.Numero}", fontRegular, Brushes.Black, new PointF(margin, y));
-            y += lineHeight;
-        }
-
-        graphics?.DrawString($"Tipo Pedido: {_pedido.TipoPedido}", fontRegular, Brushes.Black, new PointF(margin, y));
-        y += lineHeight;
-
-        graphics?.DrawString($"Cliente: {_pedido.Cliente.Nome}", fontRegular, Brushes.Black, new PointF(margin, y));
-        y += lineHeight;
-
-        graphics?.DrawString($"Telefone: {_pedido.Cliente.Telefone}", fontRegular, Brushes.Black, new PointF(margin, y));
-        y += lineHeight;
-
-        graphics?.DrawString($"Garçom: {_pedido.Garcom.Nome}", fontRegular, Brushes.Black, new PointF(margin, y));
-        y += lineHeight;
-
-        graphics?.DrawString($"Data: {_pedido.DataHora:dd/MM/yyyy HH:mm:ss}", fontRegular, Brushes.Black, new PointF(margin, y));
-        y += lineHeight + 5;
-
-        graphics?.DrawString("** Itens do Pedido **", fontBold, Brushes.Black, new PointF(margin, y));
-        y += lineHeight + 5;
-
-        foreach (var item in _pedido.Items)
-        {
-            graphics?.DrawString($"- {item.Produto.Nome} (x{item.Quantidade})", fontRegular, Brushes.Black, new PointF(margin, y));
-            y += lineHeight;
-
-            if (!string.IsNullOrWhiteSpace(item.Observacoes))
+            // Se o pedido anterior for nulo, o cliente mudar ou o tipo de pedido mudar (Interno/Externo), imprimir novo cabeçalho
+            if (pedidoAnterior == null ||
+                pedidoAnterior.Cliente.Id != pedido.Cliente.Id || 
+                pedidoAnterior.TipoPedido != pedido.TipoPedido)
             {
-                graphics?.DrawString($"Observação: {item.Observacoes}", fontRegular, Brushes.Black, new PointF(margin + 10, y));
-                y += lineHeight;
-            }
+                // Imprimir cabeçalho
+                graphics?.DrawString("********** PEDIDO **********", fontBold, Brushes.Black, new PointF(margin, y));
+                y += lineHeight + 5;
 
-            if (item.Adicionais.Any())
-            {
-                graphics?.DrawString("-- Adicionais:", fontRegular, Brushes.Black, new PointF(margin + 10, y));
-                y += lineHeight;
-
-                foreach (var adicional in item.Adicionais)
+                if (pedido.TipoPedido == TipoPedido.Interno && pedido.MesaId.HasValue)
                 {
-                    graphics?.DrawString($"  - {adicional.Nome}", fontRegular, Brushes.Black, new PointF(margin + 20, y));
+                    graphics?.DrawString($"Mesa: {pedido.Mesa.Numero}", fontRegular, Brushes.Black, new PointF(margin, y));
                     y += lineHeight;
                 }
+
+                graphics?.DrawString($"Tipo de Pedido: {pedido.TipoPedido}", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight;
+                graphics?.DrawString($"Cliente: {pedido.Cliente.Nome}", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight;
+                graphics?.DrawString($"Telefone: {pedido.Cliente.Telefone}", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight;
+                graphics?.DrawString($"Garçom: {pedido.Garcom.Nome}", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight;
+                graphics?.DrawString($"Data: {DateTime.Now:dd/MM/yyyy HH:mm:ss}", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight + 5;
+
+                // Itens dos pedidos
+                graphics?.DrawString("** Itens dos Pedidos **", fontBold, Brushes.Black, new PointF(margin, y));
+                y += lineHeight + 5;
             }
 
-            graphics?.DrawString("----------------------------------------------", fontRegular, Brushes.Black, new PointF(margin, y));
-            y += lineHeight;
+            // Imprimir itens do pedido
+            foreach (var item in pedido.Items)
+            {
+                graphics?.DrawString($"- {item.Produto.Nome} (x{item.Quantidade})", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight;
+
+                if (!string.IsNullOrWhiteSpace(item.Observacoes))
+                {
+                    graphics?.DrawString($"Observação: {item.Observacoes}", fontRegular, Brushes.Black, new PointF(margin + 10, y));
+                    y += lineHeight;
+                }
+
+                if (item.Adicionais.Any())
+                {
+                    graphics?.DrawString("-- Adicionais:", fontRegular, Brushes.Black, new PointF(margin + 10, y));
+                    y += lineHeight;
+
+                    foreach (var adicional in item.Adicionais)
+                    {
+                        graphics?.DrawString($"  - {adicional.Nome}", fontRegular, Brushes.Black, new PointF(margin + 20, y));
+                        y += lineHeight;
+                    }
+                }
+
+                graphics?.DrawString("----------------------------------------------", fontRegular, Brushes.Black, new PointF(margin, y));
+                y += lineHeight;
+            }
+
+            // Atualizar pedido anterior
+            pedidoAnterior = pedido;
         }
 
         y += 5;
@@ -134,6 +144,7 @@ public class ThermalPrinterService : IThermalPrinterService
         e.HasMorePages = false;
     }
 
+    //Para verificar se a impressora termica ta online
     [SupportedOSPlatform("windows")]
     public bool IsPrinterConnected()
     {

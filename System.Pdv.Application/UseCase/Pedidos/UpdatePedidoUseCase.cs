@@ -14,7 +14,6 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
     private readonly IPedidoRepository _pedidoRepository;
     private readonly IProcessarItensPedidoUseCase _processarItensPedido;
     private readonly IValidarPedidosUseCase _validarPedidosService;
-    private readonly IThermalPrinterService _thermalPrinterService;
     private readonly ITransactionManager _transactionManager;
     private readonly ILogger<UpdatePedidoUseCase> _logger;
 
@@ -22,14 +21,12 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
         IPedidoRepository pedidoRepository,
         IProcessarItensPedidoUseCase processarItensPedidoService,
         IValidarPedidosUseCase validarPedidosService,
-        IThermalPrinterService thermalPrinterService,
         ITransactionManager transactionManager,
         ILogger<UpdatePedidoUseCase> logger)
     {
         _pedidoRepository = pedidoRepository;
         _processarItensPedido = processarItensPedidoService;
         _validarPedidosService = validarPedidosService;
-        _thermalPrinterService = thermalPrinterService;
         _transactionManager = transactionManager;
         _logger = logger;
     }
@@ -83,12 +80,7 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
             await _pedidoRepository.UpdateAsync(pedido);
             await _transactionManager.CommitTransactionAsync();
 
-            var printSuccess = _thermalPrinterService.PrintOrder(pedido);
-            var message = printSuccess
-                ? "Pedido criado e impressão realizada com sucesso."
-                : "Pedido criado, mas houve um erro na impressão.";
-
-            return new OperationResult<Pedido> { Result = pedido, Message = message };
+            return new OperationResult<Pedido> { Result = pedido, Message = "Pedido atualizado com sucesso" };
         }
         catch (Exception ex)
         {

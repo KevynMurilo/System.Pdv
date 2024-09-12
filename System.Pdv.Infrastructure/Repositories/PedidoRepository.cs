@@ -104,6 +104,24 @@ public class PedidoRepository : IPedidoRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    public async Task<List<Pedido>> GetPedidosByIdsAsync(IEnumerable<Guid> ids)
+    {
+        return await _context.Pedidos
+            .Where(p => ids.Contains(p.Id))
+            .Include(c => c.Cliente)
+            .Include(m => m.Mesa)
+            .Include(g => g.Garcom)
+                .ThenInclude(r => r.Role)
+            .Include(m => m.MetodoPagamento)
+            .Include(s => s.StatusPedido)
+            .Include(i => i.Items)
+                .ThenInclude(p => p.Produto)
+                    .ThenInclude(c => c.Categoria)
+            .Include(i => i.Items)
+                .ThenInclude(i => i.Adicionais)
+            .ToListAsync();
+    }
+
     //Criei esse método de cliente aqui por que vou usar ele só em pedidos!
     public async Task<Cliente?> GetClienteByNomeTelefoneAsync(string nome, string telefone)
     {
