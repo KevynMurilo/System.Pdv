@@ -90,7 +90,7 @@ builder.Services.AddScoped<ITransactionManager, TransactionManager>();
 
 //Builder de Pedidos
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<IPrintPedidoByIdUseCase, PrintPedidoByIdUseCase>();
+builder.Services.AddScoped<IPrintPedidoByIdsUseCase, PrintPedidoByIdsUseCase>();
 builder.Services.AddScoped<IProcessarItensPedidoUseCase, ProcessarItensPedidoUseCase>();
 builder.Services.AddScoped<IValidarPedidosUseCase, ValidarPedidosUseCase>();
 builder.Services.AddScoped<IGetAllPedidosUseCase, GetAllPedidosUseCase>();

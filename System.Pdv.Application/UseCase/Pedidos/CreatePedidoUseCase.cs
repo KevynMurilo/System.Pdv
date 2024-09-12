@@ -65,14 +65,14 @@ public class CreatePedidoUseCase : ICreatePedidoUseCase
             await _pedidoRepository.AddAsync(pedido);
             await _transactionManager.CommitTransactionAsync();
 
-            var returnPedido = await _pedidoRepository.GetByIdAsync(pedido.Id);
+            var printPedido = await _pedidoRepository.GetByIdAsync(pedido.Id);
 
-            var printSuccess = _thermalPrinterService.PrintOrder(returnPedido);
+            var printSuccess = _thermalPrinterService.PrintOrders(new List<Pedido> { printPedido });
             var message = printSuccess
                 ? "Pedido criado e impressão realizada com sucesso."
                 : "Pedido criado, mas houve um erro na impressão.";
 
-            return new OperationResult<Pedido> { Result = returnPedido, Message = message };
+            return new OperationResult<Pedido> { Result = printPedido, Message = message };
         }
         catch (Exception ex)
         {

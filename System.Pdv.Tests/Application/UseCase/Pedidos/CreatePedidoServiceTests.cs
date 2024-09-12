@@ -77,8 +77,8 @@ public class CreatePedidoUseCaseTests
         _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(pedido);
 
-        _thermalPrinterServiceMock.Setup(t => t.PrintOrder(It.IsAny<Pedido>()))
-            .Returns(true);
+        _thermalPrinterServiceMock.Setup(t => t.PrintOrders(It.IsAny<List<Pedido>>()))
+           .Returns(true);
 
         var result = await _createPedidoUseCase.ExecuteAsync(pedidoDto, userClaims);
 
@@ -90,7 +90,7 @@ public class CreatePedidoUseCaseTests
         Assert.Equal(pedidoDto.MetodoPagamentoId, result.Result.MetodoPagamentoId);
         _pedidoRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Pedido>()), Times.Once);
         _transactionManagerMock.Verify(t => t.CommitTransactionAsync(), Times.Once);
-        _thermalPrinterServiceMock.Verify(t => t.PrintOrder(It.IsAny<Pedido>()), Times.Once);
+        _thermalPrinterServiceMock.Verify(t => t.PrintOrders(It.IsAny<List<Pedido>>()), Times.Once);
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public class CreatePedidoUseCaseTests
 
         _pedidoRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Pedido>()), Times.Never);
         _transactionManagerMock.Verify(t => t.CommitTransactionAsync(), Times.Never);
-        _thermalPrinterServiceMock.Verify(t => t.PrintOrder(It.IsAny<Pedido>()), Times.Never);
+        _thermalPrinterServiceMock.Verify(t => t.PrintOrders(It.IsAny<List<Pedido>>()), Times.Never);
     }
 
     [Fact]
@@ -144,6 +144,6 @@ public class CreatePedidoUseCaseTests
         Assert.Equal("Erro inesperado: Erro inesperado", result.Message);
         _pedidoRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Pedido>()), Times.Never);
         _transactionManagerMock.Verify(t => t.RollbackTransactionAsync(), Times.Once);
-        _thermalPrinterServiceMock.Verify(t => t.PrintOrder(It.IsAny<Pedido>()), Times.Never);
+        _thermalPrinterServiceMock.Verify(t => t.PrintOrders(It.IsAny<List<Pedido>>()), Times.Never);
     }
 }

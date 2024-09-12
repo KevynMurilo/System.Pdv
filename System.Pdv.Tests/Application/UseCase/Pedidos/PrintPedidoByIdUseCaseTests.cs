@@ -7,19 +7,19 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Tests.Application.UseCase.Pedidos;
 
-public class PrintPedidoByIdUseCaseTests
+public class PrintPedidoByIdsUseCaseTests
 {
     private readonly Mock<IPedidoRepository> _pedidoRepositoryMock;
     private readonly Mock<IThermalPrinterService> _thermalPrinterServiceMock;
-    private readonly Mock<ILogger<PrintPedidoByIdUseCase>> _loggerMock;
-    private readonly PrintPedidoByIdUseCase _printPedidoByIdUseCase;
+    private readonly Mock<ILogger<PrintPedidoByIdsUseCase>> _loggerMock;
+    private readonly PrintPedidoByIdsUseCase _printPedidoByIdsUseCase;
 
-    public PrintPedidoByIdUseCaseTests()
+    public PrintPedidoByIdsUseCaseTests()
     {
         _pedidoRepositoryMock = new Mock<IPedidoRepository>();
         _thermalPrinterServiceMock = new Mock<IThermalPrinterService>();
-        _loggerMock = new Mock<ILogger<PrintPedidoByIdUseCase>>();
-        _printPedidoByIdUseCase = new PrintPedidoByIdUseCase(
+        _loggerMock = new Mock<ILogger<PrintPedidoByIdsUseCase>>();
+        _printPedidoByIdsUseCase = new PrintPedidoByIdsUseCase(
             _pedidoRepositoryMock.Object,
             _thermalPrinterServiceMock.Object,
             _loggerMock.Object
@@ -27,86 +27,86 @@ public class PrintPedidoByIdUseCaseTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_ReturnsPedido_WhenPedidoExistsAndPrintsSuccessfully()
+    public async Task ExecuteAsync_ReturnsPedidos_WhenPedidosExistAndPrintsSuccessfully()
     {
-        var pedidoId = Guid.NewGuid();
-        var pedido = new Pedido { Id = pedidoId };
+        var pedidoIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+        var pedidos = pedidoIds.Select(id => new Pedido { Id = id }).ToList();
 
-        _pedidoRepositoryMock.Setup(repo => repo.GetByIdAsync(pedidoId))
-                             .ReturnsAsync(pedido);
+        _pedidoRepositoryMock.Setup(repo => repo.GetPedidosByIdsAsync(pedidoIds))
+                             .ReturnsAsync(pedidos);
 
-        _thermalPrinterServiceMock.Setup(printer => printer.PrintOrder(pedido))
+        _thermalPrinterServiceMock.Setup(printer => printer.PrintOrders(pedidos))
                                   .Returns(true);
 
-        var result = await _printPedidoByIdUseCase.ExecuteAsync(pedidoId);
+        var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
-        Assert.Equal(pedido, result.Result);
-        Assert.Equal("Pedido impresso com sucesso", result.Message);
+        Assert.Equal(pedidos, result.Result);
+        Assert.Equal("Pedidos impressos com sucesso", result.Message);
 
-        _pedidoRepositoryMock.Verify(repo => repo.GetByIdAsync(pedidoId), Times.Once);
-        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrder(pedido), Times.Once);
+        _pedidoRepositoryMock.Verify(repo => repo.GetPedidosByIdsAsync(pedidoIds), Times.Once);
+        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrders(pedidos), Times.Once);
     }
 
     [Fact]
-    public async Task ExecuteAsync_ReturnsError_WhenPedidoNotFound()
+    public async Task ExecuteAsync_ReturnsError_WhenPedidosNotFound()
     {
-        var pedidoId = Guid.NewGuid();
+        var pedidoIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
 
-        _pedidoRepositoryMock.Setup(repo => repo.GetByIdAsync(pedidoId))
-                             .ReturnsAsync((Pedido)null);
+        _pedidoRepositoryMock.Setup(repo => repo.GetPedidosByIdsAsync(pedidoIds))
+                             .ReturnsAsync(new List<Pedido>());
 
-        var result = await _printPedidoByIdUseCase.ExecuteAsync(pedidoId);
+        var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
         Assert.Equal(404, result.StatusCode);
-        Assert.Equal("Pedido não encontrado", result.Message);
+        Assert.Equal("Nenhum pedido encontrado", result.Message);
 
-        _pedidoRepositoryMock.Verify(repo => repo.GetByIdAsync(pedidoId), Times.Once);
-        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrder(It.IsAny<Pedido>()), Times.Never);
+        _pedidoRepositoryMock.Verify(repo => repo.GetPedidosByIdsAsync(pedidoIds), Times.Once);
+        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrders(It.IsAny<List<Pedido>>()), Times.Never);
     }
 
     [Fact]
     public async Task ExecuteAsync_ReturnsError_WhenPrintFails()
     {
-        var pedidoId = Guid.NewGuid();
-        var pedido = new Pedido { Id = pedidoId };
+        var pedidoIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+        var pedidos = pedidoIds.Select(id => new Pedido { Id = id }).ToList();
 
-        _pedidoRepositoryMock.Setup(repo => repo.GetByIdAsync(pedidoId))
-                             .ReturnsAsync(pedido);
+        _pedidoRepositoryMock.Setup(repo => repo.GetPedidosByIdsAsync(pedidoIds))
+                             .ReturnsAsync(pedidos);
 
-        _thermalPrinterServiceMock.Setup(printer => printer.PrintOrder(pedido))
+        _thermalPrinterServiceMock.Setup(printer => printer.PrintOrders(pedidos))
                                   .Returns(false);
 
-        var result = await _printPedidoByIdUseCase.ExecuteAsync(pedidoId);
+        var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
         Assert.True(result.ServerOn);
-        Assert.Equal(pedido, result.Result);
-        Assert.Equal("Ocorreu um erro ao imprimir pedido", result.Message);
+        Assert.Equal(pedidos, result.Result);
+        Assert.Equal("Ocorreu um erro ao imprimir os pedidos", result.Message);
 
-        _pedidoRepositoryMock.Verify(repo => repo.GetByIdAsync(pedidoId), Times.Once);
-        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrder(pedido), Times.Once);
+        _pedidoRepositoryMock.Verify(repo => repo.GetPedidosByIdsAsync(pedidoIds), Times.Once);
+        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrders(pedidos), Times.Once);
     }
 
     [Fact]
     public async Task ExecuteAsync_ReturnsServerError_WhenExceptionThrown()
     {
-        var pedidoId = Guid.NewGuid();
+        var pedidoIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
         var exceptionMessage = "Erro inesperado";
 
-        _pedidoRepositoryMock.Setup(repo => repo.GetByIdAsync(pedidoId))
+        _pedidoRepositoryMock.Setup(repo => repo.GetPedidosByIdsAsync(pedidoIds))
                              .ThrowsAsync(new Exception(exceptionMessage));
 
-        var result = await _printPedidoByIdUseCase.ExecuteAsync(pedidoId);
+        var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
         Assert.False(result.ServerOn);
         Assert.Equal(500, result.StatusCode);
         Assert.Equal($"Erro inesperado: {exceptionMessage}", result.Message);
 
-        _pedidoRepositoryMock.Verify(repo => repo.GetByIdAsync(pedidoId), Times.Once);
-        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrder(It.IsAny<Pedido>()), Times.Never);
+        _pedidoRepositoryMock.Verify(repo => repo.GetPedidosByIdsAsync(pedidoIds), Times.Once);
+        _thermalPrinterServiceMock.Verify(printer => printer.PrintOrders(It.IsAny<List<Pedido>>()), Times.Never);
     }
 }

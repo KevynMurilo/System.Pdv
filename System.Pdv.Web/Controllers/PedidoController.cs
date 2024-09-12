@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
+using System.Pdv.Application.UseCase.Pedidos;
 using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Web.Controllers;
@@ -11,7 +12,7 @@ namespace System.Pdv.Web.Controllers;
 public class PedidoController : ControllerBase
 {
     private readonly IGetAllPedidosUseCase _getAllPedidosService;
-    private readonly IPrintPedidoByIdUseCase _printPedidoByIdUseCase;
+    private readonly IPrintPedidoByIdsUseCase _printPedidoByIdsUseCase;
     private readonly IGetPedidosByMesaUseCase _getPedidosByMesaUseCase;
     private readonly IGetByIdPedidoUseCase _getByIdPedidoService;
     private readonly ICreatePedidoUseCase _createPedidoInternoService;
@@ -21,7 +22,7 @@ public class PedidoController : ControllerBase
 
     public PedidoController(
         IGetAllPedidosUseCase getAllPedidosService,
-        IPrintPedidoByIdUseCase printPedidoByIdUseCase,
+        IPrintPedidoByIdsUseCase printPedidoByIdsUseCase,
         IGetPedidosByMesaUseCase getPedidosByMesaUseCase,
         IGetByIdPedidoUseCase getByIdPedidoService,
         ICreatePedidoUseCase createPedidoInternoService,
@@ -30,7 +31,7 @@ public class PedidoController : ControllerBase
         ILogger<PedidoController> logger)
     {
         _getAllPedidosService = getAllPedidosService;
-        _printPedidoByIdUseCase = printPedidoByIdUseCase;
+        _printPedidoByIdsUseCase = printPedidoByIdsUseCase;
         _getPedidosByMesaUseCase = getPedidosByMesaUseCase;
         _getByIdPedidoService = getByIdPedidoService;
         _createPedidoInternoService = createPedidoInternoService;
@@ -91,21 +92,21 @@ public class PedidoController : ControllerBase
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
-    
 
-    [HttpPost("print/{id:guid}")]
-    public async Task<IActionResult> PrintPedidoById(Guid id)
+
+    [HttpPost("print")]
+    public async Task<IActionResult> PrintPedidosByIds([FromBody] List<Guid> ids)
     {
         try
         {
-            var result = await _printPedidoByIdUseCase.ExecuteAsync(id);
+            var result = await _printPedidoByIdsUseCase.ExecuteAsync(ids);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Ocorreu um erro ao imprimir pedido com id: {id}");
+            _logger.LogError(ex, "Ocorreu um erro ao imprimir pedidos pelos IDs fornecidos");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }

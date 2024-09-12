@@ -4,5 +4,5 @@ namespace System.Pdv.Core.Interfaces;
 
 public interface IThermalPrinterService
 {
-    bool PrintOrder(Pedido pedido);
+    bool PrintOrders(IEnumerable<Pedido> pedidos);
 }
