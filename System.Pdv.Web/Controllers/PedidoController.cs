@@ -58,6 +58,7 @@ public class PedidoController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN, GARCOM")]
     [HttpGet("{numeroMesa:int}")]
     public async Task<IActionResult> GetPedidoByMesa(int numeroMesa, [FromQuery] string statusPedido = null)
     {
@@ -93,7 +94,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = "ADMIN, GARCOM")]
     [HttpPost("print")]
     public async Task<IActionResult> PrintPedidosByIds([FromBody] List<Guid> ids)
     {
