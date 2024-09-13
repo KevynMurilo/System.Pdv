@@ -11,9 +11,9 @@ namespace System.Pdv.Infrastructure.Services.Printer;
 
 public class ThermalPrinterService : IThermalPrinterService
 {
-    private readonly PrintDocument _printDocument;
-    private List<Pedido> _pedidos;
-    private readonly string _printerName;
+    private readonly PrintDocument? _printDocument;
+    private List<Pedido>? _pedidos;
+    private readonly string? _printerName;
 
     [SupportedOSPlatform("windows")]
     public ThermalPrinterService(IConfiguration configuration)
