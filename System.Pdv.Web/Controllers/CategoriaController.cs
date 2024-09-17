@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Categorias;
 
@@ -31,6 +30,7 @@ public class CategoriaController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("Categoria", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllCategorias()
     {
@@ -48,6 +48,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
+    [HasPermission("Categoria", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdCategoria(Guid id)
     {
@@ -65,7 +66,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Categoria", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateCategoria(CategoriaDto categoriaDto)
     {
@@ -83,7 +84,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Categoria", "Update")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCategoria(Guid id, CategoriaDto categoriaDto)
     {
@@ -101,7 +102,7 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Categoria", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCategoria(Guid id)
     {

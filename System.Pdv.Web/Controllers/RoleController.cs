@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Pdv.Application.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.Interfaces.Roles;
 
 namespace System.Pdv.Web.Controllers;
@@ -19,7 +17,7 @@ public class RoleController : ControllerBase
         _logger = logger;
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Role", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetRoles()
     {

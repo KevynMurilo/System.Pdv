@@ -14,14 +14,19 @@ public class PermissaoRepository : IPermissaoRepository
         _context = context;
     }
 
-    public async Task<Permissao> GetByIdAsync(Guid permissaoId)
+    public async Task<Permissao?> GetByIdAsync(Guid permissaoId)
     {
-        return await _context.Permissoes.FindAsync(permissaoId);
+        return await _context.Permissoes
+            .Include(r => r.Roles)
+            .FirstOrDefaultAsync(p => p.Id == permissaoId);
     }
 
     public async Task<ICollection<Permissao>> GetAllAsync()
     {
-        return await _context.Permissoes.ToListAsync();
+        return await _context.Permissoes
+            .AsNoTracking()
+            .Include(r => r.Roles)
+            .ToListAsync();
     }
 
     public async Task AddAsync(Permissao permissao)

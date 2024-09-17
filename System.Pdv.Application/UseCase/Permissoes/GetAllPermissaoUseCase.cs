@@ -6,12 +6,12 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.UseCase.Permissoes;
 
-public class GetAllPermissionUseCase : IGetAllPermissionUseCase
+public class GetAllPermissaoUseCase : IGetAllPermissaoUseCase
 {
     private readonly IPermissaoRepository _permissaoRepository;
-    private readonly ILogger<GetAllPermissionUseCase> _logger;
+    private readonly ILogger<GetAllPermissaoUseCase> _logger;
 
-    public GetAllPermissionUseCase(IPermissaoRepository permissaoRepository, ILogger<GetAllPermissionUseCase> logger)
+    public GetAllPermissaoUseCase(IPermissaoRepository permissaoRepository, ILogger<GetAllPermissaoUseCase> logger)
     {
         _permissaoRepository = permissaoRepository;
         _logger = logger;

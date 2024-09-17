@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Mesas;
 
@@ -31,6 +30,7 @@ public class MesaController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("Mesa", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllMesas()
     {
@@ -48,6 +48,7 @@ public class MesaController : ControllerBase
         }
     }
 
+    [HasPermission("Mesa", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -66,7 +67,7 @@ public class MesaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Mesa", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateMesa(MesaDto mesaDto)
     {
@@ -84,7 +85,7 @@ public class MesaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Mesa", "Update")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateMesa(Guid id, MesaDto mesaDto)
     {
@@ -102,7 +103,7 @@ public class MesaController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Mesa", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteMesa(Guid id)
     {

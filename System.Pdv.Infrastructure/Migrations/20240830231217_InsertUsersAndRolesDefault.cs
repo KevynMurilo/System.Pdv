@@ -13,7 +13,7 @@ namespace System.Pdv.Infrastructure.Migrations
         {
             // Inserir papéis (Roles) na tabela "Roles"
             var adminRoleId = new Guid("D9A0C2D6-4A28-4F92-ABCD-0981A7A3F9E6");
-            var garcomRoleId = Guid.NewGuid();
+            var garcomRoleId = new Guid("B2C0D3E6-7F28-4B9E-9CDE-1234F56789AB");
 
             migrationBuilder.InsertData(
                 table: "Roles",

@@ -24,6 +24,7 @@ public class ClienteController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("Cliente", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllClientes([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -41,6 +42,7 @@ public class ClienteController : ControllerBase
         }
     }
 
+    [HasPermission("Cliente", "Get")]
     [HttpGet("nome")]
     public async Task<IActionResult> GetByName([FromQuery] string nome)
     {
@@ -58,6 +60,7 @@ public class ClienteController : ControllerBase
         }
     }
 
+    [HasPermission("Cliente", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdCliente(Guid id)
     {
