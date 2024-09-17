@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Pedido> Pedidos { get; set; }
     public DbSet<Produto> Produtos { get; set; }
     public DbSet<StatusPedido> StatusPedidos { get; set; }
+    public DbSet<Permissao> Permissoes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

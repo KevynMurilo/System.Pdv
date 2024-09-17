@@ -12,7 +12,7 @@ namespace System.Pdv.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Inserir papéis (Roles) na tabela "Roles"
-            var adminRoleId = Guid.NewGuid();
+            var adminRoleId = new Guid("D9A0C2D6-4A28-4F92-ABCD-0981A7A3F9E6");
             var garcomRoleId = Guid.NewGuid();
 
             migrationBuilder.InsertData(

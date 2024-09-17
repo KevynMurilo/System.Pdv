@@ -3,6 +3,7 @@ using System;
 using System.Pdv.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace System.Pdv.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240916181838_AddTablePermissao")]
+    partial class AddTablePermissao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("ItensId");
 
-                    b.ToTable("ItemAdicionalItemPedido", (string)null);
+                    b.ToTable("ItemAdicionalItemPedido");
                 });
 
             modelBuilder.Entity("PermissaoRole", b =>
@@ -49,7 +52,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("RolesId");
 
-                    b.ToTable("PermissaoRole", (string)null);
+                    b.ToTable("PermissaoRole");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Categoria", b =>
@@ -66,7 +69,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("Categorias", (string)null);
+                    b.ToTable("Categorias");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Cliente", b =>
@@ -83,7 +86,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clientes", (string)null);
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.ItemAdicional", b =>
@@ -103,7 +106,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("Adicionais", (string)null);
+                    b.ToTable("Adicionais");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.ItemPedido", b =>
@@ -130,7 +133,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.ToTable("ItensPedidos", (string)null);
+                    b.ToTable("ItensPedidos");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Mesa", b =>
@@ -152,7 +155,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Numero")
                         .IsUnique();
 
-                    b.ToTable("Mesas", (string)null);
+                    b.ToTable("Mesas");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.MetodoPagamento", b =>
@@ -169,7 +172,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("MetodoPagamento", (string)null);
+                    b.ToTable("MetodoPagamento");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Pedido", b =>
@@ -216,7 +219,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("StatusPedidoId1");
 
-                    b.ToTable("Pedidos", (string)null);
+                    b.ToTable("Pedidos");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Permissao", b =>
@@ -233,7 +236,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissoes", (string)null);
+                    b.ToTable("Permissoes");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Produto", b =>
@@ -261,7 +264,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.ToTable("Produtos", (string)null);
+                    b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Role", b =>
@@ -281,7 +284,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Nome")
                         .IsUnique();
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.StatusPedido", b =>
@@ -298,7 +301,7 @@ namespace System.Pdv.Infrastructure.Migrations
                     b.HasIndex("Status")
                         .IsUnique();
 
-                    b.ToTable("StatusPedidos", (string)null);
+                    b.ToTable("StatusPedidos");
                 });
 
             modelBuilder.Entity("System.Pdv.Core.Entities.Usuario", b =>
@@ -326,7 +329,7 @@ namespace System.Pdv.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("ItemAdicionalItemPedido", b =>

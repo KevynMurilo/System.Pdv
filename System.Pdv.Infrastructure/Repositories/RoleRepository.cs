@@ -20,6 +20,13 @@ public class RoleRepository : IRoleRepository
     public async Task<Role?> GetByIdAsync(Guid id)
     {
         return await _context.Roles
+            .Include(p => p.Permissoes)
             .FirstOrDefaultAsync(r => r.Id == id);
+    }
+
+    public async Task UpdateAsync(Role role)
+    {
+        _context.Roles.Update(role);
+        await _context.SaveChangesAsync();
     }
 }
