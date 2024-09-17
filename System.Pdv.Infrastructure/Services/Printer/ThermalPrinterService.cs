@@ -54,15 +54,6 @@ public class ThermalPrinterService : IThermalPrinterService
     }
 
     [SupportedOSPlatform("windows")]
-    public void ListAvailablePrinters()
-    {
-        foreach (string printer in PrinterSettings.InstalledPrinters)
-        {
-            Console.WriteLine($"Impressora disponível: {printer}");
-        }
-    }
-
-    [SupportedOSPlatform("windows")]
     private void OnPrintPage(object sender, PrintPageEventArgs e)
     {
         var graphics = e.Graphics;

@@ -81,14 +81,6 @@ builder.Services.AddScoped<IThermalPrinterService>(serviceProvider =>
     return new ThermalPrinterService(configuration);
 });
 
-//Configuração para listar impressoars disponiveis no terminal
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
-
-var thermalPrinterService = new ThermalPrinterService(configuration);
-thermalPrinterService.ListAvailablePrinters();
-
 //Builder de Autorização
 builder.Services.AddScoped<IAuthorizationUseCase, AuthorizationUseCase>();
 
