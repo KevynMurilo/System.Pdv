@@ -33,6 +33,10 @@ using System.Text.Json.Serialization;
 using System.Pdv.Application.Interfaces.Clientes;
 using System.Pdv.Application.UseCase.Clientes;
 using System.Pdv.Infrastructure.Services.Printer;
+using System.Pdv.Application.Interfaces.Authorization;
+using System.Pdv.Application.UseCase.Autorizacao;
+using System.Pdv.Application.Interfaces.Permissoes;
+using System.Pdv.Application.UseCase.Permissoes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +88,12 @@ var configuration = new ConfigurationBuilder()
 var thermalPrinterService = new ThermalPrinterService(configuration);
 thermalPrinterService.ListAvailablePrinters();
 
+builder.Services.AddScoped<IAuthorizationUseCase, AuthorizationUseCase>();
+builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
+builder.Services.AddScoped<IAssignPermissionToRoleUseCase, AssignPermissionToRoleUseCase>();
+builder.Services.AddScoped<IRemovePermissionFromRoleUseCase, RemovePermissionFromRoleUseCase>();
+builder.Services.AddScoped<IGetAllPermissionUseCase, GetAllPermissionUseCase>();
+builder.Services.AddScoped<ICreatePermissionUseCase, CreatePermissionUseCase>();
 
 //Builder para transações
 builder.Services.AddScoped<ITransactionManager, TransactionManager>();

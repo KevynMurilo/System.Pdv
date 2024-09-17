@@ -87,7 +87,8 @@ public class ProdutoController : ControllerBase
         
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [Authorize]
+    [HasPermission("Produto", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateProduto(ProdutoDto produtoDto)
     {

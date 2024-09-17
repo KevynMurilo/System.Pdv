@@ -27,6 +27,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         return await _context.Usuarios
             .Include(u => u.Role)
+                .ThenInclude(p => p.Permissoes)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 

@@ -10,4 +10,7 @@ public class Role
 
     [JsonIgnore]
     public ICollection<Usuario> Usuarios { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Permissao> Permissoes { get; set; }
 }
