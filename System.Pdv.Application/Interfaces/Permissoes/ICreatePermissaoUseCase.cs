@@ -4,7 +4,7 @@ using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Application.Interfaces.Permissoes;
 
-public interface ICreatePermissionUseCase
+public interface ICreatePermissaoUseCase
 {
     Task<OperationResult<Permissao>> ExecuteAsync(CreatePermissionDto permissionDto);
 }

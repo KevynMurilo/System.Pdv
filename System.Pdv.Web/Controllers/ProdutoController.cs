@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Produtos;
 
@@ -35,6 +34,7 @@ public class ProdutoController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("Produto", "Get")]
     [HttpGet] 
     public async Task<IActionResult> GetAllProdutos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -52,6 +52,7 @@ public class ProdutoController : ControllerBase
         }
     }
 
+    [HasPermission("Produto", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProdutoById(Guid id)
     {
@@ -69,6 +70,7 @@ public class ProdutoController : ControllerBase
         }
     }
 
+    [HasPermission("Produto", "Get")]
     [HttpGet("categoria/{categoriaId:guid}")]
     public async Task<IActionResult> GetProdutosByCategoria(Guid categoriaId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -87,7 +89,6 @@ public class ProdutoController : ControllerBase
         
     }
 
-    [Authorize]
     [HasPermission("Produto", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateProduto(ProdutoDto produtoDto)
@@ -106,7 +107,7 @@ public class ProdutoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Produto", "Update")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateProduto(Guid id, ProdutoDto produtoDto)
     {
@@ -124,7 +125,7 @@ public class ProdutoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Produto", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProduto(Guid id)
     {

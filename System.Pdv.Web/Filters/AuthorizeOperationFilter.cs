@@ -8,32 +8,37 @@ public class AuthorizeOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-
+        // Verifica se o método tem o AuthorizeAttribute ou HasPermissionAttribute
         var authAttributes = context.MethodInfo
           .GetCustomAttributes(true)
           .OfType<AuthorizeAttribute>()
           .Distinct();
 
-        if (authAttributes.Any())
-        {
+        var permissionAttributes = context.MethodInfo
+          .GetCustomAttributes(true)
+          .OfType<HasPermissionAttribute>()
+          .Distinct();
 
+        // Aplica as regras apenas se houver Authorize ou HasPermission
+        if (authAttributes.Any() || permissionAttributes.Any())
+        {
             operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
             operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
 
-            //Essa parte vincula o esquema JWT a operação que ta no program.cs
+            // Vincula o esquema JWT
             var jwtbearerScheme = new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" } ////Id tem que ter o mesmo nome que AddSecurityDefinition no Program.cs////
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" } // Id tem que ser o mesmo definido no Program.cs
             };
 
-            //E essa parte aplica o requisito (de aparecer o cadeado) apenas em rotas que precisam do token.
+            // Aplica o cadeado de segurança às rotas protegidas
             operation.Security = new List<OpenApiSecurityRequirement>
+            {
+                new OpenApiSecurityRequirement
                 {
-                    new OpenApiSecurityRequirement
-                    {
-                        [ jwtbearerScheme ] = new string[] { }
-                    }
-                };
+                    [ jwtbearerScheme ] = new string[] { }
+                }
+            };
         }
     }
 }

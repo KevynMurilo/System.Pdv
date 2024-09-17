@@ -3,7 +3,7 @@ using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Application.Interfaces.Permissoes;
 
-public interface IGetAllPermissionUseCase
+public interface IGetAllPermissaoUseCase
 {
     Task<OperationResult<IEnumerable<Permissao>>> ExecuteAsync();
 }

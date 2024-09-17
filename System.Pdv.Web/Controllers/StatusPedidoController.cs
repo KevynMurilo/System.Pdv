@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.StatusPedidos;
 
@@ -32,6 +31,7 @@ public class StatusPedidoController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("StatusPedido", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllStatusPedido()
     {
@@ -49,6 +49,7 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
+    [HasPermission("StatusPedido", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdStatusPedido(Guid id)
     {
@@ -66,7 +67,7 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("StatusPedido", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateStatusPedido(StatusPedidoDto statusPedidoDto)
     {
@@ -84,7 +85,7 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("StatusPedido", "Update")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateStatusPedido(Guid id, StatusPedidoDto statusPedidoDto)
     {
@@ -102,7 +103,7 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("StatusPedido", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteStatusPedido(Guid id)
     {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Adicionais;
 
@@ -32,6 +31,7 @@ public class AdicionalController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("Adicional", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllAdicionais([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -49,6 +49,7 @@ public class AdicionalController : ControllerBase
         }
     }
 
+    [HasPermission("Adicional", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdAdicional(Guid id)
     {
@@ -66,7 +67,7 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Adicional", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateAdicional(AdicionalDto adicionalDto)
     {
@@ -84,7 +85,7 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Adicional", "Update")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateAdicional(Guid id, AdicionalDto adicionalDto)
     {
@@ -102,7 +103,7 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Adicional", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteAdicional(Guid id)
     {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.MetodosPagamento;
 
@@ -32,6 +31,7 @@ public class MetodoPagamentoController : ControllerBase
         _logger = logger;
     }
 
+    [HasPermission("MetodoPagamento", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllMetodoPagamento()
     {
@@ -49,6 +49,7 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
+    [HasPermission("MetodoPagamento", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdMetodoPagamento(Guid id)
     {
@@ -66,7 +67,7 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("MetodoPagamento", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreateMetodoPagamento(MetodoPagamentoDto metodoPagamentoDto)
     {
@@ -84,7 +85,7 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("MetodoPagamento", "Update")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateMetodoPagamento(Guid id, MetodoPagamentoDto metodoPagamentoDto)
     {
@@ -102,7 +103,7 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("MetodoPagamento", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteMetodoPagamento(Guid id)
     {

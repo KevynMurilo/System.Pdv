@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Pedidos;
-using System.Pdv.Application.UseCase.Pedidos;
-using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Web.Controllers;
 
@@ -40,7 +37,7 @@ public class PedidoController : ControllerBase
         _logger = logger;
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllPedidos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string tipoPedido = null, [FromQuery] string statusPedido = null)
     {
@@ -58,7 +55,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Get")]
     [HttpGet("{numeroMesa:int}")]
     public async Task<IActionResult> GetPedidoByMesa(int numeroMesa, [FromQuery] string statusPedido = null)
     {
@@ -76,7 +73,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdPedido(Guid id)
     {
@@ -94,7 +91,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Create")]
     [HttpPost("print")]
     public async Task<IActionResult> PrintPedidosByIds([FromBody] List<Guid> ids)
     {
@@ -112,7 +109,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Create")]
     [HttpPost]
     public async Task<IActionResult> CreatePedido([FromBody] PedidoDto pedidoDto)
     {
@@ -130,7 +127,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Update")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdatePedido(Guid id, PedidoDto pedidoDto)
     {
@@ -148,7 +145,7 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN, GARCOM")]
+    [HasPermission("Pedido", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeletePedido(Guid id)
     {

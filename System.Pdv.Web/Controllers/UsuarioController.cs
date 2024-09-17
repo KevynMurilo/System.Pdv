@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Usuarios;
 
@@ -31,7 +30,7 @@ public class UsuarioController : ControllerBase
         _logger = logger;
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Usuario", "Get")]
     [HttpGet]
     public async Task<IActionResult> GetAllUsuario([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -49,7 +48,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Usuario", "Get")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -67,7 +66,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Usuario", "Create")]
     [HttpPost]
     public async Task<IActionResult> AddUsuario(UsuarioDto usuarioDto)
     {
@@ -85,7 +84,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Usuario", "Update")]
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> UpdateUsuario(Guid id, UsuarioDto usuarioDto)
     {
@@ -103,7 +102,7 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "ADMIN")]
+    [HasPermission("Usuario", "Delete")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteUsuario(Guid id)
     {

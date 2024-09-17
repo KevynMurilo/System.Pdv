@@ -37,6 +37,7 @@ using System.Pdv.Application.Interfaces.Authorization;
 using System.Pdv.Application.UseCase.Autorizacao;
 using System.Pdv.Application.Interfaces.Permissoes;
 using System.Pdv.Application.UseCase.Permissoes;
+using System.Pdv.Application.UseCase.PermissaoHasRole;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,11 +90,15 @@ var thermalPrinterService = new ThermalPrinterService(configuration);
 thermalPrinterService.ListAvailablePrinters();
 
 builder.Services.AddScoped<IAuthorizationUseCase, AuthorizationUseCase>();
+
+//Builder de Permissão
 builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
+builder.Services.AddScoped<IGetAllPermissaoUseCase, GetAllPermissaoUseCase>();
+builder.Services.AddScoped<ICreatePermissaoUseCase, CreatePermissaoUseCase>();
+
+//Builder de RolePermissao
 builder.Services.AddScoped<IAssignPermissionToRoleUseCase, AssignPermissionToRoleUseCase>();
 builder.Services.AddScoped<IRemovePermissionFromRoleUseCase, RemovePermissionFromRoleUseCase>();
-builder.Services.AddScoped<IGetAllPermissionUseCase, GetAllPermissionUseCase>();
-builder.Services.AddScoped<ICreatePermissionUseCase, CreatePermissionUseCase>();
 
 //Builder para transações
 builder.Services.AddScoped<ITransactionManager, TransactionManager>();
