@@ -89,12 +89,14 @@ var configuration = new ConfigurationBuilder()
 var thermalPrinterService = new ThermalPrinterService(configuration);
 thermalPrinterService.ListAvailablePrinters();
 
+//Builder de Autorização
 builder.Services.AddScoped<IAuthorizationUseCase, AuthorizationUseCase>();
 
 //Builder de Permissão
 builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
 builder.Services.AddScoped<IGetAllPermissaoUseCase, GetAllPermissaoUseCase>();
-builder.Services.AddScoped<ICreatePermissaoUseCase, CreatePermissaoUseCase>();
+builder.Services.AddScoped<IGetAllPermissaoComRolesUseCase, GetAllPermissaoComRolesUseCase>();
+builder.Services.AddScoped<IGetAllPermissaoByRoleIdUseCase, GetAllPermissaoByRoleIdUseCase>();
 
 //Builder de RolePermissao
 builder.Services.AddScoped<IAssignPermissionToRoleUseCase, AssignPermissionToRoleUseCase>();

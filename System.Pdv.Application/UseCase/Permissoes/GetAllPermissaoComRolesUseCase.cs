@@ -6,22 +6,22 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.UseCase.Permissoes;
 
-public class GetAllPermissaoUseCase : IGetAllPermissaoUseCase
+public class GetAllPermissaoComRolesUseCase : IGetAllPermissaoComRolesUseCase
 {
     private readonly IPermissaoRepository _permissaoRepository;
-    private readonly ILogger<GetAllPermissaoUseCase> _logger;
+    private readonly ILogger<GetAllPermissaoComRolesUseCase> _logger;
 
-    public GetAllPermissaoUseCase(IPermissaoRepository permissaoRepository, ILogger<GetAllPermissaoUseCase> logger)
+    public GetAllPermissaoComRolesUseCase(IPermissaoRepository permissaoRepository, ILogger<GetAllPermissaoComRolesUseCase> logger)
     {
         _permissaoRepository = permissaoRepository;
         _logger = logger;
     }
 
-    public async Task<OperationResult<IEnumerable<Permissao>>> ExecuteAsync(int pageNumber, int pageSize, string recurso, string acao)
+    public async Task<OperationResult<IEnumerable<Permissao>>> ExecuteAsync(int pageNumber, int pageSize, string recurso , string acao)
     {
         try
         {
-            var permissoes = await _permissaoRepository.GetAllPermissao(pageNumber, pageSize, recurso, acao);
+            var permissoes = await _permissaoRepository.GetAllPermissionWithRoleAsync(pageNumber, pageSize, recurso, acao);
             if (!permissoes.Any()) return new OperationResult<IEnumerable<Permissao>> { Message = "Nenhuma permissão encontrada", StatusCode = 404 };
 
             return new OperationResult<IEnumerable<Permissao>> { Result = permissoes };

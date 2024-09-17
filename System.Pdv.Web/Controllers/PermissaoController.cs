@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Permissoes;
 
 namespace System.Pdv.Web.Controllers;
@@ -8,52 +7,73 @@ namespace System.Pdv.Web.Controllers;
 [Route("api/[controller]")]
 public class PermissaoController : ControllerBase
 {
-    private readonly IGetAllPermissaoUseCase _getAllPermissionUseCase;
-    private readonly ICreatePermissaoUseCase _createPermissionUseCase;
+    private readonly IGetAllPermissaoUseCase _getAllPermissaoUseCase;
+    private readonly IGetAllPermissaoComRolesUseCase _getAllPermissaoComRoleUseCase;
+    private readonly IGetAllPermissaoByRoleIdUseCase _getAllPermissaoByRoleIdUseCase;
     private readonly ILogger<PermissaoController> _logger;
 
     public PermissaoController(
-        IGetAllPermissaoUseCase getAllPermissionUseCase,
-        ICreatePermissaoUseCase createPermissionUseCase,
+        IGetAllPermissaoUseCase getAllPermissaoUseCase,
+        IGetAllPermissaoComRolesUseCase getAllPermissaoComRolesUseCase,
+        IGetAllPermissaoByRoleIdUseCase getAllPermissaoByRoleIdUseCase,
         ILogger<PermissaoController> logger)
     {
-        _getAllPermissionUseCase = getAllPermissionUseCase;
-        _createPermissionUseCase = createPermissionUseCase;
+        _getAllPermissaoUseCase = getAllPermissaoUseCase;
+        _getAllPermissaoComRoleUseCase = getAllPermissaoComRolesUseCase;
+        _getAllPermissaoByRoleIdUseCase = getAllPermissaoByRoleIdUseCase;
         _logger = logger;
     }
 
     [HasPermission("RolePermission", "Get")]
-    [HttpGet]
-    public async Task<IActionResult> GetAllPermissoes()
+    [HttpGet()]
+    public async Task<IActionResult> GetAllPermissoes([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? recurso = null, [FromQuery] string? acao = null)
     {
         try
         {
-            var result = await _getAllPermissionUseCase.ExecuteAsync();
+            var result = await _getAllPermissaoUseCase.ExecuteAsync(pageNumber, pageSize, recurso, acao);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao listar roler");
+            _logger.LogError(ex, "Ocorreu um erro ao listar roles");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }
 
-    [HasPermission("RolePermission", "Create")]
-    [HttpPost()]
-    public async Task<IActionResult> CreatePermissao(CreatePermissionDto permissionDto)
+    [HasPermission("RolePermission", "Get")]
+    [HttpGet("com/roles")]
+    public async Task<IActionResult> GetAllPermissoesComRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? recurso = null, [FromQuery] string? acao = null)
     {
         try
         {
-            var result = await _createPermissionUseCase.ExecuteAsync(permissionDto);
+            var result = await _getAllPermissaoComRoleUseCase.ExecuteAsync(pageNumber, pageSize, recurso, acao);
             return result.StatusCode == 200
                 ? Ok(result)
                 : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao criar permissao");
+            _logger.LogError(ex, "Ocorreu um erro ao listar roles");
+            return StatusCode(500, "Ocorreu um erro inesperado.");
+        }
+    }
+
+    [HasPermission("RolePermission", "Get")]
+    [HttpGet("role/{roleId:guid}")]
+    public async Task<IActionResult> GetAllPermissaoByRoleId(Guid roleId)
+    {
+        try
+        {
+            var result = await _getAllPermissaoByRoleIdUseCase.ExecuteAsync(roleId);
+            return result.StatusCode == 200
+                ? Ok(result)
+                : StatusCode(result.StatusCode, result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao listar roles por id");
             return StatusCode(500, "Ocorreu um erro inesperado.");
         }
     }

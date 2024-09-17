@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace System.Pdv.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240917132926_AddGarcomRolePermissions")]
-    partial class AddGarcomRolePermissions
+    [Migration("20240917171514_AddRolesPermissions")]
+    partial class AddRolesPermissions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

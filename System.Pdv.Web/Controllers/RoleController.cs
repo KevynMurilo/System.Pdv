@@ -4,7 +4,7 @@ using System.Pdv.Application.Interfaces.Roles;
 namespace System.Pdv.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class RoleController : ControllerBase
 {
     private readonly IGetAllRolesService _getAllRoleServices;
