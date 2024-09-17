@@ -5,6 +5,7 @@ using System.Pdv.Infrastructure.Data;
 using System.Pdv.Infrastructure.Repositories;
 
 namespace System.Pdv.Infrastructure.Tests.Repositories;
+
 public class PermissaoRepositoryTests
 {
     private readonly AppDbContext _context;
@@ -51,7 +52,7 @@ public class PermissaoRepositoryTests
     }
 
     [Fact]
-    public async Task GetAllAsync_ShouldReturnAllPermissoes()
+    public async Task GetAllPermissao_ShouldReturnAllPermissoes()
     {
         var permissao1 = new Permissao { Id = Guid.NewGuid(), Recurso = "Resource1", Acao = "Action1" };
         var permissao2 = new Permissao { Id = Guid.NewGuid(), Recurso = "Resource2", Acao = "Action2" };
@@ -59,10 +60,29 @@ public class PermissaoRepositoryTests
         await _context.Permissoes.AddRangeAsync(permissao1, permissao2);
         await _context.SaveChangesAsync();
 
-        var result = await _repository.GetAllAsync();
+        var result = await _repository.GetAllPermissao(1, 10, null, null);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);
+        Assert.Contains(result, p => p.Id == permissao1.Id);
+        Assert.Contains(result, p => p.Id == permissao2.Id);
+    }
+
+    [Fact]
+    public async Task GetAllPermissao_WithPagination_ShouldReturnPaginatedResults()
+    {
+        var permissao1 = new Permissao { Id = Guid.NewGuid(), Recurso = "Resource1", Acao = "Action1" };
+        var permissao2 = new Permissao { Id = Guid.NewGuid(), Recurso = "Resource2", Acao = "Action2" };
+        var permissao3 = new Permissao { Id = Guid.NewGuid(), Recurso = "Resource3", Acao = "Action3" };
+
+        await _context.Permissoes.AddRangeAsync(permissao1, permissao2, permissao3);
+        await _context.SaveChangesAsync();
+
+        var result = await _repository.GetAllPermissao(2, 2, null, null);
+
+        Assert.NotNull(result);
+        Assert.Single(result); 
+        Assert.Contains(result, p => p.Id == permissao3.Id);
     }
 
     [Fact]

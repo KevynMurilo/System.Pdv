@@ -23,4 +23,8 @@
     <ProjectReference Include="..\System.Pdv.Infrastructure\System.Pdv.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Services\Printer\" />
+  </ItemGroup>
+
 </Project>

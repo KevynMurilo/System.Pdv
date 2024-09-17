@@ -21,11 +21,64 @@ public class PermissaoRepository : IPermissaoRepository
             .FirstOrDefaultAsync(p => p.Id == permissaoId);
     }
 
-    public async Task<ICollection<Permissao>> GetAllAsync()
+    public async Task<ICollection<Permissao>> GetAllPermissao(int pageNumber, int pageSize, string recurso, string acao)
+    {
+        IQueryable<Permissao> query = _context.Permissoes
+            .AsNoTracking()
+            .OrderBy(p => p.Recurso)
+            .ThenBy(p => p.Acao);
+
+        if (!string.IsNullOrEmpty(recurso))
+        {
+            query = query.Where(p => p.Recurso.ToLower() == recurso.ToLower());
+        }
+
+        if (!string.IsNullOrEmpty(acao))
+        {
+            query = query.Where(p => p.Acao.ToLower() == acao.ToLower());
+        }
+
+        var pagedResult = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return pagedResult;
+    }
+
+    public async Task<ICollection<Permissao>> GetAllPermissionWithRoleAsync(int pageNumber, int pageSize, string recurso, string acao)
+    {
+        IQueryable<Permissao> query = _context.Permissoes
+            .AsNoTracking()
+            .Include(p => p.Roles)
+            .OrderBy(p => p.Recurso)
+            .ThenBy(p => p.Acao);
+
+        if (!string.IsNullOrEmpty(recurso))
+        {
+            query = query.Where(p => p.Recurso.ToLower() == recurso.ToLower());
+        }
+
+        if (!string.IsNullOrEmpty(acao))
+        {
+            query = query.Where(p => p.Acao.ToLower() == acao.ToLower());
+        }
+
+        var pagedResult = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return pagedResult;
+    }
+
+    public async Task<ICollection<Permissao>> GetAllPermissaoByRoleIdAsync(Guid roleId)
     {
         return await _context.Permissoes
             .AsNoTracking()
-            .Include(r => r.Roles)
+            .Where(p => p.Roles.Any(r => r.Id == roleId)) 
+            .OrderBy(p => p.Recurso)
+            .Include(p => p.Roles)
             .ToListAsync();
     }
 

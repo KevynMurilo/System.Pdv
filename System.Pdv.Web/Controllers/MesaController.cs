@@ -5,7 +5,7 @@ using System.Pdv.Application.Interfaces.Mesas;
 namespace System.Pdv.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class MesaController : ControllerBase
 {
     private readonly IGetAllMesaUseCase _getAllServices;

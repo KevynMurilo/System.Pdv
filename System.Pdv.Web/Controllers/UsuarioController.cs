@@ -5,7 +5,7 @@ using System.Pdv.Application.Interfaces.Usuarios;
 namespace System.Pdv.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class UsuarioController : ControllerBase
 {
     private readonly IGetAllUsuarioUseCase _getAllUsuarioService;

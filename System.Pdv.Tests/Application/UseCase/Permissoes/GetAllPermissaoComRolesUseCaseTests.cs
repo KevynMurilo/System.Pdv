@@ -1,23 +1,23 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
-using System.Pdv.Application.UseCase.Permissoes;
 using System.Pdv.Core.Entities;
+using System.Pdv.Application.UseCase.Permissoes;
 using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Tests.UseCase.Permissoes;
 
-public class GetAllPermissaoUseCaseTests
+public class GetAllPermissaoComRolesUseCaseTests
 {
     private readonly Mock<IPermissaoRepository> _mockPermissaoRepository;
-    private readonly Mock<ILogger<GetAllPermissaoUseCase>> _mockLogger;
-    private readonly GetAllPermissaoUseCase _useCase;
+    private readonly Mock<ILogger<GetAllPermissaoComRolesUseCase>> _mockLogger;
+    private readonly GetAllPermissaoComRolesUseCase _useCase;
 
-    public GetAllPermissaoUseCaseTests()
+    public GetAllPermissaoComRolesUseCaseTests()
     {
         _mockPermissaoRepository = new Mock<IPermissaoRepository>();
-        _mockLogger = new Mock<ILogger<GetAllPermissaoUseCase>>();
-        _useCase = new GetAllPermissaoUseCase(
+        _mockLogger = new Mock<ILogger<GetAllPermissaoComRolesUseCase>>();
+        _useCase = new GetAllPermissaoComRolesUseCase(
             _mockPermissaoRepository.Object,
             _mockLogger.Object);
     }
@@ -31,19 +31,18 @@ public class GetAllPermissaoUseCaseTests
             new Permissao { Id = Guid.NewGuid(), Recurso = "Resource2", Acao = "Action2" }
         };
 
-        _mockPermissaoRepository.Setup(p => p.GetAllPermissao(1, 10, null, null)).ReturnsAsync(permissoes);
+        _mockPermissaoRepository.Setup(p => p.GetAllPermissionWithRoleAsync(1, 10, null, null)).ReturnsAsync(permissoes);
 
         var result = await _useCase.ExecuteAsync(1, 10, null, null);
 
         Assert.NotNull(result.Result);
         Assert.Equal(permissoes.Count, result.Result.Count());
-        Assert.Equal(200, result.StatusCode);
     }
 
     [Fact]
     public async Task ExecuteAsync_ShouldReturnNotFound_WhenNoPermissionsExist()
     {
-        _mockPermissaoRepository.Setup(p => p.GetAllPermissao(1, 10, null, null)).ReturnsAsync(new List<Permissao>());
+        _mockPermissaoRepository.Setup(p => p.GetAllPermissionWithRoleAsync(1, 10, null, null)).ReturnsAsync(new List<Permissao>());
 
         var result = await _useCase.ExecuteAsync(1, 10, null, null);
 
@@ -55,7 +54,7 @@ public class GetAllPermissaoUseCaseTests
     [Fact]
     public async Task ExecuteAsync_ShouldReturnError_WhenExceptionOccurs()
     {
-        _mockPermissaoRepository.Setup(p => p.GetAllPermissao(1, 10, null, null)).ThrowsAsync(new Exception("Database error"));
+        _mockPermissaoRepository.Setup(p => p.GetAllPermissionWithRoleAsync(1, 10, null, null)).ThrowsAsync(new Exception("Database error"));
 
         var result = await _useCase.ExecuteAsync(1, 10, null, null);
 

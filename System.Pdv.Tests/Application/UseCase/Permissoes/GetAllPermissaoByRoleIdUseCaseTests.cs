@@ -7,17 +7,17 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.Tests.UseCase.Permissoes;
 
-public class GetAllPermissaoUseCaseTests
+public class GetAllPermissaoByRoleIdUseCaseTests
 {
     private readonly Mock<IPermissaoRepository> _mockPermissaoRepository;
-    private readonly Mock<ILogger<GetAllPermissaoUseCase>> _mockLogger;
-    private readonly GetAllPermissaoUseCase _useCase;
+    private readonly Mock<ILogger<GetAllPermissaoByRoleIdUseCase>> _mockLogger;
+    private readonly GetAllPermissaoByRoleIdUseCase _useCase;
 
-    public GetAllPermissaoUseCaseTests()
+    public GetAllPermissaoByRoleIdUseCaseTests()
     {
         _mockPermissaoRepository = new Mock<IPermissaoRepository>();
-        _mockLogger = new Mock<ILogger<GetAllPermissaoUseCase>>();
-        _useCase = new GetAllPermissaoUseCase(
+        _mockLogger = new Mock<ILogger<GetAllPermissaoByRoleIdUseCase>>();
+        _useCase = new GetAllPermissaoByRoleIdUseCase(
             _mockPermissaoRepository.Object,
             _mockLogger.Object);
     }
@@ -25,39 +25,46 @@ public class GetAllPermissaoUseCaseTests
     [Fact]
     public async Task ExecuteAsync_ShouldReturnPermissions_WhenPermissionsExist()
     {
+        var roleId = Guid.NewGuid();
         var permissoes = new List<Permissao>
         {
             new Permissao { Id = Guid.NewGuid(), Recurso = "Resource1", Acao = "Action1" },
             new Permissao { Id = Guid.NewGuid(), Recurso = "Resource2", Acao = "Action2" }
         };
 
-        _mockPermissaoRepository.Setup(p => p.GetAllPermissao(1, 10, null, null)).ReturnsAsync(permissoes);
+        _mockPermissaoRepository.Setup(p => p.GetAllPermissaoByRoleIdAsync(roleId)).ReturnsAsync(permissoes);
 
-        var result = await _useCase.ExecuteAsync(1, 10, null, null);
+        var result = await _useCase.ExecuteAsync(roleId);
 
         Assert.NotNull(result.Result);
         Assert.Equal(permissoes.Count, result.Result.Count());
+        Assert.True(result.ServerOn);
+        Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
     }
 
     [Fact]
     public async Task ExecuteAsync_ShouldReturnNotFound_WhenNoPermissionsExist()
     {
-        _mockPermissaoRepository.Setup(p => p.GetAllPermissao(1, 10, null, null)).ReturnsAsync(new List<Permissao>());
+        var roleId = Guid.NewGuid();
 
-        var result = await _useCase.ExecuteAsync(1, 10, null, null);
+        _mockPermissaoRepository.Setup(p => p.GetAllPermissaoByRoleIdAsync(roleId)).ReturnsAsync(new List<Permissao>());
+
+        var result = await _useCase.ExecuteAsync(roleId);
 
         Assert.Null(result.Result);
-        Assert.Equal("Nenhuma permissão encontrada", result.Message);
+        Assert.Equal($"Nenhuma permissão encontrada com o Id - {roleId}", result.Message);
         Assert.Equal(404, result.StatusCode);
     }
 
     [Fact]
     public async Task ExecuteAsync_ShouldReturnError_WhenExceptionOccurs()
     {
-        _mockPermissaoRepository.Setup(p => p.GetAllPermissao(1, 10, null, null)).ThrowsAsync(new Exception("Database error"));
+        var roleId = Guid.NewGuid();
 
-        var result = await _useCase.ExecuteAsync(1, 10, null, null);
+        _mockPermissaoRepository.Setup(p => p.GetAllPermissaoByRoleIdAsync(roleId)).ThrowsAsync(new Exception("Database error"));
+
+        var result = await _useCase.ExecuteAsync(roleId);
 
         Assert.False(result.ServerOn);
         Assert.StartsWith("Erro inesperado:", result.Message);
