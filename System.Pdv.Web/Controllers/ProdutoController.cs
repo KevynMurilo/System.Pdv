@@ -34,8 +34,11 @@ public class ProdutoController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Produto", "Get")]
     [HttpGet] 
+    [HasPermission("Produto", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllProdutos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
@@ -52,8 +55,11 @@ public class ProdutoController : ControllerBase
         }
     }
 
-    [HasPermission("Produto", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Produto", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetProdutoById(Guid id)
     {
         try
@@ -70,8 +76,11 @@ public class ProdutoController : ControllerBase
         }
     }
 
-    [HasPermission("Produto", "Get")]
     [HttpGet("categoria/{categoriaId:guid}")]
+    [HasPermission("Produto", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetProdutosByCategoria(Guid categoriaId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
@@ -89,8 +98,11 @@ public class ProdutoController : ControllerBase
         
     }
 
-    [HasPermission("Produto", "Create")]
     [HttpPost]
+    [HasPermission("Produto", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]  
+    [ProducesResponseType(StatusCodes.Status404NotFound)]  
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateProduto(ProdutoDto produtoDto)
     {
         try
@@ -107,8 +119,11 @@ public class ProdutoController : ControllerBase
         }
     }
 
-    [HasPermission("Produto", "Update")]
     [HttpPatch("{id:guid}")]
+    [HasPermission("Produto", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateProduto(Guid id, ProdutoDto produtoDto)
     {
         try
@@ -125,8 +140,11 @@ public class ProdutoController : ControllerBase
         }
     }
 
-    [HasPermission("Produto", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("Produto", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteProduto(Guid id)
     {
         try

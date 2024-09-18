@@ -6,7 +6,6 @@ using System.Pdv.Core.Entities;
 using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.UseCase.Mesas;
-
 public class CreateMesaUseCase : ICreateMesaUseCase
 {
     private readonly IMesaRepository _mesaRepository;

@@ -31,8 +31,11 @@ public class AdicionalController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Adicional", "Get")]
     [HttpGet]
+    [HasPermission("Adicional", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllAdicionais([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
@@ -49,8 +52,11 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [HasPermission("Adicional", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Adicional", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByIdAdicional(Guid id)
     {
         try
@@ -67,8 +73,11 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [HasPermission("Adicional", "Create")]
     [HttpPost]
+    [HasPermission("Adicional", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateAdicional(AdicionalDto adicionalDto)
     {
         try
@@ -85,8 +94,11 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [HasPermission("Adicional", "Update")]
     [HttpPatch("{id:guid}")]
+    [HasPermission("Adicional", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateAdicional(Guid id, AdicionalDto adicionalDto)
     {
         try
@@ -103,8 +115,11 @@ public class AdicionalController : ControllerBase
         }
     }
 
-    [HasPermission("Adicional", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("Adicional", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteAdicional(Guid id)
     {
         try

@@ -48,6 +48,29 @@ public class RoleRepositoryTests : IDisposable
         Assert.Equal(2, results.Count());
     }
 
+    [Fact]
+    public async Task GetByNameAsync_ShouldReturnRole()
+    {
+        var role = new Role
+        {
+            Id = Guid.NewGuid(),
+            Nome = "ADMIN"
+        };
+
+        _context.Roles.Add(role);
+        await _context.SaveChangesAsync();
+
+        var result = await _repository.GetByNameAsync("ADMIN");
+        Assert.NotNull(result);
+        Assert.Equal(role.Id, result?.Id);
+    }
+
+    [Fact]
+    public async Task GetByNameAsync_ShouldReturnNullForNonExistentRole()
+    {
+        var result = await _repository.GetByNameAsync("NonExistentRole");
+        Assert.Null(result);
+    }
 
     [Fact]
     public async Task GetByIdAsync_ShouldReturnRole()
@@ -70,6 +93,60 @@ public class RoleRepositoryTests : IDisposable
     public async Task GetByIdAsync_ShouldReturnNullForNonExistentRole()
     {
         var result = await _repository.GetByIdAsync(Guid.NewGuid());
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task AddAsync_ShouldAddRole()
+    {
+        var role = new Role
+        {
+            Id = Guid.NewGuid(),
+            Nome = "NewRole"
+        };
+
+        await _repository.AddAsync(role);
+
+        var result = await _repository.GetByIdAsync(role.Id);
+        Assert.NotNull(result);
+        Assert.Equal(role.Nome, result?.Nome);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldUpdateRole()
+    {
+        var role = new Role
+        {
+            Id = Guid.NewGuid(),
+            Nome = "OldRole"
+        };
+
+        _context.Roles.Add(role);
+        await _context.SaveChangesAsync();
+
+        role.Nome = "UpdatedRole";
+        await _repository.UpdateAsync(role);
+
+        var result = await _repository.GetByIdAsync(role.Id);
+        Assert.NotNull(result);
+        Assert.Equal("UpdatedRole", result?.Nome);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ShouldRemoveRole()
+    {
+        var role = new Role
+        {
+            Id = Guid.NewGuid(),
+            Nome = "RoleToDelete"
+        };
+
+        _context.Roles.Add(role);
+        await _context.SaveChangesAsync();
+
+        await _repository.DeleteAsync(role);
+
+        var result = await _repository.GetByIdAsync(role.Id);
         Assert.Null(result);
     }
 

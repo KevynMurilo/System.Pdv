@@ -30,8 +30,11 @@ public class MesaController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Mesa", "Get")]
     [HttpGet]
+    [HasPermission("Mesa", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllMesas()
     {
         try
@@ -48,8 +51,11 @@ public class MesaController : ControllerBase
         }
     }
 
-    [HasPermission("Mesa", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Mesa", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -67,8 +73,11 @@ public class MesaController : ControllerBase
         }
     }
 
-    [HasPermission("Mesa", "Create")]
     [HttpPost]
+    [HasPermission("Mesa", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateMesa(MesaDto mesaDto)
     {
         try
@@ -85,8 +94,11 @@ public class MesaController : ControllerBase
         }
     }
 
-    [HasPermission("Mesa", "Update")]
     [HttpPatch("{id:guid}")]
+    [HasPermission("Mesa", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateMesa(Guid id, MesaDto mesaDto)
     {
         try
@@ -103,8 +115,11 @@ public class MesaController : ControllerBase
         }
     }
 
-    [HasPermission("Mesa", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("Mesa", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteMesa(Guid id)
     {
         try

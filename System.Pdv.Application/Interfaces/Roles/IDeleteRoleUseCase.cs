@@ -2,8 +2,7 @@
 using System.Pdv.Core.Entities;
 
 namespace System.Pdv.Application.Interfaces.Roles;
-
-public interface IGetAllRolesService
+public interface IDeleteRoleUseCase
 {
-    Task<OperationResult<IEnumerable<Role>>> ExecuteAsync();
+    Task<OperationResult<Role>> ExecuteAsync(Guid id);
 }

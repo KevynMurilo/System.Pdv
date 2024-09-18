@@ -19,8 +19,10 @@ public class AutenticaçãoController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost]
-    [Route("login")]
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
         try

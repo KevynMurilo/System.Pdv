@@ -24,8 +24,11 @@ public class ClienteController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Cliente", "Get")]
     [HttpGet]
+    [HasPermission("Cliente", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllClientes([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
@@ -42,8 +45,11 @@ public class ClienteController : ControllerBase
         }
     }
 
-    [HasPermission("Cliente", "Get")]
     [HttpGet("nome")]
+    [HasPermission("Cliente", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByName([FromQuery] string nome)
     {
         try
@@ -60,8 +66,11 @@ public class ClienteController : ControllerBase
         }
     }
 
-    [HasPermission("Cliente", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Cliente", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByIdCliente(Guid id)
     {
         try

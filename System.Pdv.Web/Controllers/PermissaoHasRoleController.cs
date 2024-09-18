@@ -6,29 +6,32 @@ namespace System.Pdv.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RolePermissionController : ControllerBase
+public class PermissaoHasRoleController : ControllerBase
 {
     private readonly IAssignPermissionToRoleUseCase _assignPermissionUseCase;
     private readonly IRemovePermissionFromRoleUseCase _removePermissionUseCase;
-    private readonly ILogger<RolePermissionController> _logger;
+    private readonly ILogger<PermissaoHasRoleController> _logger;
 
-    public RolePermissionController(
+    public PermissaoHasRoleController(
         IAssignPermissionToRoleUseCase assignPermissionUseCase,
         IRemovePermissionFromRoleUseCase removePermissionUseCase,
-        ILogger<RolePermissionController> logger)
+        ILogger<PermissaoHasRoleController> logger)
     {
         _assignPermissionUseCase = assignPermissionUseCase;
         _removePermissionUseCase = removePermissionUseCase;
         _logger = logger;
     }
 
-    [HasPermission("RolePermission", "Create")]
     [HttpPost("atribuir")]
+    [HasPermission("RolePermission", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AssignPermissionToRole([FromBody] PermissionHasRoleDto permissaoDto)
     {
         try
         {
-            var result = await _assignPermissionUseCase.ExecuteAsync(permissaoDto.RoleId, permissaoDto.PermissaoId);
+            var result = await _assignPermissionUseCase.ExecuteAsync(permissaoDto);
             return result.StatusCode == 200
                 ? Ok("Permissão atribuída com sucesso.")
                 : StatusCode(result.StatusCode, result);
@@ -40,13 +43,16 @@ public class RolePermissionController : ControllerBase
         }
     }
 
-    [HasPermission("RolePermission", "Delete")]
     [HttpDelete("remover")]
+    [HasPermission("RolePermission", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RemovePermissionFromRole([FromBody] PermissionHasRoleDto permissaoDto)
     {
         try
         {
-            var result = await _removePermissionUseCase.ExecuteAsync(permissaoDto.RoleId, permissaoDto.PermissaoId);
+            var result = await _removePermissionUseCase.ExecuteAsync(permissaoDto);
             return result.StatusCode == 200
                 ? Ok("Permissão removida com sucesso.")
                 : StatusCode(result.StatusCode, result);

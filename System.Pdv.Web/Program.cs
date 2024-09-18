@@ -109,9 +109,13 @@ builder.Services.AddScoped<ICreatePedidoUseCase, CreatePedidoUseCase>();
 builder.Services.AddScoped<IUpdatePedidoUseCase, UpdatePedidoUseCase>();
 builder.Services.AddScoped<IDeletePedidoUseCase , DeletePedidoUseCase>();
 
-//Criar Role
+//Builder de Roles
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IGetAllRolesService, GetAllRolesUseCase>();
+builder.Services.AddScoped<IGetAllRolesUseCase, GetAllRolesUseCase>();
+builder.Services.AddScoped<IGetByIdRoleUseCase, GetByIdRoleUseCase>();
+builder.Services.AddScoped<ICreateRoleUseCase, CreateRoleUseCase>();
+builder.Services.AddScoped<IUpdateRoleUseCase, UpdateRoleUseCase>();
+builder.Services.AddScoped<IDeleteRoleUseCase , DeleteRoleUseCase>();
 
 // Injeção Autenticação
 builder.Services.AddScoped<IAuthUseCase, AuthUseCase>();
@@ -221,6 +225,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     c.OperationFilter<AuthorizeOperationFilter>();
+
+    c.OperationFilter<RemoveExamplesOperationFilter>();
 });
 
 var app = builder.Build();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Pdv.Application.Common;
+using System.Pdv.Application.DTOs;
 using System.Pdv.Application.Interfaces.Permissoes;
 using System.Pdv.Core.Interfaces;
 
@@ -21,27 +22,36 @@ public class RemovePermissionFromRoleUseCase : IRemovePermissionFromRoleUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<bool>> ExecuteAsync(Guid roleId, Guid permissaoId)
+    public async Task<OperationResult<bool>> ExecuteAsync(PermissionHasRoleDto permissionHasRoleDto)
     {
         try
         {
-            var role = await _roleRepository.GetByIdAsync(roleId);
-            var permissao = await _permissaoRepository.GetByIdAsync(permissaoId);
-
-            if (role == null) return new OperationResult<bool> { Message = "Role não encontrada", StatusCode = 404 };
-            if (permissao == null) return new OperationResult<bool> { Message = "Permissão não encontrada", StatusCode = 404 };
-            
-            if (role.Permissoes.Contains(permissao))
+            foreach (var roleId in permissionHasRoleDto.RoleIds)
             {
-                role.Permissoes.Remove(permissao);
+                var role = await _roleRepository.GetByIdAsync(roleId);
+                if (role == null)
+                    return new OperationResult<bool> { Message = $"Role com ID {roleId} não encontrada", StatusCode = 404 };
+
+                foreach (var permissaoId in permissionHasRoleDto.PermissaoIds)
+                {
+                    var permissao = await _permissaoRepository.GetByIdAsync(permissaoId);
+                    if (permissao == null)
+                        return new OperationResult<bool> { Message = $"Permissão com ID {permissaoId} não encontrada", StatusCode = 404 };
+
+                    if (role.Permissoes.Contains(permissao))
+                    {
+                        role.Permissoes.Remove(permissao);
+                    }
+                }
+
                 await _roleRepository.UpdateAsync(role);
             }
 
-            return new OperationResult<bool> { Result = true };
+            return new OperationResult<bool> { Result = true, StatusCode = 200 };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ocorreu um erro ao remover vinculo entre permissão e função.");
+            _logger.LogError(ex, "Ocorreu um erro ao remover permissões das funções.");
             return new OperationResult<bool> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace System.Pdv.Core.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace System.Pdv.Core.Entities;
 
 public class Permissao
 {

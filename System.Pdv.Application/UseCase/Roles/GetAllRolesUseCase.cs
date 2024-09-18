@@ -6,7 +6,7 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.UseCase.Roles;
 
-public class GetAllRolesUseCase : IGetAllRolesService
+public class GetAllRolesUseCase : IGetAllRolesUseCase
 {
     private readonly IRoleRepository _roleRepository;
     private readonly ILogger<GetAllRolesUseCase> _logger;

@@ -24,8 +24,11 @@ public class PermissaoController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("RolePermission", "Get")]
     [HttpGet()]
+    [HasPermission("RolePermission", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllPermissoes([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? recurso = null, [FromQuery] string? acao = null)
     {
         try
@@ -42,8 +45,11 @@ public class PermissaoController : ControllerBase
         }
     }
 
-    [HasPermission("RolePermission", "Get")]
     [HttpGet("com/roles")]
+    [HasPermission("RolePermission", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllPermissoesComRoles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string? recurso = null, [FromQuery] string? acao = null)
     {
         try
@@ -60,8 +66,11 @@ public class PermissaoController : ControllerBase
         }
     }
 
-    [HasPermission("RolePermission", "Get")]
     [HttpGet("role/{roleId:guid}")]
+    [HasPermission("RolePermission", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllPermissaoByRoleId(Guid roleId)
     {
         try
