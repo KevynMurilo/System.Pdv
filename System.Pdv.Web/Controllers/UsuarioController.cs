@@ -30,8 +30,11 @@ public class UsuarioController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Usuario", "Get")]
     [HttpGet]
+    [HasPermission("Usuario", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllUsuario([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         try
@@ -48,8 +51,11 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HasPermission("Usuario", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Usuario", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -66,8 +72,12 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HasPermission("Usuario", "Create")]
     [HttpPost]
+    [HasPermission("Usuario", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AddUsuario(UsuarioDto usuarioDto)
     {
         try
@@ -84,8 +94,12 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HasPermission("Usuario", "Update")]
     [HttpPatch("{id:guid}")]
+    [HasPermission("Usuario", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateUsuario(Guid id, UsuarioDto usuarioDto)
     {
         try
@@ -102,8 +116,11 @@ public class UsuarioController : ControllerBase
         }
     }
 
-    [HasPermission("Usuario", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("Usuario", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteUsuario(Guid id)
     {
         try

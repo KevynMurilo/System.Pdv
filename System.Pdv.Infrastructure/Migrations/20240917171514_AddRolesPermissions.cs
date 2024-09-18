@@ -25,7 +25,8 @@ namespace System.Pdv.Infrastructure.Migrations
                 ("Role", "Create"), ("Role", "Update"), ("Role", "Delete"), ("Role", "Get"),
                 ("RolePermission", "Create"), ("RolePermission", "Update"), ("RolePermission", "Delete"), ("RolePermission", "Get"),
                 ("StatusPedido", "Create"), ("StatusPedido", "Update"), ("StatusPedido", "Delete"), ("StatusPedido", "Get"),
-                ("Usuario", "Create"), ("Usuario", "Update"), ("Usuario", "Delete"), ("Usuario", "Get")
+                ("Usuario", "Create"), ("Usuario", "Update"), ("Usuario", "Delete"), ("Usuario", "Get"),
+                ("Printer", "Create"), ("Printer", "Get") 
             };
 
             // Defina permissões para GARÇOM
@@ -33,7 +34,8 @@ namespace System.Pdv.Infrastructure.Migrations
             {
                 ("Adicional", "Get"), ("Categoria", "Get"), ("Mesa", "Get"), ("MetodoPagamento", "Get"),
                 ("Pedido", "Create"), ("Pedido", "Update"), ("Pedido", "Delete"), ("Pedido", "Get"),
-                ("Produto", "Get"), ("StatusPedido", "Get")
+                ("Produto", "Get"), ("StatusPedido", "Get"),
+                ("Printer", "Create"), ("Printer", "Get") 
             };
 
             // Insere as permissões e associa às roles
@@ -82,7 +84,8 @@ namespace System.Pdv.Infrastructure.Migrations
                 ("Role", "Get"), ("Role", "Create"), ("Role", "Update"), ("Role", "Delete"),
                 ("RolePermission", "Get"), ("RolePermission", "Create"), ("RolePermission", "Update"), ("RolePermission", "Delete"),
                 ("StatusPedido", "Get"), ("StatusPedido", "Create"), ("StatusPedido", "Update"), ("StatusPedido", "Delete"),
-                ("Usuario", "Get"), ("Usuario", "Create"), ("Usuario", "Update"), ("Usuario", "Delete")
+                ("Usuario", "Get"), ("Usuario", "Create"), ("Usuario", "Update"), ("Usuario", "Delete"),
+                ("Printer", "Create"), ("Printer", "Get")
             };
 
             foreach (var (recurso, acao) in permissoes)

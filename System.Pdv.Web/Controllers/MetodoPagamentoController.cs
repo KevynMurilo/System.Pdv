@@ -31,8 +31,11 @@ public class MetodoPagamentoController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("MetodoPagamento", "Get")]
     [HttpGet]
+    [HasPermission("MetodoPagamento", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllMetodoPagamento()
     {
         try
@@ -49,8 +52,11 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [HasPermission("MetodoPagamento", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("MetodoPagamento", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByIdMetodoPagamento(Guid id)
     {
         try
@@ -67,8 +73,11 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [HasPermission("MetodoPagamento", "Create")]
     [HttpPost]
+    [HasPermission("MetodoPagamento", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateMetodoPagamento(MetodoPagamentoDto metodoPagamentoDto)
     {
         try
@@ -85,8 +94,12 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [HasPermission("MetodoPagamento", "Update")]
     [HttpPatch("{id:guid}")]
+    [HasPermission("MetodoPagamento", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateMetodoPagamento(Guid id, MetodoPagamentoDto metodoPagamentoDto)
     {
         try
@@ -103,8 +116,11 @@ public class MetodoPagamentoController : ControllerBase
         }
     }
 
-    [HasPermission("MetodoPagamento", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("MetodoPagamento", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteMetodoPagamento(Guid id)
     {
         try

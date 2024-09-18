@@ -31,8 +31,11 @@ public class StatusPedidoController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("StatusPedido", "Get")]
     [HttpGet]
+    [HasPermission("StatusPedido", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllStatusPedido()
     {
         try
@@ -49,8 +52,11 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [HasPermission("StatusPedido", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("StatusPedido", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByIdStatusPedido(Guid id)
     {
         try
@@ -67,8 +73,11 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [HasPermission("StatusPedido", "Create")]
     [HttpPost]
+    [HasPermission("StatusPedido", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateStatusPedido(StatusPedidoDto statusPedidoDto)
     {
         try
@@ -85,8 +94,12 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [HasPermission("StatusPedido", "Update")]
     [HttpPut("{id:guid}")]
+    [HasPermission("StatusPedido", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateStatusPedido(Guid id, StatusPedidoDto statusPedidoDto)
     {
         try
@@ -103,8 +116,11 @@ public class StatusPedidoController : ControllerBase
         }
     }
 
-    [HasPermission("StatusPedido", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("StatusPedido", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteStatusPedido(Guid id)
     {
         try

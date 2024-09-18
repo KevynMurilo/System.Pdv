@@ -30,8 +30,11 @@ public class CategoriaController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Categoria", "Get")]
     [HttpGet]
+    [HasPermission("Categoria", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllCategorias()
     {
         try
@@ -48,8 +51,11 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [HasPermission("Categoria", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Categoria", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByIdCategoria(Guid id)
     {
         try
@@ -66,8 +72,11 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [HasPermission("Categoria", "Create")]
     [HttpPost]
+    [HasPermission("Categoria", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateCategoria(CategoriaDto categoriaDto)
     {
         try
@@ -84,8 +93,11 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [HasPermission("Categoria", "Update")]
     [HttpPut("{id:guid}")]
+    [HasPermission("Categoria", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateCategoria(Guid id, CategoriaDto categoriaDto)
     {
         try
@@ -102,8 +114,11 @@ public class CategoriaController : ControllerBase
         }
     }
 
-    [HasPermission("Categoria", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("Categoria", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteCategoria(Guid id)
     {
         try

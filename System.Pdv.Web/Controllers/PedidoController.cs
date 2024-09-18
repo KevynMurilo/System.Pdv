@@ -37,8 +37,11 @@ public class PedidoController : ControllerBase
         _logger = logger;
     }
 
-    [HasPermission("Pedido", "Get")]
     [HttpGet]
+    [HasPermission("Pedido", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllPedidos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string tipoPedido = null, [FromQuery] string statusPedido = null)
     {
         try
@@ -55,8 +58,11 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HasPermission("Pedido", "Get")]
     [HttpGet("{numeroMesa:int}")]
+    [HasPermission("Pedido", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetPedidoByMesa(int numeroMesa, [FromQuery] string statusPedido = null)
     {
         try
@@ -73,8 +79,11 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HasPermission("Pedido", "Get")]
     [HttpGet("{id:guid}")]
+    [HasPermission("Pedido", "Get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByIdPedido(Guid id)
     {
         try
@@ -91,8 +100,11 @@ public class PedidoController : ControllerBase
         }
     }
 
+    [HttpPost("imprimir")]
     [HasPermission("Pedido", "Create")]
-    [HttpPost("print")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PrintPedidosByIds([FromBody] List<Guid> ids)
     {
         try
@@ -109,8 +121,12 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HasPermission("Pedido", "Create")]
     [HttpPost]
+    [HasPermission("Pedido", "Create")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreatePedido([FromBody] PedidoDto pedidoDto)
     {
         try
@@ -127,8 +143,11 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HasPermission("Pedido", "Update")]
     [HttpPatch("{id:guid}")]
+    [HasPermission("Pedido", "Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdatePedido(Guid id, PedidoDto pedidoDto)
     {
         try
@@ -145,8 +164,11 @@ public class PedidoController : ControllerBase
         }
     }
 
-    [HasPermission("Pedido", "Delete")]
     [HttpDelete("{id:guid}")]
+    [HasPermission("Pedido", "Delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeletePedido(Guid id)
     {
         try

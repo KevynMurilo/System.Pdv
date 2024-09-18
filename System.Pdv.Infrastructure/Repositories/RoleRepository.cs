@@ -17,6 +17,11 @@ public class RoleRepository : IRoleRepository
         return await _context.Roles.AsNoTracking().ToListAsync();
     }
 
+    public async Task<Role?> GetByNameAsync(string name)
+    {
+        return await _context.Roles.FirstOrDefaultAsync(r => r.Nome == name.ToUpper());
+    }
+
     public async Task<Role?> GetByIdAsync(Guid id)
     {
         return await _context.Roles
@@ -24,9 +29,21 @@ public class RoleRepository : IRoleRepository
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
+    public async Task AddAsync(Role role)
+    {
+        _context.Roles.Add(role);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateAsync(Role role)
     {
         _context.Roles.Update(role);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Role role)
+    {
+        _context.Roles?.Remove(role);
         await _context.SaveChangesAsync();
     }
 }
