@@ -1,398 +1,145 @@
-### **Rotas de Pedidos**
+# Sistema para Gerenciamento de Pedidos e Mesas
 
-1. **POST `/api/pedidos`**
-   - **Descrição**: Cria um novo pedido. Se o pedido for do tipo "externo" (delivery), um novo cliente é criado e o ID do cliente é associado ao pedido. Se o pedido for do tipo "interno" (consumo no local), o ID da mesa é associado ao pedido.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "tipo_pedido": "string",  // "interno" ou "externo"
-         "mesa_id": "int",         // Obrigatório se tipo_pedido = "interno"
-         "cliente": {              // Obrigatório se tipo_pedido = "externo"
-             "nome": "string",
-             "telefone": "string"
-         },
-         "garcom_id": "int",
-         "metodo_pagamento_id": "int",
-         "status_pedido_id": "int",
-         "data_pedido": "DateTime",
-         "itens": [
-             {
-                 "produto_id": "int",
-                 "quantidade": "int",
-                 "observacoes": "string",
-                 "adicionais": [
-                     {"adicional_id": "int"}
-                 ]
-             }
-         ]
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do pedido criado, incluindo informações sobre o cliente ou mesa, garçom, método de pagamento, status do pedido e itens.
+## Descrição
 
-2. **GET `/api/pedidos/{id}`**
-   - **Descrição**: Retorna os detalhes de um pedido específico.
-   - **Resposta**: 
-     - **200 OK**: Retorna os detalhes do pedido, incluindo informações sobre o cliente ou mesa, garçom, método de pagamento, status do pedido e itens.
-     - **404 Not Found**: Caso o pedido não seja encontrado.
+Este sistema foi desenvolvido para facilitar o gerenciamento de pedidos em estabelecimentos como hamburguerias e pizzarias. Ele permite o controle de mesas, clientes, produtos, categorias, métodos de pagamento, além de integrar com impressoras térmicas para impressão de pedidos. O sistema também oferece controle de acesso baseado em roles, com permissões configuráveis para diferentes tipos de usuários.
 
-3. **GET `/api/pedidos`**
-   - **Descrição**: Retorna a lista de todos os pedidos.
-   - **Resposta**:
-     - **200 OK**: Lista de pedidos, incluindo detalhes como ID, cliente/mesa, garçom, status, data e itens.
+## Passos para Começar a Usar o Sistema
 
-### **Rotas de Mesas**
+### 1. Configuração Inicial
 
-1. **GET `/api/mesas`**
-   - **Descrição**: Retorna a lista de mesas disponíveis.
-   - **Resposta**:
-     - **200 OK**: Lista de mesas, incluindo ID, número e status.
+Após clonar o repositório, siga os passos abaixo:
 
-2. **GET `/api/mesas/{id}`**
-   - **Descrição**: Retorna os detalhes de uma mesa específica.
-   - **Resposta**:
-     - **200 OK**: Detalhes da mesa, incluindo ID, número e status.
-     - **404 Not Found**: Caso a mesa não seja encontrada.
+1. Execute o comando `dotnet restore` na raiz do projeto para restaurar as dependências.
+2. Verifique as credenciais de conexão com o banco de dados no arquivo `appsettings.json`. Insira as informações corretas para a conexão com o seu banco.
+3. Suba as migrações no banco de dados com o seguinte comando:
+   ```bash
+   dotnet ef database update -s System.Pdv.Web/System.Pdv.Web.csproj -p System.Pdv.Infrastructure/System.Pdv.Infrastructure.csproj
+   ```
+4. O sistema já estará pronto para uso.
 
-3. **POST `/api/mesas`**
-   - **Descrição**: Cria uma nova mesa.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "numero": "int",
-         "status": "string"  // Ex: "disponível", "ocupada", etc.
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes da mesa criada.
+### 2. Roles e Usuário Padrão
 
-4. **PUT `/api/mesas/{id}`**
-   - **Descrição**: Atualiza os detalhes de uma mesa específica.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "numero": "int",
-         "status": "string"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes da mesa atualizada.
-     - **404 Not Found**: Caso a mesa não seja encontrada.
+Ao iniciar o sistema, serão criadas duas roles por padrão: `ADMIN` e `GARCOM`.
 
-5. **DELETE `/api/mesas/{id}`**
-   - **Descrição**: Exclui uma mesa específica.
-   - **Resposta**:
-     - **204 No Content**: A mesa foi excluída com sucesso.
-     - **404 Not Found**: Caso a mesa não seja encontrada.
+Um usuário ADMIN será criado automaticamente com as seguintes credenciais:
+- **Email**: `admin@pdv.com`
+- **Senha**: `admin@123`
 
-### **Rotas de Clientes**
+### 3. Permissões Padrão
 
-1. **GET `/api/clientes`**
-   - **Descrição**: Retorna a lista de clientes cadastrados.
-   - **Resposta**:
-     - **200 OK**: Lista de clientes, incluindo ID, nome e telefone.
+As permissões pré-definidas no sistema são associadas às roles criadas:
 
-2. **GET `/api/clientes/{id}`**
-   - **Descrição**: Retorna os detalhes de um cliente específico.
-   - **Resposta**:
-     - **200 OK**: Detalhes do cliente, incluindo ID, nome e telefone.
-     - **404 Not Found**: Caso o cliente não seja encontrado.
+#### Role ADMIN
 
-3. **POST `/api/clientes`**
-   - **Descrição**: Cria um novo cliente.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "telefone": "string"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do cliente criado.
+A role ADMIN possui permissões completas para gerenciar todos os recursos do sistema, como:
 
-4. **PUT `/api/clientes/{id}`**
-   - **Descrição**: Atualiza os detalhes de um cliente específico.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "telefone": "string"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes do cliente atualizado.
-     - **404 Not Found**: Caso o cliente não seja encontrado.
+- Adicionais
+  - Criar, atualizar, excluir e visualizar.
+- Categorias
+  - Criar, atualizar, excluir e visualizar.
+- Clientes
+  - Criar, atualizar, excluir e visualizar.
+- Mesas
+  - Criar, atualizar, excluir e visualizar.
+- Métodos de Pagamento
+  - Criar, atualizar, excluir e visualizar.
+- Pedidos
+  - Criar, atualizar, excluir e visualizar.
+- Produtos
+  - Criar, atualizar, excluir e visualizar.
+- Roles e Permissões
+  - Gerenciar roles e suas permissões.
+- Status de Pedido
+  - Criar, atualizar, excluir e visualizar.
+- Usuários
+  - Gerenciar usuários do sistema.
 
-5. **DELETE `/api/clientes/{id}`**
-   - **Descrição**: Exclui um cliente específico.
-   - **Resposta**:
-     - **204 No Content**: O cliente foi excluído com sucesso.
-     - **404 Not Found**: Caso o cliente não seja encontrado.
+#### Role GARCOM
 
-### **Rotas de Garçons**
+A role GARCOM possui permissões restritas, focando em pedidos e visualização de dados:
 
-1. **GET `/api/garcons`**
-   - **Descrição**: Retorna a lista de garçons cadastrados.
-   - **Resposta**:
-     - **200 OK**: Lista de garçons, incluindo ID, nome e email.
+- Adicionais, Categorias, Mesas, Métodos de Pagamento, Produtos, Status de Pedido
+  - Apenas visualizar.
+- Pedidos
+  - Criar, atualizar, excluir e visualizar.
 
-2. **GET `/api/garcons/{id}`**
-   - **Descrição**: Retorna os detalhes de um garçom específico.
-   - **Resposta**:
-     - **200 OK**: Detalhes do garçom, incluindo ID, nome e email.
-     - **404 Not Found**: Caso o garçom não seja encontrado.
+### 4. Gerenciamento de Permissões
 
-3. **POST `/api/garcons`**
-   - **Descrição**: Cria um novo garçom.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "email": "string",
-         "password": "string"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do garçom criado.
+O ADMIN pode atribuir ou remover permissões das roles existentes através das seguintes rotas:
 
-4. **PUT `/api/garcons/{id}`**
-   - **Descrição**: Atualiza os detalhes de um garçom específico.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "email": "string",
-         "password": "string"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes do garçom atualizado.
-     - **404 Not Found**: Caso o garçom não seja encontrado.
+- **Atribuir Permissões a uma Role** (POST): `api/PermissaoHasRole/atribuir`
+  - Exemplo de payload:
+    ```json
+    {
+      "roleIds": ["role-id"],
+      "permissaoIds": ["permissao-id"]
+    }
+    ```
 
-5. **DELETE `/api/garcons/{id}`**
-   - **Descrição**: Exclui um garçom específico.
-   - **Resposta**:
-     - **204 No Content**: O garçom foi excluído com sucesso.
-     - **404 Not Found**: Caso o garçom não seja encontrado.
+- **Remover Permissões de uma Role** (DELETE): `api/PermissaoHasRole/remover`
 
-### **Rotas de Produtos**
+### 5. Configuração de Impressoras
 
-1. **GET `/api/produtos`**
-   - **Descrição**: Retorna a lista de produtos disponíveis.
-   - **Resposta**:
-     - **200 OK**: Lista de produtos, incluindo ID, nome, descrição, preço, disponibilidade e categoria.
+Para gerenciar as impressoras do sistema:
 
-2. **GET `/api/produtos/{id}`**
-   - **Descrição**: Retorna os detalhes de um produto específico.
-   - **Resposta**:
-     - **200 OK**: Detalhes do produto, incluindo ID, nome, descrição, preço, disponibilidade e categoria.
-     - **404 Not Found**: Caso o produto não seja encontrado.
+- **Listar Impressoras Disponíveis** (GET): `api/Printer/disponiveis`.
+- **Selecionar uma Impressora** (POST): `api/Printer/selecionar`.
+- **Verificar Impressora Selecionada** (GET): `api/Printer/selecionada`.
 
-3. **POST `/api/produtos`**
-   - **Descrição**: Cria um novo produto.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "descricao": "string",
-         "preco": "float",
-         "disponivel": "boolean",
-         "categoria_id": "int"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do produto criado.
+### 6. Cadastrando Usuários e Recursos
 
-4. **PUT `/api/produtos/{id}`**
-   - **Descrição**: Atualiza os detalhes de um produto específico.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "descricao": "string",
-         "preco": "float",
-         "disponivel": "boolean",
-         "categoria_id": "int"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes do produto atualizado.
-     - **404 Not Found**: Caso o produto não seja encontrado.
+- Após configurar o sistema, cadastre os usuários, associando-os a roles com os IDs correspondentes.
+- Cadastrar itens como adicionais, categorias, mesas (Livre = 0, Ocupada = 1, Reservada = 2), métodos de pagamento e produtos (associando-os a uma categoria), além de status de pedidos e novas roles, se necessário.
 
-5. **DELETE `/api/produtos/{id}`**
-   - **Descrição**: Exclui um produto específico.
-   - **Resposta**:
-     - **204 No Content**
+### 7. Realizando Pedidos
 
-: O produto foi excluído com sucesso.
-     - **404 Not Found**: Caso o produto não seja encontrado.
+Para criar um pedido, utilize a rota `api/Pedido`:
 
-### **Rotas de Categorias**
+- **Criar Pedido** (POST): 
+  - Para **pedidos internos** (mesa física), defina o campo `tipoPedido` como `0` e informe o `mesaId`.
+  - Para **pedidos externos** (cliente vai buscar), defina o `tipoPedido` como `1` e não informe o `mesaId`.
 
-1. **GET `/api/categorias`**
-   - **Descrição**: Retorna a lista de categorias disponíveis.
-   - **Resposta**:
-     - **200 OK**: Lista de categorias, incluindo ID e nome.
+Exemplo de payload para um pedido interno:
+```json
+{
+  "nomeCliente": "string",
+  "telefoneCliente": "string",
+  "mesaId": "mesa-id",
+  "tipoPedido": 0,
+  "metodoPagamentoId": "pagamento-id",
+  "statusPedidoId": "status-id",
+  "itens": [
+    {
+      "produtoId": "produto-id",
+      "quantidade": 1,
+      "observacoes": "string",
+      "adicionalId": ["adicional-id"]
+    }
+  ]
+}
+```
 
-2. **GET `/api/categorias/{id}`**
-   - **Descrição**: Retorna os detalhes de uma categoria específica.
-   - **Resposta**:
-     - **200 OK**: Detalhes da categoria, incluindo ID e nome.
-     - **404 Not Found**: Caso a categoria não seja encontrada.
+### 8. Impressão de Pedidos
 
-3. **POST `/api/categorias`**
-   - **Descrição**: Cria uma nova categoria.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes da categoria criada.
+- **Reimprimir Pedido** (POST): `api/Pedido/imprimir`, passando os IDs dos pedidos a serem impressos:
+  ```json
+  ["pedido-id"]
+  ```
 
-4. **PUT `/api/categorias/{id}`**
-   - **Descrição**: Atualiza os detalhes de uma categoria específica.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes da categoria atualizada.
-     - **404 Not Found**: Caso a categoria não seja encontrada.
+### 9. Atualização de Pedidos
 
-5. **DELETE `/api/categorias/{id}`**
-   - **Descrição**: Exclui uma categoria específica.
-   - **Resposta**:
-     - **204 No Content**: A categoria foi excluída com sucesso.
-     - **404 Not Found**: Caso a categoria não seja encontrada.
+- **Atualizar Pedido** (PATCH): Para atualizar um pedido, utilize a rota `api/Pedido` com o método `PATCH`. O JSON enviado substituirá o pedido original, mas apenas os itens enviados serão alterados ou removidos.
 
-### **Rotas de Métodos de Pagamento**
 
-1. **GET `/api/metodos-pagamento`**
-   - **Descrição**: Retorna a lista de métodos de pagamento disponíveis.
-   - **Resposta**:
-     - **200 OK**: Lista de métodos de pagamento, incluindo ID e nome.
+## **Documentação Completa da API**
 
-2. **GET `/api/metodos-pagamento/{id}`**
-   - **Descrição**: Retorna os detalhes de um método de pagamento específico.
-   - **Resposta**:
-     - **200 OK**: Detalhes do método de pagamento, incluindo ID e nome.
-     - **404 Not Found**: Caso o método de pagamento não seja encontrado.
+Para obter mais detalhes sobre todos os endpoints disponíveis e testar as funcionalidades da API, acesse a documentação interativa via Swagger. Nele, você pode explorar as rotas, ver exemplos de requisições e respostas, além de testar os endpoints diretamente:
 
-3. **POST `/api/metodos-pagamento`**
-   - **Descrição**: Cria um novo método de pagamento.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do método de pagamento criado.
+- **HTTPS**:  
+  [localhost:7166/swagger/index.html](https://localhost:7166/swagger/index.html)
 
-4. **PUT `/api/metodos-pagamento/{id}`**
-   - **Descrição**: Atualiza os detalhes de um método de pagamento específico.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes do método de pagamento atualizado.
-     - **404 Not Found**: Caso o método de pagamento não seja encontrado.
+- **HTTP**:  
+  [localhost:5119/swagger/index.html](http://localhost:5119/swagger/index.html)
 
-5. **DELETE `/api/metodos-pagamento/{id}`**
-   - **Descrição**: Exclui um método de pagamento específico.
-   - **Resposta**:
-     - **204 No Content**: O método de pagamento foi excluído com sucesso.
-     - **404 Not Found**: Caso o método de pagamento não seja encontrado.
-
-### **Rotas de Status de Pedido**
-
-1. **GET `/api/status-pedido`**
-   - **Descrição**: Retorna a lista de status possíveis para um pedido.
-   - **Resposta**:
-     - **200 OK**: Lista de status de pedidos, incluindo ID e nome.
-
-2. **GET `/api/status-pedido/{id}`**
-   - **Descrição**: Retorna os detalhes de um status de pedido específico.
-   - **Resposta**:
-     - **200 OK**: Detalhes do status de pedido, incluindo ID e nome.
-     - **404 Not Found**: Caso o status de pedido não seja encontrado.
-
-3. **POST `/api/status-pedido`**
-   - **Descrição**: Cria um novo status de pedido.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do status de pedido criado.
-
-4. **PUT `/api/status-pedido/{id}`**
-   - **Descrição**: Atualiza os detalhes de um status de pedido específico.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes do status de pedido atualizado.
-     - **404 Not Found**: Caso o status de pedido não seja encontrado.
-
-5. **DELETE `/api/status-pedido/{id}`**
-   - **Descrição**: Exclui um status de pedido específico.
-   - **Resposta**:
-     - **204 No Content**: O status de pedido foi excluído com sucesso.
-     - **404 Not Found**: Caso o status de pedido não seja encontrado.
-
-### **Rotas de Adicionais**
-
-1. **GET `/api/adicionais`**
-   - **Descrição**: Retorna a lista de adicionais disponíveis.
-   - **Resposta**:
-     - **200 OK**: Lista de adicionais, incluindo ID, nome e preço.
-
-2. **GET `/api/adicionais/{id}`**
-   - **Descrição**: Retorna os detalhes de um adicional específico.
-   - **Resposta**:
-     - **200 OK**: Detalhes do adicional, incluindo ID, nome e preço.
-     - **404 Not Found**: Caso o adicional não seja encontrado.
-
-3. **POST `/api/adicionais`**
-   - **Descrição**: Cria um novo adicional.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "preco": "float"
-     }
-     ```
-   - **Resposta**:
-     - **201 Created**: Retorna os detalhes do adicional criado.
-
-4. **PUT `/api/adicionais/{id}`**
-   - **Descrição**: Atualiza os detalhes de um adicional específico.
-   - **Corpo da Requisição**:
-     ```json
-     {
-         "nome": "string",
-         "preco": "float"
-     }
-     ```
-   - **Resposta**:
-     - **200 OK**: Retorna os detalhes do adicional atualizado.
-     - **404 Not Found**: Caso o adicional não seja encontrado.
-
-5. **DELETE `/api/adicionais/{id}`**
-   - **Descrição**: Exclui um adicional específico.
-   - **Resposta**:
-     - **204 No Content**: O adicional foi excluído com sucesso.
-     - **404 Not Found**: Caso o adicional não seja encontrado.
+---
