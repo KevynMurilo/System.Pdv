@@ -14,7 +14,6 @@ public class ValidarPedidosUseCase : IValidarPedidosUseCase
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IMetodoPagamentoRepository _metodoPagamentoRepository;
     private readonly IStatusPedidoRepository _statusPedidoRepository;
-    private readonly IProcessarItensPedidoUseCase _processarItensPedido;
 
     public ValidarPedidosUseCase(
         IMesaRepository mesaRepository,
