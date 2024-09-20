@@ -16,7 +16,12 @@ Após clonar o repositório, siga os passos abaixo:
    ```bash
    dotnet ef database update -s System.Pdv.Web/System.Pdv.Web.csproj -p System.Pdv.Infrastructure/System.Pdv.Infrastructure.csproj
    ```
-4. O sistema já estará pronto para uso.
+4. Para rodar o backend é só colocar esse comando:
+   ```bash
+   dotnet run -p System.Pdv.Web/System.Pdv.Web.csproj
+   ```
+   
+5. O sistema já estará pronto para uso.
 
 ### 2. Roles e Usuário Padrão
 
