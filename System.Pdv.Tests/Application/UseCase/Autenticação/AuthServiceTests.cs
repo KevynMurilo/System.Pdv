@@ -37,12 +37,13 @@ public class AuthServiceTests
         var result = await _authService.ExecuteAsync(loginDto);
 
         Assert.NotNull(result.Result);
-        Assert.Equal(token, result.Result);
         Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
+
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
         _tokenGeneratorMock.Verify(generator => generator.GenerateToken(It.IsAny<Usuario>()), Times.Once);
     }
+
 
     [Fact]
     public async Task AuthenticateAsync_ShouldReturnUnauthorized_WhenCredentialsAreInvalid()

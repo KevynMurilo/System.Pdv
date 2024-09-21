@@ -22,22 +22,26 @@ public class AuthUseCase : IAuthUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<string>> ExecuteAsync(LoginDto loginDto)
+    public async Task<OperationResult<dynamic>> ExecuteAsync(LoginDto loginDto)
     {
         try
         {
             var usuario = await _usuarioRepository.GetByEmail(loginDto.Email);
             if (usuario != null && BCrypt.Net.BCrypt.Verify(loginDto.Password, usuario.PasswordHash))
             {
-                return new OperationResult<string> { Result = _tokenGeneratorGarcom.GenerateToken(usuario) };
+                string token = _tokenGeneratorGarcom.GenerateToken(usuario);
+
+                var useWithToken = new { usuario, token };
+
+                return new OperationResult<dynamic> { Result = useWithToken };
             }
 
-            return new OperationResult<string> { Message = "Credenciais inválidas", StatusCode = 401 };
+            return new OperationResult<dynamic> { Message = "Credenciais inválidas", StatusCode = 401 };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao logar usuário");
-            return new OperationResult<string> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<dynamic> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }
