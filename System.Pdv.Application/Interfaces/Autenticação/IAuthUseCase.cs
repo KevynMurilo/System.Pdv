@@ -5,5 +5,5 @@ namespace System.Pdv.Application.Interfaces.Auth;
 
 public interface IAuthUseCase
 {
-    Task<OperationResult<string>> ExecuteAsync(LoginDto loginDto);
+    Task<OperationResult<dynamic>> ExecuteAsync(LoginDto loginDto);
 }

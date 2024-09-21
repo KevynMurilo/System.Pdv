@@ -27,11 +27,10 @@ public class AutenticaçãoController : ControllerBase
     {
         try
         {
-            var token = await _authService.ExecuteAsync(loginDto);
-
-            if (token == null) return Unauthorized();
-
-            return Ok(new { Token = token });
+            var result = await _authService.ExecuteAsync(loginDto);
+            return result.StatusCode == 200
+                ? Ok(result)
+                : StatusCode(result.StatusCode, result);
         }
         catch (Exception ex)
         {
