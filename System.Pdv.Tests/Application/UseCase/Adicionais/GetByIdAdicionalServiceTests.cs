@@ -62,7 +62,7 @@ public class GetByIdAdicionalServiceTests
 
         var result = await _getByIdAdicionalService.ExecuteAsync(adicionalId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
         _adicionalRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

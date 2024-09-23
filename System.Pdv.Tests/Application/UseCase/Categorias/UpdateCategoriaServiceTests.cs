@@ -33,7 +33,7 @@ public class UpdateCategoriaServiceTests
         var result = await _service.ExecuteAsync(id, categoriaDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(categoriaDto.Nome.ToUpper(), result.Result.Nome);
         _categoriasRepositoryMock.Verify(repo => repo.GetByIdAsync(id), Times.Once);
         _categoriasRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Categoria>()), Times.Once);
@@ -50,7 +50,7 @@ public class UpdateCategoriaServiceTests
         var result = await _service.ExecuteAsync(id, categoriaDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Categoria não encontrada", result.Message);
         _categoriasRepositoryMock.Verify(repo => repo.GetByIdAsync(id), Times.Once);
@@ -68,7 +68,7 @@ public class UpdateCategoriaServiceTests
         var result = await _service.ExecuteAsync(id, categoriaDto);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado:", result.Message);
         _categoriasRepositoryMock.Verify(repo => repo.GetByIdAsync(id), Times.Once);

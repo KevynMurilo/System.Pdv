@@ -29,7 +29,7 @@ public class DeleteCategoriaServiceTests
         var result = await _service.ExecuteAsync(categoriaId);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Categoria não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
         _repositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -51,7 +51,7 @@ public class DeleteCategoriaServiceTests
 
         Assert.NotNull(result);
         Assert.Equal(200, result.StatusCode);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Categoria deletada com sucesso!", result.Message);
         _repositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _repositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Categoria>()), Times.Once);
@@ -68,7 +68,7 @@ public class DeleteCategoriaServiceTests
 
         var result = await _service.ExecuteAsync(categoriaId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _repositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

@@ -34,7 +34,7 @@ public class GetByNameClienteUseCaseTests
         var result = await _getByNameClienteUseCase.ExecuteAsync(nome);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(clientes, result.Result);
         Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
@@ -62,7 +62,7 @@ public class GetByNameClienteUseCaseTests
 
         var result = await _getByNameClienteUseCase.ExecuteAsync(nome);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Erro de teste", result.Message);
         Assert.Equal(500, result.StatusCode);
     }

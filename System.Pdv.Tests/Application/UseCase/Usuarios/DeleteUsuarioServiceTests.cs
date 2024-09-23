@@ -36,7 +36,7 @@ public class DeleteUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(200, result.StatusCode);
         Assert.Equal("Usuário deletado com sucesso", result.Message);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -54,7 +54,7 @@ public class DeleteUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Usuário não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -72,7 +72,7 @@ public class DeleteUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

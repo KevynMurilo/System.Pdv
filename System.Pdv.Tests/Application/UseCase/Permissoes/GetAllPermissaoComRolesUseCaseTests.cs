@@ -58,7 +58,7 @@ public class GetAllPermissaoComRolesUseCaseTests
 
         var result = await _useCase.ExecuteAsync(1, 10, null, null);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.StartsWith("Erro inesperado:", result.Message);
         Assert.Equal(500, result.StatusCode);
     }

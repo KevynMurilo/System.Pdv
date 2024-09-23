@@ -46,7 +46,7 @@ public class CreateUsuarioServiceTests
         var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.NotNull(result.Result);
         Assert.Equal(usuarioDto.Nome, result.Result.Nome);
         Assert.Equal(200, result.StatusCode);
@@ -74,7 +74,7 @@ public class CreateUsuarioServiceTests
         var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Role não encontrada", result.Message);
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
@@ -94,7 +94,7 @@ public class CreateUsuarioServiceTests
 
         var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(409, result.StatusCode);
         Assert.Equal("Email já cadastrado", result.Message);
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
@@ -120,7 +120,7 @@ public class CreateUsuarioServiceTests
 
         var result = await _createUsuarioService.ExecuteAsync(usuarioDto);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);

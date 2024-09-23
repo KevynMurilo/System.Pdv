@@ -36,7 +36,7 @@ public class DeleteRoleUseCase : IDeleteRoleUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao deletar role");
-            return new OperationResult<Role> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Role> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

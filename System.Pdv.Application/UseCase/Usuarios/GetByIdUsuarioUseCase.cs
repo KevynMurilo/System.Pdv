@@ -32,7 +32,7 @@ public class GetByIdUsuarioUseCase : IGetByIdUsuarioUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao procurar usuário por id");
-            return new OperationResult<Usuario> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Usuario> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

@@ -71,7 +71,7 @@ public class CreateMesaServiceTests
 
         var result = await _createMesaService.ExecuteAsync(mesaDto);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         _mesaRepositoryMock.Verify(repo => repo.GetByNumberAsync(It.IsAny<int>()), Times.Once);

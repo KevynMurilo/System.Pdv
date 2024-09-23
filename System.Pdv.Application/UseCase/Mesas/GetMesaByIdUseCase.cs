@@ -31,7 +31,7 @@ public class GetMesaByIdUseCase : IGetMesaByIdUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar mesa por id");
-            return new OperationResult<Mesa> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Mesa> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

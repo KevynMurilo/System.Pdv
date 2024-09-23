@@ -32,7 +32,7 @@ public class GetPedidosByMesaUseCase : IGetPedidosByMesaUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listrar pedidos de uma mesa especifica");
-            return new OperationResult<IEnumerable<Pedido>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<Pedido>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

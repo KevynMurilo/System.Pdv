@@ -31,7 +31,7 @@ public class GetAllProdutoUseCase : IGetAllProdutoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar produtos");
-            return new OperationResult<IEnumerable<Produto>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<Produto>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

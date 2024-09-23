@@ -48,7 +48,7 @@ public class CreateMetodoPagamentoServiceTests
         Assert.NotNull(result);
         Assert.Null(result.Message);
         Assert.Equal("CARTÃO DE DÉBITO", result.Result.Nome);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(200, result.StatusCode);
         _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);
         _metodoPagamentoRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<MetodoPagamento>()), Times.Once);
@@ -64,7 +64,7 @@ public class CreateMetodoPagamentoServiceTests
         var result = await _service.ExecuteAsync(metodoPagamentoDto);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado:", result.Message);
         _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByNameAsync(It.IsAny<string>()), Times.Once);

@@ -46,7 +46,7 @@ public class CreateProdutoUseCase : ICreateProdutoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao registrar produto");
-            return new OperationResult<Produto> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Produto> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

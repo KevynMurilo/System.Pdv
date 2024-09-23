@@ -57,7 +57,7 @@ public class GetByIdProdutoServiceTests
 
         var result = await _getByIdProdutoService.ExecuteAsync(produtoId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

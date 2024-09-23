@@ -78,7 +78,7 @@ public class CreatePedidoUseCase : ICreatePedidoUseCase
         {
             await _transactionManager.RollbackTransactionAsync();
             _logger.LogError(ex, "Ocorreu um erro ao registrar pedido");
-            return new OperationResult<Pedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Pedido> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 

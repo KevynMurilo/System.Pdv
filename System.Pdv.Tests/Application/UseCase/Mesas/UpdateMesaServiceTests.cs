@@ -33,7 +33,7 @@ public class UpdateMesaServiceTests
 
         var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Mesa não encontrada", result.Message);
         _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -51,7 +51,7 @@ public class UpdateMesaServiceTests
 
         var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(2, result.Result.Numero);
         Assert.Equal(StatusMesa.Ocupada, result.Result.Status);
         _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -69,7 +69,7 @@ public class UpdateMesaServiceTests
 
         var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.StartsWith("Erro inesperado:", result.Message);
         _mesaRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

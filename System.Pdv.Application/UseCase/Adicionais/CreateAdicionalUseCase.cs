@@ -34,7 +34,7 @@ public class CreateAdicionalUseCase : ICreateAdicionalUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao cadastrar adicional");
-            return new OperationResult<ItemAdicional> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<ItemAdicional> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

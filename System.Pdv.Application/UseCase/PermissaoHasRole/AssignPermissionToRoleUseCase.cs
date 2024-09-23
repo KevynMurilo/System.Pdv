@@ -54,7 +54,7 @@ public class AssignPermissionToRoleUseCase : IAssignPermissionToRoleUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao atribuir permissões às funções.");
-            return new OperationResult<bool> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<bool> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

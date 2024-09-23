@@ -62,7 +62,7 @@ public class GetProdutoByCategoriaServiceTests
 
         var result = await _getProdutoByCategoriaService.ExecuteAsync(categoriaId, 1, 10);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _produtoRepositoryMock.Verify(repo => repo.GetProdutoByCategoria(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);

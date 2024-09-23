@@ -47,7 +47,7 @@ public class UpdateProdutoUseCase : IUpdateProdutoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao atualizar produto");
-            return new OperationResult<Produto> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Produto> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

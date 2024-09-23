@@ -32,7 +32,7 @@ public class DeleteStatusPedidoUseCase : IDeleteStatusPedidoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao deletar status de pedido");
-            return new OperationResult<StatusPedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<StatusPedido> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

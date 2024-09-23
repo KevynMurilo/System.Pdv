@@ -59,7 +59,7 @@ public class GetAllProdutoServiceTests
 
         var result = await _getAllProdutoService.ExecuteAsync(1, 10);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _produtoRepositoryMock.Verify(repo => repo.GetAllAsync(1, 10), Times.Once);

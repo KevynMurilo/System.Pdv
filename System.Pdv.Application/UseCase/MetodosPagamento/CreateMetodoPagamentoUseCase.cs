@@ -36,7 +36,7 @@ public class CreateMetodoPagamentoUseCase : ICreateMetodoPagamentoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao cadastrar método de pagamento");
-            return new OperationResult<MetodoPagamento> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<MetodoPagamento> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

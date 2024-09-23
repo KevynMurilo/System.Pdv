@@ -41,7 +41,7 @@ public class AuthUseCase : IAuthUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao logar usuário");
-            return new OperationResult<dynamic> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<dynamic> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

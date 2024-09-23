@@ -41,7 +41,7 @@ public class PrintPedidoByIdsUseCaseTests
         var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(pedidos, result.Result);
         Assert.Equal("Pedidos impressos com sucesso", result.Message);
 
@@ -82,7 +82,7 @@ public class PrintPedidoByIdsUseCaseTests
         var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(pedidos, result.Result);
         Assert.Equal("Ocorreu um erro ao imprimir os pedidos", result.Message);
 
@@ -102,7 +102,7 @@ public class PrintPedidoByIdsUseCaseTests
         var result = await _printPedidoByIdsUseCase.ExecuteAsync(pedidoIds);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Equal($"Erro inesperado: {exceptionMessage}", result.Message);
 

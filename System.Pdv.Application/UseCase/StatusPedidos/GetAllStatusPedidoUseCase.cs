@@ -30,7 +30,7 @@ public class GetAllStatusPedidoUseCase : IGetAllStatusPedidoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao criar status de pedido");
-            return new OperationResult<IEnumerable<StatusPedido>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<StatusPedido>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

@@ -38,7 +38,7 @@ public class GetAllPermissaoByRoleIdUseCaseTests
 
         Assert.NotNull(result.Result);
         Assert.Equal(permissoes.Count, result.Result.Count());
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
     }
@@ -66,7 +66,7 @@ public class GetAllPermissaoByRoleIdUseCaseTests
 
         var result = await _useCase.ExecuteAsync(roleId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.StartsWith("Erro inesperado:", result.Message);
         Assert.Equal(500, result.StatusCode);
     }

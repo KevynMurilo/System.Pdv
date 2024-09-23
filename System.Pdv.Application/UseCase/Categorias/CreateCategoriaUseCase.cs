@@ -36,7 +36,7 @@ public class CreateCategoriaUseCase : ICreateCategoriaUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao cadastrar categoria");
-            return new OperationResult<Categoria> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Categoria> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

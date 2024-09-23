@@ -34,7 +34,7 @@ public class GetAllCategoriaUseCase : IGetAllCategoriaUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar categorias");
-            return new OperationResult<IEnumerable<Categoria>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<Categoria>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

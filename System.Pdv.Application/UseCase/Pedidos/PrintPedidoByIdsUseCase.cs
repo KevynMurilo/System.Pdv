@@ -41,7 +41,7 @@ public class PrintPedidoByIdsUseCase : IPrintPedidoByIdsUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao imprimir pedido por IDs");
-            return new OperationResult<List<Pedido>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<List<Pedido>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }
