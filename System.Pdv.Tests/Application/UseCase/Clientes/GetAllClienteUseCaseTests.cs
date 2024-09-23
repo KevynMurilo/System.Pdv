@@ -31,7 +31,7 @@ public class GetAllClienteUseCaseTests
 
         Assert.Equal(404, result.StatusCode);
         Assert.Equal("Nenhum cliente encontrado", result.Message);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         _repositoryMock.Verify(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 
@@ -52,7 +52,7 @@ public class GetAllClienteUseCaseTests
         Assert.NotNull(result);
         Assert.Equal(clientes, result.Result);
         Assert.Equal(200, result.StatusCode);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         _repositoryMock.Verify(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
 
@@ -66,7 +66,7 @@ public class GetAllClienteUseCaseTests
 
         var result = await _clienteUseCase.ExecuteAsync(1, 10);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado", result.Message);
         _repositoryMock.Verify(repo => repo.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);

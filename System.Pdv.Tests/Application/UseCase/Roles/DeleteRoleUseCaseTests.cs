@@ -28,7 +28,7 @@ public class DeleteRoleUseCaseTests
 
         var result = await _deleteRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Role não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByIdAsync(roleId), Times.Once);
@@ -44,7 +44,7 @@ public class DeleteRoleUseCaseTests
 
         var result = await _deleteRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Não é possível excluir as roles padrão", result.Message);
         Assert.Equal(400, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByIdAsync(roleId), Times.Once);
@@ -61,7 +61,7 @@ public class DeleteRoleUseCaseTests
 
         var result = await _deleteRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal($"Role {role.Nome} deletado com sucesso", result.Message);
         Assert.Equal(200, result.StatusCode);
         Assert.Equal(role, result.Result);
@@ -77,7 +77,7 @@ public class DeleteRoleUseCaseTests
 
         var result = await _deleteRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.StartsWith("Erro inesperado:", result.Message);
         Assert.Equal(500, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByIdAsync(roleId), Times.Once);

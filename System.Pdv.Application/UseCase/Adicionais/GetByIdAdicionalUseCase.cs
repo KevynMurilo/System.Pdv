@@ -32,7 +32,7 @@ public class GetByIdAdicionalUseCase : IGetByIdAdicionalUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao procurar adicional por id");
-            return new OperationResult<ItemAdicional> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<ItemAdicional> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

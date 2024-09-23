@@ -33,7 +33,7 @@ public class GetByIdCategoriaServiceTests
         Assert.NotNull(result);
         Assert.Equal(categoria, result.Result);
         Assert.Equal(200, result.StatusCode);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         _repositoryMock.Verify(repo => repo.GetByIdAsync(categoriaId), Times.Once);
     }
 
@@ -50,7 +50,7 @@ public class GetByIdCategoriaServiceTests
         Assert.Null(result.Result);
         Assert.Equal("Categoria não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         _repositoryMock.Verify(repo => repo.GetByIdAsync(categoriaId), Times.Once);
     }
 

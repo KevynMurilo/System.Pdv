@@ -44,7 +44,7 @@ public class UpdateUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId, usuarioDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(200, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
@@ -65,7 +65,7 @@ public class UpdateUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId, usuarioDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Usuário não encontrado", result.Message);
         Assert.Equal(404, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -96,7 +96,7 @@ public class UpdateUsuarioServiceTests
 
         Assert.NotNull(result);
         Assert.Equal("Role não encontrada", result.Message);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(404, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _usuarioRepositoryMock.Verify(repo => repo.GetByEmail(It.IsAny<string>()), Times.Once);
@@ -120,7 +120,7 @@ public class UpdateUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId, usuarioDto);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Email já cadastrado", result.Message);
         Assert.Equal(409, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -142,7 +142,7 @@ public class UpdateUsuarioServiceTests
         var result = await _service.ExecuteAsync(usuarioId, usuarioDto);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _usuarioRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

@@ -29,7 +29,7 @@ public class CreateRoleUseCaseTests
 
         var result = await _createRoleUseCase.ExecuteAsync(roleDto);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Role já cadastrada", result.Message);
         Assert.Equal(409, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByNameAsync(roleDto.Nome), Times.Once);
@@ -45,7 +45,7 @@ public class CreateRoleUseCaseTests
 
         var result = await _createRoleUseCase.ExecuteAsync(roleDto);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Null(result.Message);
         Assert.NotNull(result.Result);
         Assert.Equal(roleDto.Nome.ToUpper(), result.Result.Nome);
@@ -61,7 +61,7 @@ public class CreateRoleUseCaseTests
 
         var result = await _createRoleUseCase.ExecuteAsync(roleDto);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.StartsWith("Erro inesperado:", result.Message);
         Assert.Equal(500, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByNameAsync(roleDto.Nome), Times.Once);

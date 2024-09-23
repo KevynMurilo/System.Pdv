@@ -29,7 +29,7 @@ public class GetByNameClienteUseCase : IGetByNameClienteUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar clientes com nome especifico");
-            return new OperationResult<IEnumerable<Cliente>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<Cliente>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

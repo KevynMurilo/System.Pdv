@@ -62,7 +62,7 @@ public class DeleteProdutoServiceTests
 
         var result = await _deleteProdutoService.ExecuteAsync(produtoId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(produtoId), Times.Once);

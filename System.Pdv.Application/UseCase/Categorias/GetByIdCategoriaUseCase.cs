@@ -31,7 +31,7 @@ public class GetByIdCategoriaUseCase : IGetByIdCategoriaUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao procurar categoria por id");
-            return new OperationResult<Categoria> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Categoria> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

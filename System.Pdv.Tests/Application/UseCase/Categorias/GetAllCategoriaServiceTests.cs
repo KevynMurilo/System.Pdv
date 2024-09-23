@@ -29,7 +29,7 @@ public class GetAllCategoriaServiceTests
         Assert.NotNull(result);
         Assert.Equal("Nenhuma categoria encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         _repositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
     }
 
@@ -47,7 +47,7 @@ public class GetAllCategoriaServiceTests
         var result = await _service.ExecuteAsync();
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(categorias, result.Result);
         Assert.Equal(200, result.StatusCode);
         _repositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
@@ -61,7 +61,7 @@ public class GetAllCategoriaServiceTests
 
         var result = await _service.ExecuteAsync();
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database Error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _repositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);

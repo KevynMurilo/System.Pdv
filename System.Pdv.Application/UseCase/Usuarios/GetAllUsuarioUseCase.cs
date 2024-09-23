@@ -31,7 +31,7 @@ public class GetAllUsuarioUseCase : IGetAllUsuarioUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao buscar usuário");
-            return new OperationResult<IEnumerable<Usuario>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<Usuario>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

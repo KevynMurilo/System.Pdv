@@ -38,7 +38,7 @@ public class CreateRoleUseCase : ICreateRoleUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao cadastrar role");
-            return new OperationResult<Role> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Role> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

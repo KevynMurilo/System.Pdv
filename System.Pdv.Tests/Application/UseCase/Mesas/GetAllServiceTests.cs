@@ -27,7 +27,7 @@ public class GetAllServicesTests
 
         var result = await _service.ExecuteAsync();
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Nenhuma mesa registrada", result.Message);
         Assert.Equal(404, result.StatusCode);
         _mesaRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
@@ -46,7 +46,7 @@ public class GetAllServicesTests
         var result = await _service.ExecuteAsync();
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(mesas, result.Result);
         Assert.Equal(200, result.StatusCode);
         _mesaRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
@@ -60,7 +60,7 @@ public class GetAllServicesTests
 
         var result = await _service.ExecuteAsync();
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Erro de teste", result.Message);
         Assert.Equal(500, result.StatusCode);
         _mesaRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);

@@ -30,7 +30,7 @@ public class GetByIdStatusPedidoUseCase : IGetByIdStatusPedidoUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao procurar status de pedido por id");
-            return new OperationResult<StatusPedido> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<StatusPedido> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

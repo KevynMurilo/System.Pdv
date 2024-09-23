@@ -44,7 +44,7 @@ public class GetPedidosByMesaUseCaseTests
         var result = await _getPedidosByMesaUseCase.ExecuteAsync(numeroMesa, statusPedido);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(pedidos, result.Result);
         Assert.Null(result.Message);
         _pedidoRepositoryMock.Verify(repo => repo.GetPedidosByMesaAsync(numeroMesa, statusPedido), Times.Once);
@@ -63,7 +63,7 @@ public class GetPedidosByMesaUseCaseTests
         var result = await _getPedidosByMesaUseCase.ExecuteAsync(numeroMesa, statusPedido);
 
         Assert.NotNull(result);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Null(result.Result);
         Assert.Equal($"Mesa {numeroMesa} não tem nenhum pedido vinculado", result.Message);
         Assert.Equal(404, result.StatusCode);
@@ -83,7 +83,7 @@ public class GetPedidosByMesaUseCaseTests
         var result = await _getPedidosByMesaUseCase.ExecuteAsync(numeroMesa, statusPedido);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Null(result.Result);
         Assert.Equal($"Erro inesperado: {exception}", result.Message);
         Assert.Equal(500, result.StatusCode);

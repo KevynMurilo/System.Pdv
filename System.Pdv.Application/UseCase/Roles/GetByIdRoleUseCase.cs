@@ -29,7 +29,7 @@ public class GetByIdRoleUseCase : IGetByIdRoleUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao pegar role por Id");
-            return new OperationResult<Role> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Role> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

@@ -29,7 +29,7 @@ public class GetAllPermissaoByRoleIdUseCase : IGetAllPermissaoByRoleIdUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao listar permissões pelo Id");
-            return new OperationResult<IEnumerable<Permissao>> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<IEnumerable<Permissao>> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

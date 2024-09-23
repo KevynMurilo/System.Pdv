@@ -99,7 +99,7 @@ public class UpdateMetodoPagamentoServiceTests
         var result = await _service.ExecuteAsync(metodoPagamentoId, metodoPagamentoDto);
 
         Assert.NotNull(result);
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal(500, result.StatusCode);
         Assert.Contains("Erro inesperado:", result.Message);
         _metodoPagamentoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

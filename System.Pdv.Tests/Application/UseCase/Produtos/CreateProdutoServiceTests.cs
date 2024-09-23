@@ -93,7 +93,7 @@ public class CreateProdutoServiceTests
 
         var result = await _createProdutoService.ExecuteAsync(produtoDto);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _produtoRepositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Produto>()), Times.Never);

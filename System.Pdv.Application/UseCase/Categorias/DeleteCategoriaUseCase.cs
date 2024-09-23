@@ -32,7 +32,7 @@ public class DeleteCategoriaUseCase : IDeleteCategoriaUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao deletar categoria");
-            return new OperationResult<Categoria> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Categoria> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

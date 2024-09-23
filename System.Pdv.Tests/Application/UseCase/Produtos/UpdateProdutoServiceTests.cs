@@ -101,7 +101,7 @@ public class UpdateProdutoServiceTests
 
         var result = await _updateProdutoService.ExecuteAsync(produtoId, produtoDto);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _produtoRepositoryMock.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);

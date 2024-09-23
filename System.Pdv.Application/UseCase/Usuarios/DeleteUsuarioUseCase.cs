@@ -33,7 +33,7 @@ public class DeleteUsuarioUseCase : IDeleteUsuarioUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao deletar usuário");
-            return new OperationResult<Usuario> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Usuario> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

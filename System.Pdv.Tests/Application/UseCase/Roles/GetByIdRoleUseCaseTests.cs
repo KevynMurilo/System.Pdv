@@ -28,7 +28,7 @@ public class GetByIdRoleUseCaseTests
 
         var result = await _getByIdRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Role não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByIdAsync(roleId), Times.Once);
@@ -43,7 +43,7 @@ public class GetByIdRoleUseCaseTests
 
         var result = await _getByIdRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal(role, result.Result);
         Assert.Null(result.Message);
         Assert.Equal(200, result.StatusCode);
@@ -58,7 +58,7 @@ public class GetByIdRoleUseCaseTests
 
         var result = await _getByIdRoleUseCase.ExecuteAsync(roleId);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
     }

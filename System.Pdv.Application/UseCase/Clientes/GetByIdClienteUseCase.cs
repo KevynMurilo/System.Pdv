@@ -29,7 +29,7 @@ public class GetByIdClienteUseCase : IGetByIdClienteUseCase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao procurar cliente por id");
-            return new OperationResult<Cliente> { ServerOn = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
+            return new OperationResult<Cliente> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
     }
 }

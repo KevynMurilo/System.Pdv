@@ -27,7 +27,7 @@ public class DeleteMesaServiceTests
 
         var result = await _deleteMesaService.ExecuteAsync(id);
 
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Mesa não encontrada", result.Message);
         Assert.Equal(404, result.StatusCode);
         _mockMesaRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
@@ -43,7 +43,7 @@ public class DeleteMesaServiceTests
         var result = await _deleteMesaService.ExecuteAsync(id);
 
         _mockMesaRepository.Verify(repo => repo.DeleteAsync(mesa), Times.Once);
-        Assert.True(result.ServerOn);
+        Assert.True(result.ReqSuccess);
         Assert.Equal("Mesa deletada com sucesso!", result.Message);
         _mockMesaRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         _mockMesaRepository.Verify(repo => repo.DeleteAsync(It.IsAny<Mesa>()), Times.Once);
@@ -58,7 +58,7 @@ public class DeleteMesaServiceTests
 
         var result = await _deleteMesaService.ExecuteAsync(id);
 
-        Assert.False(result.ServerOn);
+        Assert.False(result.ReqSuccess);
         Assert.Equal("Erro inesperado: Database error", result.Message);
         Assert.Equal(500, result.StatusCode);
         _mockMesaRepository.Verify(repo => repo.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
