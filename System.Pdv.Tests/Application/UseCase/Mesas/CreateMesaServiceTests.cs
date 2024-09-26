@@ -23,7 +23,7 @@ public class CreateMesaServiceTests
     [Fact]
     public async Task CreateMesa_ShouldReturnConflict_WhenMesaAlreadyExists()
     {
-        var mesaDto = new MesaDto { Numero = 1 };
+        var mesaDto = new CreateMesaDto { Numero = 1 };
         var existingMesa = new Mesa { Numero = 1 };
 
         _mesaRepositoryMock.Setup(repo => repo.GetByNumberAsync(It.IsAny<int>()))
@@ -39,7 +39,7 @@ public class CreateMesaServiceTests
     [Fact]
     public async Task CreateMesa_ShouldReturnSuccess_WhenMesaIsCreated()
     {
-        var mesaDto = new MesaDto { Numero = 1 };
+        var mesaDto = new CreateMesaDto { Numero = 1 };
         Mesa mesaCreated = null;
 
         _mesaRepositoryMock.Setup(repo => repo.GetByNumberAsync(It.IsAny<int>()))
@@ -64,7 +64,7 @@ public class CreateMesaServiceTests
     [Fact]
     public async Task CreateMesa_ShouldReturnError_WhenExceptionIsThrown()
     {
-        var mesaDto = new MesaDto { Numero = 1 };
+        var mesaDto = new CreateMesaDto { Numero = 1 };
 
         _mesaRepositoryMock.Setup(repo => repo.GetByNumberAsync(It.IsAny<int>()))
             .ThrowsAsync(new Exception("Database error"));

@@ -7,10 +7,11 @@ using System.Pdv.Core.Interfaces;
 
 namespace System.Pdv.Application.UseCase.Mesas;
 
-public class UpdateMesaUseCase: IUpdateMesaUseCase
+public class UpdateMesaUseCase : IUpdateMesaUseCase
 {
     private readonly IMesaRepository _mesaRepository;
     private readonly ILogger<UpdateMesaUseCase> _logger;
+
     public UpdateMesaUseCase(
         IMesaRepository mesaRepository,
         ILogger<UpdateMesaUseCase> logger)
@@ -19,7 +20,7 @@ public class UpdateMesaUseCase: IUpdateMesaUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> ExecuteAsync(Guid id, MesaDto mesaDto)
+    public async Task<OperationResult<Mesa>> ExecuteAsync(Guid id, UpdateMesaDto mesaDto)
     {
         try
         {
@@ -27,8 +28,7 @@ public class UpdateMesaUseCase: IUpdateMesaUseCase
             if (mesa == null)
                 return new OperationResult<Mesa> { Message = "Mesa não encontrada", StatusCode = 404 };
 
-            mesa.Numero = mesaDto.Numero;
-            mesa.Status = mesaDto.Status;
+            UpdateFromDto(mesa, mesaDto);
 
             await _mesaRepository.UpdateAsync(mesa);
 
@@ -39,5 +39,13 @@ public class UpdateMesaUseCase: IUpdateMesaUseCase
             _logger.LogError(ex, "Ocorreu um erro ao atualizar mesa");
             return new OperationResult<Mesa> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
+    }
+
+    private void UpdateFromDto(Mesa target, UpdateMesaDto source)
+    {
+        if (source.Numero.HasValue)
+            target.Numero = source.Numero.Value;
+
+        target.Status = source.Status;
     }
 }

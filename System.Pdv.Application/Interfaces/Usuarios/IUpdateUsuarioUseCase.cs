@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Usuarios;
 
 public interface IUpdateUsuarioUseCase
 {
-    Task<OperationResult<Usuario>> ExecuteAsync(Guid id, UsuarioDto usuario);
+    Task<OperationResult<Usuario>> ExecuteAsync(Guid id, UpdateUsuarioDto usuario);
 }

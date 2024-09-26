@@ -23,7 +23,7 @@ public class CreateAdicionalServiceTests
     [Fact]
     public async Task CreateAdicional_ShouldReturnConflict_WhenAdicionalAlreadyExists()
     {
-        var adicionalDto = new AdicionalDto { Nome = "Adicional Teste", Preco = 10.0m };
+        var adicionalDto = new CreateAdicionalDto { Nome = "Adicional Teste", Preco = 10.0m };
         _adicionalRepositoryMock.Setup(repo => repo.GetByNameAsync(adicionalDto.Nome))
             .ReturnsAsync(new ItemAdicional());
 
@@ -38,7 +38,7 @@ public class CreateAdicionalServiceTests
     [Fact]
     public async Task CreateAdicional_ShouldReturnSuccess_WhenAdicionalIsCreatedSuccessfully()
     {
-        var adicionalDto = new AdicionalDto { Nome = "Novo Adicional", Preco = 10.0m };
+        var adicionalDto = new CreateAdicionalDto { Nome = "Novo Adicional", Preco = 10.0m };
         _adicionalRepositoryMock.Setup(repo => repo.GetByNameAsync(adicionalDto.Nome))
             .ReturnsAsync((ItemAdicional)null);
 
@@ -58,7 +58,7 @@ public class CreateAdicionalServiceTests
     [Fact]
     public async Task CreateAdicional_ShouldLogErrorAndReturnError_WhenExceptionIsThrown()
     {
-        var adicionalDto = new AdicionalDto { Nome = "Novo Adicional", Preco = 10.0m };
+        var adicionalDto = new CreateAdicionalDto { Nome = "Novo Adicional", Preco = 10.0m };
         var exception = new Exception("Database error");
 
         _adicionalRepositoryMock.Setup(repo => repo.GetByNameAsync(adicionalDto.Nome))

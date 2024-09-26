@@ -29,7 +29,7 @@ public class UpdateProdutoServiceTests
         var categoriaId = Guid.NewGuid();
         var produto = new Produto { Id = produtoId, Nome = "Produto Antigo", CategoriaId = categoriaId };
         var categoria = new Categoria { Id = categoriaId, Nome = "Categoria Atualizada" };
-        var produtoDto = new ProdutoDto
+        var produtoDto = new UpdateProdutoDto
         {
             Nome = "Produto Atualizado",
             Descricao = "Nova Descrição",
@@ -58,7 +58,7 @@ public class UpdateProdutoServiceTests
     public async Task UpdateProduto_ShouldReturnError_WhenProdutoDoesNotExist()
     {
         var produtoId = Guid.NewGuid();
-        var produtoDto = new ProdutoDto { Nome = "Produto Teste", CategoriaId = Guid.NewGuid() };
+        var produtoDto = new UpdateProdutoDto { Nome = "Produto Teste", CategoriaId = Guid.NewGuid() };
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync((Produto)null);
 
         var result = await _updateProdutoService.ExecuteAsync(produtoId, produtoDto);
@@ -76,7 +76,7 @@ public class UpdateProdutoServiceTests
     {
         var produtoId = Guid.NewGuid();
         var produto = new Produto { Id = produtoId, Nome = "Produto Teste" };
-        var produtoDto = new ProdutoDto { Nome = "Produto Atualizado", CategoriaId = Guid.NewGuid() };
+        var produtoDto = new UpdateProdutoDto { Nome = "Produto Atualizado", CategoriaId = Guid.NewGuid() };
 
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ReturnsAsync(produto);
         _categoriaRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoDto.CategoriaId)).ReturnsAsync((Categoria)null);
@@ -95,7 +95,7 @@ public class UpdateProdutoServiceTests
     public async Task UpdateProduto_ShouldLogError_WhenExceptionOccurs()
     {
         var produtoId = Guid.NewGuid();
-        var produtoDto = new ProdutoDto { Nome = "Produto Atualizado", CategoriaId = Guid.NewGuid() };
+        var produtoDto = new UpdateProdutoDto { Nome = "Produto Atualizado", CategoriaId = Guid.NewGuid() };
 
         _produtoRepositoryMock.Setup(repo => repo.GetByIdAsync(produtoId)).ThrowsAsync(new Exception("Database error"));
 

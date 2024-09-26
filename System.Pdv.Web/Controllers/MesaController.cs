@@ -78,7 +78,7 @@ public class MesaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateMesa(MesaDto mesaDto)
+    public async Task<IActionResult> CreateMesa(CreateMesaDto mesaDto)
     {
         try
         {
@@ -99,7 +99,7 @@ public class MesaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateMesa(Guid id, MesaDto mesaDto)
+    public async Task<IActionResult> UpdateMesa(Guid id, UpdateMesaDto mesaDto)
     {
         try
         {

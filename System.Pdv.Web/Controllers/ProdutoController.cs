@@ -103,7 +103,7 @@ public class ProdutoController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]  
     [ProducesResponseType(StatusCodes.Status404NotFound)]  
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateProduto(ProdutoDto produtoDto)
+    public async Task<IActionResult> CreateProduto(CreateProdutoDto produtoDto)
     {
         try
         {
@@ -124,7 +124,7 @@ public class ProdutoController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateProduto(Guid id, ProdutoDto produtoDto)
+    public async Task<IActionResult> UpdateProduto(Guid id, UpdateProdutoDto produtoDto)
     {
         try
         {

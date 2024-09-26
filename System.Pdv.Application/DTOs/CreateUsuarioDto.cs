@@ -2,7 +2,7 @@
 
 namespace System.Pdv.Application.DTOs;
 
-public class UsuarioDto
+public class CreateUsuarioDto
 {
     [Required(ErrorMessage = "Nome é obrigatório")]
     public string Nome { get; set; }

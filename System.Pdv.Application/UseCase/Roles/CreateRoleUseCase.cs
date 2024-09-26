@@ -18,7 +18,7 @@ public class CreateRoleUseCase : ICreateRoleUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<Role>> ExecuteAsync(RoleDto roleDto)
+    public async Task<OperationResult<Role>> ExecuteAsync(CreateRoleDto roleDto)
     {
         try
         {

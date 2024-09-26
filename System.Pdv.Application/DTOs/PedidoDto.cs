@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Pdv.Core.Enums;
-using System.Text.Json.Serialization;
 
 namespace System.Pdv.Application.DTOs;
 

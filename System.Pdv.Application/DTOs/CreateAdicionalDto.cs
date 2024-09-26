@@ -2,7 +2,7 @@
 
 namespace System.Pdv.Application.DTOs;
 
-public class AdicionalDto
+public class CreateAdicionalDto
 {
     [Required(ErrorMessage = "O nome do item adicional é obrigatório.")]
     public string Nome { get; set; }

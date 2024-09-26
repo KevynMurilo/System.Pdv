@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Mesas;
 
 public interface ICreateMesaUseCase
 {
-    Task<OperationResult<Mesa>> ExecuteAsync(MesaDto mesa);
+    Task<OperationResult<Mesa>> ExecuteAsync(CreateMesaDto mesa);
 }

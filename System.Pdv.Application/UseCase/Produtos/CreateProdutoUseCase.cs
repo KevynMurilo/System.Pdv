@@ -23,7 +23,7 @@ public class CreateProdutoUseCase : ICreateProdutoUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<Produto>> ExecuteAsync(ProdutoDto produtoDto)
+    public async Task<OperationResult<Produto>> ExecuteAsync(CreateProdutoDto produtoDto)
     {
         try
         {

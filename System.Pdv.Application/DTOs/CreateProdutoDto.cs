@@ -2,7 +2,7 @@
 
 namespace System.Pdv.Application.DTOs;
 
-public class ProdutoDto
+public class CreateProdutoDto
 {
     [Required(ErrorMessage = "O nome do produto é obrigatório.")]
     [StringLength(100, ErrorMessage = "O nome do produto deve ter no máximo 100 caracteres.")]

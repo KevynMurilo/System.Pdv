@@ -18,7 +18,7 @@ public class CreateMesaUseCase : ICreateMesaUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<Mesa>> ExecuteAsync(MesaDto mesaDto)
+    public async Task<OperationResult<Mesa>> ExecuteAsync(CreateMesaDto mesaDto)
     {
         try
         {

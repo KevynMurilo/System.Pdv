@@ -18,7 +18,7 @@ public class CreateAdicionalUseCase : ICreateAdicionalUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(AdicionalDto adicionalDto)
+    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(CreateAdicionalDto adicionalDto)
     {
         try
         {

@@ -25,7 +25,7 @@ public class UpdateAdicionalServiceTests
     public async Task UpdateAdicional_ShouldReturnNotFound_WhenAdicionalDoesNotExist()
     {
         var adicionalId = Guid.NewGuid();
-        var adicionalDto = new AdicionalDto { Nome = "Updated Name", Preco = 15.0m };
+        var adicionalDto = new UpdateAdicionalDto { Nome = "Updated Name", Preco = 15.0m };
 
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ReturnsAsync((ItemAdicional)null);
@@ -42,7 +42,7 @@ public class UpdateAdicionalServiceTests
     {
         var adicionalId = Guid.NewGuid();
         var adicional = new ItemAdicional { Id = adicionalId, Nome = "OLD NAME", Preco = 10.0m };
-        var adicionalDto = new AdicionalDto { Nome = "Updated Name", Preco = 15.0m };
+        var adicionalDto = new UpdateAdicionalDto { Nome = "Updated Name", Preco = 15.0m };
 
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))
             .ReturnsAsync(adicional);
@@ -65,7 +65,7 @@ public class UpdateAdicionalServiceTests
     public async Task UpdateAdicional_ShouldLogErrorAndReturnError_WhenExceptionIsThrown()
     {
         var adicionalId = Guid.NewGuid();
-        var adicionalDto = new AdicionalDto { Nome = "Updated Name", Preco = 15.0m };
+        var adicionalDto = new UpdateAdicionalDto { Nome = "Updated Name", Preco = 15.0m };
         var exception = new Exception("Database error");
 
         _adicionalRepositoryMock.Setup(repo => repo.GetByIdAsync(adicionalId))

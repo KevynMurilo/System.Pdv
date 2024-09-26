@@ -20,7 +20,7 @@ public class UpdateAdicionalUseCase : IUpdateAdicionalUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id, AdicionalDto adicionalDto)
+    public async Task<OperationResult<ItemAdicional>> ExecuteAsync(Guid id, UpdateAdicionalDto adicionalDto)
     {
         try
         {
@@ -28,8 +28,7 @@ public class UpdateAdicionalUseCase : IUpdateAdicionalUseCase
             if (adicional == null)
                 return new OperationResult<ItemAdicional> { Message = "Adicional não encontrado", StatusCode = 404 };
 
-            adicional.Nome = adicionalDto.Nome.ToUpper();
-            adicional.Preco = adicionalDto.Preco;
+            UpdateFromDto(adicional, adicionalDto);
 
             await _adicionalRepository.UpdateAsync(adicional);
 
@@ -40,5 +39,14 @@ public class UpdateAdicionalUseCase : IUpdateAdicionalUseCase
             _logger.LogError(ex, "Ocorreu um erro ao atualizar adicional");
             return new OperationResult<ItemAdicional> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
+    }
+
+    private void UpdateFromDto(ItemAdicional target, UpdateAdicionalDto source)
+    {
+        if (!string.IsNullOrEmpty(source.Nome))
+            target.Nome = source.Nome.ToUpper();
+
+        if (source.Preco.HasValue)
+            target.Preco = source.Preco.Value;
     }
 }
