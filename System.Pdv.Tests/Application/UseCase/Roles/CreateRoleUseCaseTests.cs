@@ -24,7 +24,7 @@ public class CreateRoleUseCaseTests
     [Fact]
     public async Task ExecuteAsync_RoleAlreadyExists_ReturnsConflictResult()
     {
-        var roleDto = new RoleDto { Nome = "EXISTINGROLE", Descricao = "Role already exists" };
+        var roleDto = new CreateRoleDto { Nome = "EXISTINGROLE", Descricao = "Role already exists" };
         _mockRoleRepository.Setup(repo => repo.GetByNameAsync(roleDto.Nome)).ReturnsAsync(new Role { Nome = "EXISTINGROLE" });
 
         var result = await _createRoleUseCase.ExecuteAsync(roleDto);
@@ -39,7 +39,7 @@ public class CreateRoleUseCaseTests
     [Fact]
     public async Task ExecuteAsync_CreateRoleSuccessfully_ReturnsSuccessResult()
     {
-        var roleDto = new RoleDto { Nome = "NEWROLE", Descricao = "Newly created role" };
+        var roleDto = new CreateRoleDto { Nome = "NEWROLE", Descricao = "Newly created role" };
         _mockRoleRepository.Setup(repo => repo.GetByNameAsync(roleDto.Nome)).ReturnsAsync((Role)null);
         _mockRoleRepository.Setup(repo => repo.AddAsync(It.IsAny<Role>())).Returns(Task.CompletedTask);
 
@@ -56,7 +56,7 @@ public class CreateRoleUseCaseTests
     [Fact]
     public async Task ExecuteAsync_ExceptionThrown_ReturnsErrorResult()
     {
-        var roleDto = new RoleDto { Nome = "ROLETHATFAILS", Descricao = "This will fail" };
+        var roleDto = new CreateRoleDto { Nome = "ROLETHATFAILS", Descricao = "This will fail" };
         _mockRoleRepository.Setup(repo => repo.GetByNameAsync(roleDto.Nome)).ThrowsAsync(new Exception("Database error"));
 
         var result = await _createRoleUseCase.ExecuteAsync(roleDto);

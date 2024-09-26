@@ -78,7 +78,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> AddUsuario(UsuarioDto usuarioDto)
+    public async Task<IActionResult> AddUsuario(CreateUsuarioDto usuarioDto)
     {
         try
         {
@@ -100,7 +100,7 @@ public class UsuarioController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateUsuario(Guid id, UsuarioDto usuarioDto)
+    public async Task<IActionResult> UpdateUsuario(Guid id, UpdateUsuarioDto usuarioDto)
     {
         try
         {

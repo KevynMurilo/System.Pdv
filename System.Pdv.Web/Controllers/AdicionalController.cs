@@ -78,7 +78,7 @@ public class AdicionalController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateAdicional(AdicionalDto adicionalDto)
+    public async Task<IActionResult> CreateAdicional(CreateAdicionalDto adicionalDto)
     {
         try
         {
@@ -99,7 +99,7 @@ public class AdicionalController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateAdicional(Guid id, AdicionalDto adicionalDto)
+    public async Task<IActionResult> UpdateAdicional(Guid id, UpdateAdicionalDto adicionalDto)
     {
         try
         {

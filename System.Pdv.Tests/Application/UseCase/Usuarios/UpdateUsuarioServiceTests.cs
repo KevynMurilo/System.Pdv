@@ -29,7 +29,7 @@ public class UpdateUsuarioServiceTests
         var roleId = Guid.NewGuid();
 
         var existingUsuario = new Usuario { Id = usuarioId, RoleId = roleId, Nome = "Nome", Email = "existing@email.com", PasswordHash = "312mk312kosSmdiosp" };
-        var usuarioDto = new UsuarioDto { Nome = "Teste", Email = "teste@example.com", Password = "senha123", RoleId = roleId };
+        var usuarioDto = new UpdateUsuarioDto { Nome = "Teste", Email = "teste@example.com", Password = "senha123", RoleId = roleId };
         var existingRole = new Role { Id = roleId, Nome = "Usuario", Descricao = "descricao" };
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
@@ -60,7 +60,7 @@ public class UpdateUsuarioServiceTests
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ReturnsAsync((Usuario)null);
 
-        var usuarioDto = new UsuarioDto { Nome = "nome", Email = "email@email.com", Password = "12345678" };
+        var usuarioDto = new UpdateUsuarioDto { Nome = "nome", Email = "email@email.com", Password = "12345678" };
 
         var result = await _service.ExecuteAsync(usuarioId, usuarioDto);
 
@@ -81,7 +81,7 @@ public class UpdateUsuarioServiceTests
         var roleId = Guid.NewGuid();
 
         var existingUsuario = new Usuario { Id = usuarioId, RoleId = roleId, Nome = "Nome", Email = "existing@email.com", PasswordHash = "312mk312kosSmdiosp" };
-        var usuarioDto = new UsuarioDto { Nome = "Teste", Email = "teste@example.com", Password = "senha123", RoleId = roleId };
+        var usuarioDto = new UpdateUsuarioDto { Nome = "Teste", Email = "teste@example.com", Password = "senha123", RoleId = roleId };
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
             .ReturnsAsync(existingUsuario);
@@ -108,7 +108,7 @@ public class UpdateUsuarioServiceTests
     public async Task UpdateUsuario_ShouldReturnConflict_WhenEmailAlreadyExists()
     {
         var usuarioId = Guid.NewGuid();
-        var usuarioDto = new UsuarioDto { Nome = "Nome", Email = "existing@email.com", Password = "12345678" };
+        var usuarioDto = new UpdateUsuarioDto { Nome = "Nome", Email = "existing@email.com", Password = "12345678" };
         var existingUsuario = new Usuario { Id = usuarioId, Nome = "Nome", Email = "existing@email.com", PasswordHash = "312mk312kosSmdiosp" };
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))
@@ -133,7 +133,7 @@ public class UpdateUsuarioServiceTests
     public async Task UpdateUsuario_ShouldLogError_WhenExceptionOccurs()
     {
         var usuarioId = Guid.NewGuid();
-        var usuarioDto = new UsuarioDto { Nome = "Nome", Email = "email@email.com", Password = "12345678" };
+        var usuarioDto = new UpdateUsuarioDto { Nome = "Nome", Email = "email@email.com", Password = "12345678" };
         var exception = new Exception("Database error");
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByIdAsync(usuarioId))

@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Roles;
 
 public interface IUpdateRoleUseCase
 {
-    Task<OperationResult<Role>> ExecuteAsync(Guid id, RoleDto roledDto);
+    Task<OperationResult<Role>> ExecuteAsync(Guid id, UpdateRoleDto roledDto);
 }

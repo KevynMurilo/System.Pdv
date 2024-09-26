@@ -25,7 +25,7 @@ public class UpdateRoleUseCaseTests
     public async Task ExecuteAsync_RoleNotFound_ReturnsNotFoundResult()
     {
         var roleId = Guid.NewGuid();
-        var roleDto = new RoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
+        var roleDto = new UpdateRoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
         _mockRoleRepository.Setup(repo => repo.GetByIdAsync(roleId)).ReturnsAsync((Role)null);
 
         var result = await _updateRoleUseCase.ExecuteAsync(roleId, roleDto);
@@ -42,7 +42,7 @@ public class UpdateRoleUseCaseTests
     {
         var roleId = Guid.NewGuid();
         var role = new Role { Nome = "ADMIN" };
-        var roleDto = new RoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
+        var roleDto = new UpdateRoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
         _mockRoleRepository.Setup(repo => repo.GetByIdAsync(roleId)).ReturnsAsync(role);
 
         var result = await _updateRoleUseCase.ExecuteAsync(roleId, roleDto);
@@ -59,7 +59,7 @@ public class UpdateRoleUseCaseTests
     {
         var roleId = Guid.NewGuid();
         var existingRole = new Role { Nome = "ExistingRole" };
-        var roleDto = new RoleDto { Nome = "ExistingRole", Descricao = "Updated description" };
+        var roleDto = new UpdateRoleDto { Nome = "ExistingRole", Descricao = "Updated description" };
         _mockRoleRepository.Setup(repo => repo.GetByIdAsync(roleId)).ReturnsAsync(new Role { Nome = "SomeRole" });
         _mockRoleRepository.Setup(repo => repo.GetByNameAsync(roleDto.Nome)).ReturnsAsync(existingRole);
 
@@ -67,7 +67,7 @@ public class UpdateRoleUseCaseTests
 
         Assert.True(result.ReqSuccess);
         Assert.Equal("Role já registrada", result.Message);
-        Assert.Equal(404, result.StatusCode);
+        Assert.Equal(409, result.StatusCode);
         _mockRoleRepository.Verify(repo => repo.GetByIdAsync(roleId), Times.Once);
         _mockRoleRepository.Verify(repo => repo.GetByNameAsync(roleDto.Nome), Times.Once);
         _mockRoleRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Role>()), Times.Never);
@@ -78,7 +78,7 @@ public class UpdateRoleUseCaseTests
     {
         var roleId = Guid.NewGuid();
         var existingRole = new Role { Nome = "ExistingRole" };
-        var roleDto = new RoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
+        var roleDto = new UpdateRoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
         _mockRoleRepository.Setup(repo => repo.GetByIdAsync(roleId)).ReturnsAsync(existingRole);
         _mockRoleRepository.Setup(repo => repo.GetByNameAsync(roleDto.Nome)).ReturnsAsync((Role)null);
         _mockRoleRepository.Setup(repo => repo.UpdateAsync(It.IsAny<Role>())).Returns(Task.CompletedTask);
@@ -98,7 +98,7 @@ public class UpdateRoleUseCaseTests
     public async Task ExecuteAsync_ExceptionThrown_ReturnsErrorResult()
     {
         var roleId = Guid.NewGuid();
-        var roleDto = new RoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
+        var roleDto = new UpdateRoleDto { Nome = "UpdatedRole", Descricao = "Updated description" };
         _mockRoleRepository.Setup(repo => repo.GetByIdAsync(roleId)).ThrowsAsync(new Exception("Database error"));
 
         var result = await _updateRoleUseCase.ExecuteAsync(roleId, roleDto);

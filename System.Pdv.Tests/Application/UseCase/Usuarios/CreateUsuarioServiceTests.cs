@@ -27,7 +27,7 @@ public class CreateUsuarioServiceTests
     public async Task CreateUsuario_ShouldReturnOperationResultWithUsuario_WhenSuccessful()
     {
         var roleId = Guid.NewGuid();
-        var usuarioDto = new UsuarioDto { Nome = "Teste", RoleId = roleId, Email = "teste@example.com", Password = "senha123" };
+        var usuarioDto = new CreateUsuarioDto { Nome = "Teste", RoleId = roleId, Email = "teste@example.com", Password = "senha123" };
         var existingRole = new Role { Id = roleId, Nome = "Usuario", Descricao = "descricao" };
         var usuarioCriado = new Usuario { Id = Guid.NewGuid(), Nome = usuarioDto.Nome, Email = usuarioDto.Email, PasswordHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Password), RoleId = roleId, Role = existingRole };
 
@@ -60,7 +60,7 @@ public class CreateUsuarioServiceTests
     public async Task CreateUsuario_ShouldReturn_NotFoundRole()
     {
         var roleId = Guid.NewGuid();
-        var usuarioDto = new UsuarioDto { Nome = "Teste", RoleId = roleId, Email = "teste@example.com", Password = "senha123" };
+        var usuarioDto = new CreateUsuarioDto { Nome = "Teste", RoleId = roleId, Email = "teste@example.com", Password = "senha123" };
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(usuarioDto.Email))
             .ReturnsAsync((Usuario)null);
@@ -85,7 +85,7 @@ public class CreateUsuarioServiceTests
     [Fact]
     public async Task CreateUsuario_ShouldReturnConflict_WhenEmailAlreadyExists()
     {
-        var usuarioDto = new UsuarioDto { Nome = "Kevyn", Email = "kevyn@email.com", Password = "12345678" };
+        var usuarioDto = new CreateUsuarioDto { Nome = "Kevyn", Email = "kevyn@email.com", Password = "12345678" };
 
         var existingUsuario = new Usuario { Nome = "Kevyn", Email = "kevyn@email.com", PasswordHash = "hashedpassword" };
 
@@ -107,7 +107,7 @@ public class CreateUsuarioServiceTests
     {
         var roleId = Guid.NewGuid();
         var existingRole = new Role { Id = roleId, Nome = "Usuario", Descricao = "descricao" };
-        var usuarioDto = new UsuarioDto { Nome = "João", RoleId = roleId, Email = "joao@example.com", Password = "password123" };
+        var usuarioDto = new CreateUsuarioDto { Nome = "João", RoleId = roleId, Email = "joao@example.com", Password = "password123" };
 
         _usuarioRepositoryMock.Setup(repo => repo.GetByEmail(usuarioDto.Email))
             .ReturnsAsync((Usuario)null);

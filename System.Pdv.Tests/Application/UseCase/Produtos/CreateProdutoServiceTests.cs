@@ -25,7 +25,7 @@ public class CreateProdutoServiceTests
     [Fact]
     public async Task CreateProduto_ShouldReturnProduto_WhenCategoriaExists()
     {
-        var produtoDto = new ProdutoDto
+        var produtoDto = new CreateProdutoDto
         {
             Nome = "Produto Teste",
             Descricao = "Descrição do produto teste",
@@ -57,7 +57,7 @@ public class CreateProdutoServiceTests
     [Fact]
     public async Task CreateProduto_ShouldReturnError_WhenCategoriaDoesNotExist()
     {
-        var produtoDto = new ProdutoDto
+        var produtoDto = new CreateProdutoDto
         {
             Nome = "Produto Teste",
             Descricao = "Descrição do produto teste",
@@ -80,7 +80,7 @@ public class CreateProdutoServiceTests
     [Fact]
     public async Task CreateProduto_ShouldLogError_WhenExceptionOccurs()
     {
-        var produtoDto = new ProdutoDto
+        var produtoDto = new CreateProdutoDto
         {
             Nome = "Produto Teste",
             Descricao = "Descrição do produto teste",

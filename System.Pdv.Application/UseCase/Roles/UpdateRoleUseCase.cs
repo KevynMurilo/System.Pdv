@@ -18,22 +18,22 @@ public class UpdateRoleUseCase : IUpdateRoleUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<Role>> ExecuteAsync(Guid id, RoleDto roleDto)
+    public async Task<OperationResult<Role>> ExecuteAsync(Guid id, UpdateRoleDto roleDto)
     {
         try
         {
             var role = await _roleRepository.GetByIdAsync(id);
-            if (role == null) return new OperationResult<Role> { Message = "Role não encontrada", StatusCode = 404 };
+            if (role == null)
+                return new OperationResult<Role> { Message = "Role não encontrada", StatusCode = 404 };
 
             var standardRoles = new HashSet<string> { "ADMIN", "GARCOM" };
             if (standardRoles.Contains(role.Nome.ToUpper()))
                 return new OperationResult<Role> { Message = "Não é possível atualizar as roles padrão", StatusCode = 400 };
 
-            if (await _roleRepository.GetByNameAsync(roleDto.Nome) != null)
-                return new OperationResult<Role> { Message = "Role já registrada", StatusCode = 404 };
+            if (!string.IsNullOrEmpty(roleDto.Nome) && await _roleRepository.GetByNameAsync(roleDto.Nome) != null)
+                return new OperationResult<Role> { Message = "Role já registrada", StatusCode = 409 };
 
-            role.Nome = roleDto.Nome.ToUpper();
-            role.Descricao = roleDto.Descricao;
+            UpdateFromDto(role, roleDto);
 
             await _roleRepository.UpdateAsync(role);
 
@@ -44,5 +44,14 @@ public class UpdateRoleUseCase : IUpdateRoleUseCase
             _logger.LogError(ex, "Ocorreu um erro ao atualizar role");
             return new OperationResult<Role> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
+    }
+
+    private void UpdateFromDto(Role target, UpdateRoleDto source)
+    {
+        if (!string.IsNullOrEmpty(source.Nome))
+            target.Nome = source.Nome.ToUpper();
+
+        if (!string.IsNullOrEmpty(source.Descricao))
+            target.Descricao = source.Descricao;
     }
 }

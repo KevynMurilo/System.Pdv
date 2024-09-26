@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Mesas;
 
 public interface IUpdateMesaUseCase
 {
-    Task<OperationResult<Mesa>> ExecuteAsync(Guid id, MesaDto mesaDto);
+    Task<OperationResult<Mesa>> ExecuteAsync(Guid id, UpdateMesaDto mesaDto);
 }

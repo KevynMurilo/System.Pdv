@@ -29,7 +29,7 @@ public class UpdateMesaServiceTests
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId))
             .ReturnsAsync((Mesa)null);
 
-        var mesaDto = new MesaDto { Numero = 1, Status = StatusMesa.Ocupada };
+        var mesaDto = new UpdateMesaDto { Numero = 1, Status = StatusMesa.Ocupada };
 
         var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
@@ -47,7 +47,7 @@ public class UpdateMesaServiceTests
 
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId)).ReturnsAsync(existingMesa);
 
-        var mesaDto = new MesaDto { Numero = 2, Status = StatusMesa.Ocupada };
+        var mesaDto = new UpdateMesaDto { Numero = 2, Status = StatusMesa.Ocupada };
 
         var result = await _updateMesaService.ExecuteAsync(mesaId, mesaDto);
 
@@ -62,7 +62,7 @@ public class UpdateMesaServiceTests
     public async Task UpdateMesa_ShouldLogError_WhenExceptionIsThrown()
     {
         var mesaId = Guid.NewGuid();
-        var mesaDto = new MesaDto { Numero = 1, Status = StatusMesa.Ocupada };
+        var mesaDto = new UpdateMesaDto { Numero = 1, Status = StatusMesa.Ocupada };
         var exception = new Exception("Database error");
 
         _mesaRepositoryMock.Setup(repo => repo.GetByIdAsync(mesaId)).ThrowsAsync(exception);

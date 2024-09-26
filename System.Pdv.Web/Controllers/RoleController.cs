@@ -77,7 +77,7 @@ public class RoleController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateRole(RoleDto roleDto)
+    public async Task<IActionResult> CreateRole(CreateRoleDto roleDto)
     {
         try
         {
@@ -99,7 +99,7 @@ public class RoleController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateRole(Guid id, RoleDto roleDto)
+    public async Task<IActionResult> UpdateRole(Guid id, UpdateRoleDto roleDto)
     {
         try
         {

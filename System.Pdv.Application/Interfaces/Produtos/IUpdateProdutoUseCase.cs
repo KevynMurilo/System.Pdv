@@ -6,5 +6,5 @@ namespace System.Pdv.Application.Interfaces.Produtos;
 
 public interface IUpdateProdutoUseCase
 {
-    Task<OperationResult<Produto>> ExecuteAsync(Guid id, ProdutoDto produtoDto); 
+    Task<OperationResult<Produto>> ExecuteAsync(Guid id, UpdateProdutoDto produtoDto); 
 }

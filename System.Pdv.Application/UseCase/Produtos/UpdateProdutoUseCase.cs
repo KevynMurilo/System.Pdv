@@ -23,25 +23,27 @@ public class UpdateProdutoUseCase : IUpdateProdutoUseCase
         _logger = logger;
     }
 
-    public async Task<OperationResult<Produto>> ExecuteAsync(Guid id, ProdutoDto produtoDto)
+    public async Task<OperationResult<Produto>> ExecuteAsync(Guid id, UpdateProdutoDto produtoDto)
     {
         try
         {
             var produto = await _produtoRepository.GetByIdAsync(id);
-            if (produto == null) return new OperationResult<Produto> { Message = "Produto não encontrado", StatusCode = 404 };
+            if (produto == null)
+                return new OperationResult<Produto> { Message = "Produto não encontrado", StatusCode = 404 };
 
-            var categoria = await _categoriaRepository.GetByIdAsync(produtoDto.CategoriaId);
-            if (categoria == null) return new OperationResult<Produto> { Message = "Categoria não encontrada", StatusCode = 404 };
+            if (produtoDto.CategoriaId != Guid.Empty)
+            {
+                var categoria = await _categoriaRepository.GetByIdAsync(produtoDto.CategoriaId);
+                if (categoria == null)
+                    return new OperationResult<Produto> { Message = "Categoria não encontrada", StatusCode = 404 };
 
-            produto.Nome = produtoDto.Nome;
-            produto.Descricao = produtoDto.Descricao;
-            produto.Preco = produtoDto.Preco;
-            produto.Disponivel = produtoDto.Disponivel;
-            produto.Categoria = categoria;
+                produto.Categoria = categoria;
+            }
+
+            UpdateFromDto(produto, produtoDto);
 
             await _produtoRepository.UpdateAsync(produto);
 
-            Console.WriteLine(produto);
             return new OperationResult<Produto> { Result = produto };
         }
         catch (Exception ex)
@@ -49,5 +51,20 @@ public class UpdateProdutoUseCase : IUpdateProdutoUseCase
             _logger.LogError(ex, "Ocorreu um erro ao atualizar produto");
             return new OperationResult<Produto> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
+    }
+
+    private void UpdateFromDto(Produto target, UpdateProdutoDto source)
+    {
+        if (!string.IsNullOrEmpty(source.Nome))
+            target.Nome = source.Nome;
+
+        if (!string.IsNullOrEmpty(source.Descricao))
+            target.Descricao = source.Descricao;
+
+        if (source.Preco.HasValue)
+            target.Preco = source.Preco.Value;
+
+        if (source.Disponivel.HasValue)
+            target.Disponivel = source.Disponivel.Value;
     }
 }

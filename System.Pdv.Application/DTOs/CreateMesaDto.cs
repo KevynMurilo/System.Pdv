@@ -3,7 +3,7 @@ using System.Pdv.Core.Enums;
 
 namespace System.Pdv.Application.DTOs;
 
-public class MesaDto
+public class CreateMesaDto
 {
     [Required(ErrorMessage = "Número da mesa é obrigatório")]
     [Range(1, int.MaxValue, ErrorMessage = "Número da mesa tem que ser maior que 0")]

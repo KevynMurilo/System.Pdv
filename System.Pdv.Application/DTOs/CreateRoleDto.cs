@@ -2,7 +2,7 @@
 
 namespace System.Pdv.Application.DTOs;
 
-public class RoleDto
+public class CreateRoleDto
 {
     [Required(ErrorMessage = "Nome de role é obrigatório")]
     public string Nome { get; set; }

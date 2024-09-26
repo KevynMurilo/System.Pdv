@@ -21,7 +21,7 @@ public class CreateUsuarioUseCase : ICreateUsuarioUseCase
         _logger = logger;
     }   
 
-    public async Task<OperationResult<Usuario>> ExecuteAsync(UsuarioDto usuarioDto)
+    public async Task<OperationResult<Usuario>> ExecuteAsync(CreateUsuarioDto usuarioDto)
     {
         try
         {
