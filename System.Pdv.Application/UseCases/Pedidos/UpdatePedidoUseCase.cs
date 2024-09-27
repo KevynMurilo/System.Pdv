@@ -33,6 +33,9 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
 
     public async Task<OperationResult<Pedido>> ExecuteAsync(Guid id, PedidoDto pedidoDto, ClaimsPrincipal userClaims)
     {
+        if (pedidoDto == null || userClaims == null)
+            return new OperationResult<Pedido> { Message = "Dados de entrada inválidos", StatusCode = 400 };
+
         try
         {
             await _transactionManager.BeginTransactionAsync();
@@ -42,40 +45,14 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
                 return new OperationResult<Pedido> { Message = "Pedido não encontrado", StatusCode = 404 };
 
             var userId = userClaims.FindFirstValue("id");
+            var garcomId = Guid.Parse(userId);
 
             var validationResult = await _validarPedidosService.ValidarPedido(pedidoDto, userId);
             if (validationResult != null) return validationResult;
 
-            var clienteExistente = await _pedidoRepository.GetClienteByNomeTelefoneAsync(pedidoDto.NomeCliente, pedidoDto.TelefoneCliente);
-
-            if (clienteExistente != null)
-            {
-                // Se o cliente já existe, atualiza o pedido com o ID do cliente existente
-                pedido.ClienteId = clienteExistente.Id;
-            }
-            else
-            {
-                // Se o cliente não existe, cria um novo cliente
-                pedido.Cliente = new Cliente
-                {
-                    Nome = pedidoDto.NomeCliente,
-                    Telefone = pedidoDto.TelefoneCliente,
-                };
-            }
-
-            pedido.MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null;
-            pedido.GarcomId = Guid.Parse(userId);
-            pedido.MetodoPagamentoId = pedidoDto.MetodoPagamentoId;
-            pedido.TipoPedido = pedidoDto.TipoPedido;
-            pedido.StatusPedidoId = pedidoDto.StatusPedidoId;
-
-            foreach (var item in pedido.Items.ToList())
-            {
-                await _pedidoRepository.RemoveItem(item);
-            }
-
-            var itemResult = await _processarItensPedido.ExecuteAsync(pedidoDto.Itens, pedido);
-            if (itemResult != null) return itemResult;
+            await AtualizarClienteAsync(pedidoDto, pedido);
+            AtualizarDetalhesPedido(pedidoDto, pedido, garcomId);
+            await ProcessarItensPedidoAsync(pedidoDto, pedido);
 
             await _pedidoRepository.UpdateAsync(pedido);
             await _transactionManager.CommitTransactionAsync();
@@ -85,8 +62,47 @@ public class UpdatePedidoUseCase : IUpdatePedidoUseCase
         catch (Exception ex)
         {
             await _transactionManager.RollbackTransactionAsync();
-            _logger.LogError(ex, "Ocorreu um erro ao atualizar o pedido");
+            _logger.LogError(ex, "Erro ao atualizar pedido {PedidoId}: {Message}", id, ex.Message);
             return new OperationResult<Pedido> { ReqSuccess = false, Message = $"Erro inesperado: {ex.Message}", StatusCode = 500 };
         }
+    }
+
+    private async Task AtualizarClienteAsync(PedidoDto pedidoDto, Pedido pedido)
+    {
+        var clienteExistente = await _pedidoRepository.GetClienteByNomeTelefoneAsync(pedidoDto.NomeCliente, pedidoDto.TelefoneCliente);
+        if (clienteExistente != null)
+        {
+            pedido.ClienteId = clienteExistente.Id;
+            pedido.Cliente = null;
+        }
+        else
+        {
+            pedido.Cliente = new Cliente
+            {
+                Nome = pedidoDto.NomeCliente,
+                Telefone = pedidoDto.TelefoneCliente
+            };
+        }
+    }
+
+    private void AtualizarDetalhesPedido(PedidoDto pedidoDto, Pedido pedido, Guid garcomId)
+    {
+        pedido.MesaId = pedidoDto.TipoPedido == TipoPedido.Interno ? pedidoDto.MesaId : null;
+        pedido.GarcomId = garcomId;
+        pedido.MetodoPagamentoId = pedidoDto.MetodoPagamentoId;
+        pedido.TipoPedido = pedidoDto.TipoPedido;
+        pedido.StatusPedidoId = pedidoDto.StatusPedidoId;
+    }
+
+    private async Task ProcessarItensPedidoAsync(PedidoDto pedidoDto, Pedido pedido)
+    {
+        foreach (var item in pedido.Items.ToList())
+        {
+            await _pedidoRepository.RemoveItem(item);
+        }
+
+        var itemResult = await _processarItensPedido.ExecuteAsync(pedidoDto.Itens, pedido);
+        if (itemResult != null)
+            throw new Exception("Erro ao processar itens do pedido");
     }
 }
